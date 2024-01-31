@@ -4,13 +4,9 @@ var app = express();
 
 const user="FVE Grygar"
 const passwort="Grygar2022"
-const options={weather : false,
-                }
+const options={weather : false}
 const cors = require('cors');
-var corsOptions = {
-    origin: 'http://localhost',
-    optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
-}
+
 app.use(cors());
 app.get('/plantdata', async function (req, res) {
    
@@ -36,7 +32,7 @@ app.get('/plantdata', async function (req, res) {
   "Export_To_Grid_Today": getAllPlantData["1531648"].devices.KHH0B1500P.totalData.etoGridToday,
   "Export_To_Grid_Total": getAllPlantData["1531648"].devices.KHH0B1500P.totalData.etogridTotal,
 
-"Import_From_Grid_Now": getAllPlantData["1531648"].devices.KHH0B1500P.statusData.pactouser,
+  "Import_From_Grid_Now": getAllPlantData["1531648"].devices.KHH0B1500P.statusData.pactouser,
   "Import_From_Grid_Today": getAllPlantData["1531648"].devices.KHH0B1500P.totalData.gridPowerToday,
   "Import_From_Grid_Total": getAllPlantData["1531648"].devices.KHH0B1500P.totalData.gridPowerTotal,
 
