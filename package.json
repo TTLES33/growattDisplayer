@@ -1,8 +1,0 @@
-{
-  "dependencies": {
-    "cors": "^2.8.5",
-    "express": "^4.18.2",
-    "growatt": "^0.3.0",
-    "http-server": "^14.1.1"
-  }
-}
