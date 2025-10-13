@@ -1,4 +1,5 @@
 var plantdata = {};
+let Last_Temperature_Update = "never";
 var activepage;
 let theme = "dark";
 let config = {};
@@ -141,6 +142,7 @@ function dataPageCreator(){
         console.log(plantdata[Object.keys(plantdata)[i]]);
         document.getElementById(Object.keys(plantdata)[i]).innerHTML = plantdata[Object.keys(plantdata)[i]];
     }
+    document.getElementById("Last_Temperature_Update").innerHTML = new Date(Last_Temperature_Update ).toString();
 }
 function autoupdater(){
     console.log("function: autoupdater()");
@@ -152,7 +154,7 @@ function autoupdater(){
 
 async function onloadfnc(){
     await loadConfig();
-    updateMainTemperature()
+    updateTemperatures()
     checkForAutoThemeChange();
     if (localStorage.getItem("plantdata") !== null) {
         plantdata = JSON.parse(localStorage.getItem("plantdata"));
@@ -195,7 +197,8 @@ function toggleTheme(){
     const dataIcon = document.getElementById("dataIcon");
     const themeIcon = document.getElementById("themeIcon");
     const settingsIcon = document.getElementById("settingsIcon");
-    const poolIcon = document.getElementById("pool_icon")
+    const inside_temp_icon = document.getElementById("inside_temp_icon")
+    const outside_temp_icon = document.getElementById("outside_temp_icon")
     const homeElement = document.getElementById("homeElement");
     const solarElement = document.getElementById("solarElement");
     const gridElement = document.getElementById("gridElement");
@@ -207,10 +210,11 @@ function toggleTheme(){
         dataIcon.src = "media/dark/stats_icon.svg";
         themeIcon.src = "media/dark/theme_icon.svg";
         settingsIcon.src = "media/dark/settings_icon.svg";
-        poolIcon.src = "media/dark/pool_icon.svg"
-        homeElement.src = "media/dark/home_icon.png";
+        inside_temp_icon.src = "media/dark/home_icon.svg";
+        outside_temp_icon.src = "media/dark/outside_icon.svg";
+        homeElement.src = "media/dark/home_icon.svg";
         solarElement.src = "media/dark/solar_panel_icon.png";
-        gridElement.src = "media/dark/power_plant.png";
+        gridElement.src = "media/dark/power_plant.svg";
 
         root.style.setProperty('--nav_background', '#141218');
         root.style.setProperty('--nav_button_background', '#4a4458');
@@ -222,11 +226,12 @@ function toggleTheme(){
         homeIcon.src = "media/white/home_icon_fill.svg";
         dataIcon.src = "media/white/stats_icon.svg";
         themeIcon.src = "media/white/theme_icon.svg";
-        homeElement.src = "media/white/home_icon.png";
+        homeElement.src = "media/white/home_icon.svg";
         settingsIcon.src = "media/white/settings_icon.svg";
-        poolIcon.src = "media/white/pool_icon.svg"
+        inside_temp_icon.src = "media/white/home_icon.svg";
+        outside_temp_icon.src = "media/white/outside_icon.svg";
         solarElement.src = "media/white/solar_panel_icon.png";
-        gridElement.src = "media/white/power_plant.png";
+        gridElement.src = "media/white/power_plant.svg";
 
         root.style.setProperty('--nav_background', '#fef7ff');
         root.style.setProperty('--nav_button_background', '#e8def8');
@@ -294,60 +299,6 @@ function checkForAutoThemeChange(){
 }
 
 
-function updateCongig(){
-    console.log("Function: updateCongig");
-    fetch("/config/set/theme", {
-    method: "POST",
-    body: JSON.stringify({
-        from: config.from,
-        to: config.to
-    }),
-    headers: {
-        "Content-type": "application/json; charset=UTF-8"
-    }
-    });
-}
-
-
-async function loadConfig(){
-  console.log("Function: loadConfig");
-  const url = "/config";
-  try {
-    const response = await fetch(url);
-    if (!response.ok) {
-        let response = `Response status: ${response.status}`;
-        showError(response)
-        throw new Error(response);
-    }
-
-    const json = await response.json();
-    console.log(json.theme);
-    config = json.theme;
-    
-    
-  } catch (error) {
-    console.error(error.message);
-     showError(error.message)
-  }
-
-}
-
-function configThemeChange(){
-    let fromInput = document.getElementById("settTimeFrom").valueAsNumber;
-    let toInput = document.getElementById("settTimeTo").valueAsNumber;
-
-    if(fromInput != NaN){
-        config.from = fromInput;
-        updateCongig();
-        checkForAutoThemeChange();
-    }
-
-    if(toInput != NaN){
-        config.to = toInput;
-        updateCongig();
-        checkForAutoThemeChange();
-    }
-}
 
 function showError(errMsg){
     errMsg = "error: " + errMsg;
@@ -365,62 +316,118 @@ function showError(errMsg){
 
 }
 
-async function updateMainTemperature(){
+async function updateTemperatures(){
+    //24 hours
     let dateNow = Date.now();
     let dateFrom = dateNow - 86400000;
+
+    
 
     console.log(dateNow);
     console.log(dateFrom);
 
-    let tempdata = await loadTemperature(dateFrom, dateNow, 45);
+    let tempdata0 = await loadTemperature(dateFrom, dateNow, 45);
+    let tempdata1 = await loadTemperature(dateFrom, dateNow, 129);
 
-    console.log(tempdata);
-
-    document.getElementById("bazenTeplotaNadpis").innerHTML = Number.parseFloat(tempdata[0].teplota).toFixed(1) + "°C";
     
-    let tempArray = [];
-    let chartLabels = [];
-    let minTemp = tempdata[0].teplota;
-    let maxTemp = tempdata[0].teplota;
 
-    for(i = tempdata.length - 1; i >= 0; i--){
-        let temp = tempdata[i].teplota
-        tempArray.push(parseFloat(temp));
-        if(temp < minTemp){
-            minTemp = temp;
-        }
-        if(temp > maxTemp){
-            maxTemp = temp;
-        }
-
-
-        var date = new Date(tempdata[i].datetime);
-        var hours = date.getHours();
-
-        // Minutes part from the timestamp
-        var minutes = "0" + date.getMinutes();
-
-        // Seconds part from the timestamp
-        var seconds = "0" + date.getSeconds();
-
-        // Will display time in 10:30:23 format
-        var formattedTime = hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
-
-        chartLabels.push("sss");
-    }
+    document.getElementById("tempValue0").innerHTML = Number.parseFloat(tempdata0[0].teplota).toFixed(1) + "°C";
+    document.getElementById("tempValue1").innerHTML = Number.parseFloat(tempdata1[0].teplota).toFixed(1) + "°C";
+    Last_Temperature_Update = tempdata0[0].datetime;
     
-    console.log(tempArray);
-    const ctx = document.getElementById('tempChart');
-    ctx.innerHTML = "";
+    let tempArray0 = [];
+    let chartLabels0 = [];
+
+    let tempArray1 = [];
+    let chartLabels1 = [];
+
+    // let minTemp = Number.MAX_SAFE_INTEGER;
+    // let maxTemp = Number.MIN_SAFE_INTEGER;
+
+
+    // //tempdata0
+    // for(i = tempdata0.length - 1; i >= 0; i--){
+    //     let temp = tempdata0[i].teplota
+    //     tempArray0.push(parseFloat(temp));
+    //     if(temp < minTemp){
+    //         minTemp = temp;
+    //     }
+    //     if(temp > maxTemp){
+    //         maxTemp = temp;
+    //     }
+
+
+    //     var date = new Date(tempdata0[i].datetime);
+    //     var hours = date.getHours();
+
+    //     // Minutes part from the timestamp
+    //     var minutes = "0" + date.getMinutes();
+
+    //     // Seconds part from the timestamp
+    //     var seconds = "0" + date.getSeconds();
+
+    //     // Will display time in 10:30:23 format
+    //     var formattedTime = hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
+
+    //     chartLabels0.push(formattedTime);
+    // }
+    
+    // //tempdata1
+    // for(i = tempdata1.length - 1; i >= 0; i--){
+    //     let temp = tempdata1[i].teplota
+    //     tempArray1.push(parseFloat(temp));
+    //     if(temp < minTemp){
+    //         minTemp = temp;
+    //     }
+    //     if(temp > maxTemp){
+    //         maxTemp = temp;
+    //     }
+
+
+    //     var date = new Date(tempdata1[i].datetime);
+    //     var hours = date.getHours();
+
+    //     // Minutes part from the timestamp
+    //     var minutes = "0" + date.getMinutes();
+
+    //     // Seconds part from the timestamp
+    //     var seconds = "0" + date.getSeconds();
+
+    //     // Will display time in 10:30:23 format
+    //     var formattedTime = hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
+
+    //     chartLabels1.push(formattedTime);
+    // }
+
+    // console.log("minTemp: " + minTemp);
+    // console.log("maxTemp: " + maxTemp);
+
+    // //console.log(tempArray);
+    // const ctx0 = document.getElementById('tempChart0');
+    // ctx0.innerHTML = "";
+    
+    // const ctx1 = document.getElementById('tempChart1');
+    // ctx1.innerHTML = "";
   
+    // let chart0 = createTemperatureChart(ctx0, tempArray0, chartLabels0, minTemp, maxTemp);
+    // let chart1 = createTemperatureChart(ctx1, tempArray1, chartLabels1, minTemp, maxTemp);
+
+    // setTimeout(() => {
+    //     chart0.destroy();
+    //     chart1.destroy();
+    //     updateTemperatures();
+    // }, "120000");
+}
+
+
+function createTemperatureChart(ctx, tempArray, chartLabels, minTemp, maxTemp){
     const data = {
         labels: chartLabels,
         datasets: [{
-            label: 'Myset',
+            label: 'temps',
             data: tempArray,
             fill: false,
             borderColor: 'rgb(75, 192, 192)',
-
             pointRadius: 0,
         }]
     };
@@ -465,11 +472,10 @@ async function updateMainTemperature(){
         }
     });
 
-      setTimeout(() => {
-        chrt.destroy();
-        updateMainTemperature();
-    }, "120000");
+    console.log(chrt);
+    return chrt;
 }
+
 
 async function loadTemperature(from, to, sensorId){
       console.log("Function: loadTemperature");
@@ -501,23 +507,3 @@ async function loadTemperature(from, to, sensorId){
   }
 }
 
-async function removeTeplotyDB(){
-      console.log("Function: removeTeplotyDB");
-  const url = "/bazen/removeDB";
-
-   try {
-    const response = await fetch(url, {
-            method: "GET"
-    });
-    if (!response.ok) {
-      let response = `Response status: ${response.status}`;
-        showError(response)
-        throw new Error(response);
-    }
-
-    alert("deleted");
-  } catch (error) {
-    console.error(error.message);
-    showError(error.message);
-  } 
-}

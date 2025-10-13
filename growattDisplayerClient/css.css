@@ -427,13 +427,13 @@ align-self: center;
 
 .bazenTeplotaWidgetContainer{
   display: flex;
-  justify-content: center;
+  justify-content: space-evenly;
   align-items: center;
   grid-area: bazenTeplotaWidget;
 }
 
 .bazenTeplotaWidgetContent{
- padding: 10px 30px;
+ padding: 10px 15px;
   background: var(--nav_button_background);
   border-radius: 10px;
   display: flex;
@@ -577,9 +577,9 @@ hr{
   text-align: center;
   line-height: 24px;
 }
-#pool_icon{
+.homeTempIcon{
   height: 60px;
   text-align: center;
   align-self: center;
-  margin-right: 30;
+  margin-right: 15;
 }
