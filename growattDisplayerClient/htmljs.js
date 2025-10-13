@@ -1,15 +1,19 @@
 var plantdata = {};
 var activepage;
+let theme = "dark";
+let config = {};
+let errorLogs = []; 
 function screen(){
-    alert(window.innerWidth);
-    alert(window.innerHeight)
+    //alert(window.innerWidth);
+   // alert(window.innerHeight)
 }
 
 function loadData(){
-    console.log("Function: loadData()")
+    console.log("Function: loadData()");
+
     $.ajax({
         type: "GET",
-        url: 'http://localhost:8081/plantdata',
+        url: '/plantdata',
         success: function (result) {
             plantdata = result;
             localStorage.setItem("plantdata", JSON.stringify(plantdata));
@@ -19,24 +23,42 @@ function loadData(){
             }else if(activepage == "data"){
                 dataPageCreator()
             }
-       
+
         },
         error: function (xhr, ajaxOptions, thrownError) {
-          alert(xhr.status);
-          alert(thrownError);
+          //alert(xhr.status);
+         // alert(thrownError);
+
+          showError(thrownError);
+
+           setTimeout(() => {
+               loadData(); 
+
+            }, "5000");
+
         }
       });
 }
+
+
+
 function mainPageCreator(){
 
     console.log("function: mainPageCreator()");
+
+//battery
     var battery_height = "calc(" + plantdata.Battery_Percentage + "% - 4px)";
     console.log(battery_height)
-//battery
+   
 
  document.getElementById("percentage").innerHTML = plantdata.Battery_Percentage;
  document.getElementById("battery-level").style.setProperty("height", battery_height) ;
- 
+  if(plantdata.Battery_Percentage > 50){
+     document.getElementById("battery-level").style.backgroundColor = "var(--arrow_green)";    
+    }else{
+            document.getElementById("battery-level").style.backgroundColor = "var(--arrow_red)";     
+    }
+
 
 
  if(plantdata.Battery_Charge_Now_Power > 0){
@@ -44,6 +66,7 @@ function mainPageCreator(){
     document.getElementById("power").innerHTML = plantdata.Battery_Charge_Now_Power + "kW";
     for(i=0; i < document.getElementById("arrow_0").childNodes.length; i++ ){
         document.getElementById("arrow_0").childNodes[i].className = "arrow_top";
+        document.getElementById("arrow_0").childNodes[i].classList.add("charging");
         document.getElementById("arrow_0").childNodes[i].style.borderBottomColor = "var(--arrow_green)";
         document.getElementById("arrow_0").childNodes[i].style.display = "block";
     }
@@ -65,7 +88,7 @@ function mainPageCreator(){
             document.getElementById("arrow_0").childNodes[i].style.display = "none";
         }
     }
-   
+
  }
 
  //home
@@ -91,20 +114,20 @@ function mainPageCreator(){
  if(plantdata.ExportToGrid <= 0){
     document.getElementById("grid_nadpis").innerHTML = "Import";
     document.getElementById("grid_text").innerHTML = plantdata.Import_From_Grid_Now + " kW";
-    for(i=0; i < document.getElementById("arrow_2").childNodes.length - 1; i++ ){
-        document.getElementById("arrow_2").childNodes[i].className = "arrow_top";
-        document.getElementById("arrow_2").childNodes[i].style.borderBottomColor = "var(--arrow_red)";
+    for(i=0; i < document.getElementById("arrow_2").childNodes.length; i++ ){
+        document.getElementById("arrow_2").childNodes[i].className =  "arrow_left";
+        document.getElementById("arrow_2").childNodes[i].style.borderLeftColor = "var(--arrow_red)";
     }
  }else{
     document.getElementById("grid_nadpis").innerHTML = "Export";
     document.getElementById("grid_text").innerHTML = plantdata.Export_To_Grid_Now + " kW";
-    
-    for(i=0; i < document.getElementById("arrow_2").childNodes.length - 1; i++ ){
-        document.getElementById("arrow_2").childNodes[i].className = "arrow_down";
-        document.getElementById("arrow_2").childNodes[i].style.borderTopColor = "var(--arrow_green)";
+
+    for(i=0; i < document.getElementById("arrow_2").childNodes.length; i++ ){
+        document.getElementById("arrow_2").childNodes[i].className = "arrow_right";
+        document.getElementById("arrow_2").childNodes[i].style.borderRightColor = "var(--arrow_green)";
     }
  }
- 
+
 
 
  document.getElementById("loadingDiv").style.display = "none";
@@ -123,10 +146,14 @@ function autoupdater(){
     console.log("function: autoupdater()");
     setInterval(function(){
         loadData();
+        checkForAutoThemeChange();
     }, 120000)
 }
 
-function onloadfnc(){
+async function onloadfnc(){
+    await loadConfig();
+    updateMainTemperature()
+    checkForAutoThemeChange();
     if (localStorage.getItem("plantdata") !== null) {
         plantdata = JSON.parse(localStorage.getItem("plantdata"));
         var olddate = new Date(plantdata.Last_Data_Update);
@@ -145,9 +172,352 @@ function onloadfnc(){
                 autoupdater()
             }
         }else{
-        loadData();
-        autoupdater();
+            loadData();
+            autoupdater();
         }
 
 }
 
+function toggleFullScreen() {
+    let element = document.documentElement;
+  if (!document.fullscreenElement) {
+    // If the document is not in full screen mode
+    // make the video full screen
+    element.requestFullscreen();
+  } else {
+    // Otherwise exit the full screen
+    document.exitFullscreen?.();
+  }
+}
+
+function toggleTheme(){
+    const homeIcon = document.getElementById("homeIcon");
+    const dataIcon = document.getElementById("dataIcon");
+    const themeIcon = document.getElementById("themeIcon");
+    const settingsIcon = document.getElementById("settingsIcon");
+    const poolIcon = document.getElementById("pool_icon")
+    const homeElement = document.getElementById("homeElement");
+    const solarElement = document.getElementById("solarElement");
+    const gridElement = document.getElementById("gridElement");
+    
+    const root = document.documentElement;
+
+    if(theme == "white"){
+        homeIcon.src = "media/dark/home_icon_fill.svg";
+        dataIcon.src = "media/dark/stats_icon.svg";
+        themeIcon.src = "media/dark/theme_icon.svg";
+        settingsIcon.src = "media/dark/settings_icon.svg";
+        poolIcon.src = "media/dark/pool_icon.svg"
+        homeElement.src = "media/dark/home_icon.png";
+        solarElement.src = "media/dark/solar_panel_icon.png";
+        gridElement.src = "media/dark/power_plant.png";
+
+        root.style.setProperty('--nav_background', '#141218');
+        root.style.setProperty('--nav_button_background', '#4a4458');
+        root.style.setProperty('--background', '#0f0d13');
+        root.style.setProperty('--text_color', '#e6e6e6');
+
+        theme = "dark";
+    }else{
+        homeIcon.src = "media/white/home_icon_fill.svg";
+        dataIcon.src = "media/white/stats_icon.svg";
+        themeIcon.src = "media/white/theme_icon.svg";
+        homeElement.src = "media/white/home_icon.png";
+        settingsIcon.src = "media/white/settings_icon.svg";
+        poolIcon.src = "media/white/pool_icon.svg"
+        solarElement.src = "media/white/solar_panel_icon.png";
+        gridElement.src = "media/white/power_plant.png";
+
+        root.style.setProperty('--nav_background', '#fef7ff');
+        root.style.setProperty('--nav_button_background', '#e8def8');
+        root.style.setProperty('--background', '#ffffff');
+        root.style.setProperty('--text_color', 'black');
+
+        theme = "white";
+    }
+}
+
+function showIndex(){
+    activepage = "index";
+    document.getElementById("body").style.display = "flex";
+    document.getElementById("bodyData").style.display = "none";
+    document.getElementById("bodySettings").style.display = "none";
+}
+
+
+function showData(){
+    activepage = "data";
+    document.getElementById("body").style.display = "none";
+    document.getElementById("bodyData").style.display = "flex";
+    document.getElementById("bodySettings").style.display = "none";
+    onloadfnc();
+}
+
+function showSettings(){
+    activepage = "settings";
+    document.getElementById("body").style.display = "none";
+    document.getElementById("bodyData").style.display = "none";
+    document.getElementById("bodySettings").style.display = "flex";
+
+    document.getElementById("settTimeFrom").valueAsNumber = config.from;
+    document.getElementById("settTimeTo").valueAsNumber = config.to;
+
+    let errLogs = document.getElementById("errorLogs");
+    errLogs.innerHTML = "";
+    for(i = 0; i < errorLogs.length; i++){
+        errLogs.innerHTML = errLogs.innerHTML + errorLogs[i] + "<br>";
+    }
+}
+
+function checkForAutoThemeChange(){
+    console.log("Function: checkForAutoThemeChange");
+    const now = new Date();
+    const hours = now.getHours();
+
+
+    const configDateFrom = new Date(config.from);
+    const configDateTo = new Date(config.to);
+
+    if(hours > configDateFrom.getHours() && hours < configDateTo.getHours()){
+        //white theme
+        if(theme != "white"){
+            toggleTheme();
+        }
+    }else{
+        //dark theme
+        if(theme != "dark"){
+            toggleTheme();
+        }
+    }
+
+
+}
+
+
+function updateCongig(){
+    console.log("Function: updateCongig");
+    fetch("/config/set/theme", {
+    method: "POST",
+    body: JSON.stringify({
+        from: config.from,
+        to: config.to
+    }),
+    headers: {
+        "Content-type": "application/json; charset=UTF-8"
+    }
+    });
+}
+
+
+async function loadConfig(){
+  console.log("Function: loadConfig");
+  const url = "/config";
+  try {
+    const response = await fetch(url);
+    if (!response.ok) {
+        let response = `Response status: ${response.status}`;
+        showError(response)
+        throw new Error(response);
+    }
+
+    const json = await response.json();
+    console.log(json.theme);
+    config = json.theme;
+    
+    
+  } catch (error) {
+    console.error(error.message);
+     showError(error.message)
+  }
+
+}
+
+function configThemeChange(){
+    let fromInput = document.getElementById("settTimeFrom").valueAsNumber;
+    let toInput = document.getElementById("settTimeTo").valueAsNumber;
+
+    if(fromInput != NaN){
+        config.from = fromInput;
+        updateCongig();
+        checkForAutoThemeChange();
+    }
+
+    if(toInput != NaN){
+        config.to = toInput;
+        updateCongig();
+        checkForAutoThemeChange();
+    }
+}
+
+function showError(errMsg){
+    errMsg = "error: " + errMsg;
+    let errElement = document.getElementById("errorContainer");
+    let errTextElement = document.getElementById("errorText");
+    errorLogs.push(errMsg);
+
+
+    errElement.style.display = "flex";
+    errTextElement.innerHTML = errMsg;
+
+    setTimeout(() => {
+     errElement.style.display = "none";
+    }, "5000");
+
+}
+
+async function updateMainTemperature(){
+    let dateNow = Date.now();
+    let dateFrom = dateNow - 86400000;
+
+    console.log(dateNow);
+    console.log(dateFrom);
+
+    let tempdata = await loadTemperature(dateFrom, dateNow, 45);
+
+    console.log(tempdata);
+
+    document.getElementById("bazenTeplotaNadpis").innerHTML = Number.parseFloat(tempdata[0].teplota).toFixed(1) + "°C";
+    
+    let tempArray = [];
+    let chartLabels = [];
+    let minTemp = tempdata[0].teplota;
+    let maxTemp = tempdata[0].teplota;
+
+    for(i = tempdata.length - 1; i >= 0; i--){
+        let temp = tempdata[i].teplota
+        tempArray.push(parseFloat(temp));
+        if(temp < minTemp){
+            minTemp = temp;
+        }
+        if(temp > maxTemp){
+            maxTemp = temp;
+        }
+
+
+        var date = new Date(tempdata[i].datetime);
+        var hours = date.getHours();
+
+        // Minutes part from the timestamp
+        var minutes = "0" + date.getMinutes();
+
+        // Seconds part from the timestamp
+        var seconds = "0" + date.getSeconds();
+
+        // Will display time in 10:30:23 format
+        var formattedTime = hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
+
+        chartLabels.push("sss");
+    }
+    
+    console.log(tempArray);
+    const ctx = document.getElementById('tempChart');
+    ctx.innerHTML = "";
+  
+    const data = {
+        labels: chartLabels,
+        datasets: [{
+            label: 'Myset',
+            data: tempArray,
+            fill: false,
+            borderColor: 'rgb(75, 192, 192)',
+
+            pointRadius: 0,
+        }]
+    };
+    let chrt = new Chart(ctx, {
+        type: 'line',
+        data: data,
+  
+         options: {
+            layout: {
+                padding: 0
+            },
+            maintainAspectRatio: false,
+            responsive: true,
+            plugins: {
+                legend: false
+            },
+            scales: {
+                y: {
+                    min: minTemp,
+                    max: maxTemp,
+                    grid: {
+                        display: false
+                    },
+                    
+                    border:{
+                        display:false
+                    }
+                },
+                x: {
+                    ticks:{
+                        display: false
+                    },
+                    grid: {
+                        display: false
+                    },
+                    border:{
+                        display:false
+                    }
+                }
+
+            }
+        }
+    });
+
+      setTimeout(() => {
+        chrt.destroy();
+        updateMainTemperature();
+    }, "120000");
+}
+
+async function loadTemperature(from, to, sensorId){
+      console.log("Function: loadTemperature");
+  const url = "/bazen/getData";
+
+   try {
+    const response = await fetch(url, {
+            method: "POST",
+            body: JSON.stringify({
+                "from": from,
+                "to": to,
+                "sensorId": sensorId
+            }),
+            headers: {
+                "Content-type": "application/json; charset=UTF-8"
+            }
+    });
+    if (!response.ok) {
+      let response = `Response status: ${response.status}`;
+        showError(response)
+        throw new Error(response);
+    }
+
+    const json = await response.json();
+    return json;
+  } catch (error) {
+    console.error(error.message);
+    showError(error.message);
+  }
+}
+
+async function removeTeplotyDB(){
+      console.log("Function: removeTeplotyDB");
+  const url = "/bazen/removeDB";
+
+   try {
+    const response = await fetch(url, {
+            method: "GET"
+    });
+    if (!response.ok) {
+      let response = `Response status: ${response.status}`;
+        showError(response)
+        throw new Error(response);
+    }
+
+    alert("deleted");
+  } catch (error) {
+    console.error(error.message);
+    showError(error.message);
+  } 
+}
