@@ -2,6 +2,7 @@
 <head>
     <meta charset="UTF-8">
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <link rel="stylesheet" href="css.css">
 
@@ -13,19 +14,53 @@
 </head>
 <body onload="onloadfnc()">
 
+    <div class="errorContainer" id="errorContainer">
+        <img src="media/error_icon.svg" alt="" srcset="">
+        <div class="errorText" id="errorText">
+            Error: klashdůklashjdů jasldjkh asljk
+        </div>
+    </div>
 
 <div class="all">
 
     <div class="bar">
-        <img src="media/home_icon_fill.svg" class="baricon active" alt="">
-        <a href="data.html"> <img src="media/stats_icon.svg" class="baricon" alt=""></a>
-    </div>
+     
+        <a class="barItem" onclick="showIndex()">
+            <img id="homeIcon" src="media/dark/home_icon_fill.svg" class="baricon active" alt="">
+            <div>Domů</div>    
+        </a>
+     
+    
+        <a class="barItem" onclick="showData()"">
+            <img id="dataIcon" src="media/dark/stats_icon.svg" class="baricon" alt="">
+            <div>Data</div>
+        </a>
 
+        <div class="barBottom">
+            <a class="barItem barBottom" onclick="toggleFullScreen()">
+            <div>Fullscreen</div>
+        </a>
+        <a class="barItem" onclick="toggleTheme()">
+            <img id="themeIcon" src="media/dark/theme_icon.svg" class="baricon" alt="">
+            <div>Theme</div>
+        </a>
+
+        <a class="barItem barCenter" onclick="showSettings()">
+            <img id="settingsIcon" src="media/dark/settings_icon.svg" class="baricon" alt="">
+            <div></div>
+        </a>
+  
+   
+        </div>
+
+        
+    </div>
+    <!-- INDEX ELEMENT  -->
     <div id="body" class="content">
         <div id="container" style="display: none;" class="container">
             <div class="baterry">
                 <div class="battery_img">
-                    <div id="battery-level" class="battery-level"">
+                    <div id="battery-level" class="battery-level">
                 </div>
             </div>
             <div class="percentage">
@@ -42,32 +77,223 @@
 
         <div id="arrow_1" class="arrow_1"><div class="arrow_right"></div><div class="arrow_right"></div><div class="arrow_right"></div></div>
 
-        <div id="arrow_2" class="arrow_2"><div class="arrow_top"></div><div class="arrow_top"></div><div class="arrow_top"></div></div>
 
-        <div id="arrow_3" class="arrow_3"><div class="arrow_right"></div><div class="arrow_right"></div><div class="arrow_right"></div></div>
+        <div class="export_arrows_container">
 
-        <div class="home">
-            <img src="media/home_icon.png" class="home_img">
-            <div id="home_text" class="home_text"> 6,1kW</div>
+            <!-- grid -->
+            <div id="arrow_2" class="arrow_2"><div class="arrow_top"></div><div class="arrow_top"></div><div class="arrow_top"></div></div>
+            <!-- home -->
+            <div id="arrow_3" class="arrow_3"><div class="arrow_right"></div><div class="arrow_right"></div><div class="arrow_right"></div></div>
+
         </div>
+
+        <div class="export_container">
+            <div class="home">
+                <img id="homeElement" src="media/dark/home_icon.png" class="home_img">
+                <div id="home_text" class="home_text"> 6,1kW</div>
+            </div>
+            <div class="grid">
+                <img id="gridElement" src="media/dark/power_plant.png" class="grid_img">
+                <div id="grid_nadpis" class="grid_nadpis">Import</div>
+                <div id="grid_text" class="grid_text">6,1kW</div>
+            </div>
+        </div>
+        
         <div class="fotovaltaika">
-            <img src="media/solar_panel_icon.png" class="img">
+            <img id="solarElement" src="media/dark/solar_panel_icon.png" class="img">
             <div id="foto_text" class="foto_text"> 6,1kW</div>
         </div>
-        <div class="grid">
-            <img src="media/power_plant.png" class="grid_img">
-            <div id="grid_nadpis" class="grid_nadpis">Import</div>
-            <div id="grid_text" class="grid_text">6,1kW</div>
+  
+        <div class="bazenTeplotaWidgetContainer">
+            <div class="bazenTeplotaWidgetContent">
+                <img id="pool_icon" src="media/dark/pool_icon.svg" alt="" srcset="">
+                <div id="bazenTeplotaNadpis" class="bazenTeplotaNadpis"> -- °C</div>
+                <div class="bazenGraf">
+                    <canvas style="height: 80px; width: 250px" id="tempChart"></canvas>
+                </div>
+            </div>
         </div>
+   
+   
     </div>
+    <!-- LOADING ELEMENT  -->
     <div id="loadingDiv" class="loadingDiv">
         <div class="custom-loader"></div>
-
-
     </div>
 </div>
+    <!-- DATA ELEMENT  -->
+    <div id="bodyData" style="display: none;" class="content" >
+       <table div="datatable">
+        <tr>
+            <td>Battery_Discharged_Total</td>
+            <td id="Battery_Discharged_Total"></td>
+        </tr>
+        <tr>
+            <td>Battery_Discharged_Today</td>
+            <td id="Battery_Discharged_Today"></td>
+        </tr>
+        <tr>
+            <td>Battery_Charge_Now_Power</td>
+            <td id="Battery_Charge_Now_Power"></td>
+        </tr>
+        <tr>
+            <td>Battery_Discharge_Now_Power</td>
+            <td id="Battery_Discharge_Now_Power"></td>
+        </tr>
+        <tr>
+            <td>Battery_Percentage</td>
+            <td id="Battery_Percentage"></td>
+        </tr>
+        <tr>
+            <td>Export_To_Grid_Now</td>
+            <td id="Export_To_Grid_Now"></td>
+        </tr>
+        <tr>
+            <td>Export_To_Grid_Today</td>
+            <td id="Export_To_Grid_Today"></td>
+        </tr>
+        <tr>
+            <td>Export_To_Grid_Total</td>
+            <td id="Export_To_Grid_Total"></td>
+        </tr>
+        <tr>
+            <td>Import_From_Grid_Now</td>
+            <td id="Import_From_Grid_Now"></td>
+        </tr>
+        <tr>
+            <td>Import_From_Grid_Today</td>
+            <td id="Import_From_Grid_Today"></td>
+        </tr>
+        <tr>
+            <td>Import_From_Grid_Total</td>
+            <td id="Import_From_Grid_Total"></td>
+        </tr>
+        <tr>
+            <td>Plant_Production_Now</td>
+            <td id="Plant_Production_Now"></td>
+        </tr>
+        <tr>
+            <td>Plant_Production_Today</td>
+            <td id="Plant_Production_Today"></td>
+        </tr>
+        <tr>
+            <td>Plant_Production_Total</td>
+            <td id="Plant_Production_Total"></td>
+        </tr>
+        <tr>
+            <td>Total_energy_created</td>
+            <td id="Total_energy_created"></td>
+        </tr>
+        <tr>
+            <td>Power_Consumption_Now</td>
+            <td id="Power_Consumption_Now"></td>
+        </tr>
+        <tr>
+            <td>Power_Consumption_Today</td>
+            <td id="Power_Consumption_Today"></td>
+        </tr>
+        <tr>
+            <td>Self_Power_Consumption_Today</td>
+            <td id="Self_Power_Consumption_Today"></td>
+        </tr>
+        <tr>
+            <td>Battery_Voltage</td>
+            <td id="Battery_Voltage"></td>
+        </tr>
+        <tr>
+            <td>Grid_Voltage</td>
+            <td id="Grid_Voltage"></td>
+        </tr>
+        <tr>
+            <td>Grid_Frequency</td>
+            <td id="Grid_Frequency"></td>
+        </tr>
+        <tr>
+            <td>First_MPPT_Voltage</td>
+            <td id="First_MPPT_Voltage"></td>
+        </tr>
+        <tr>
+            <td>First_MPPT_Power</td>
+            <td id="First_MPPT_Power"></td>
+        </tr>
+        <tr>
+            <td>Second_MPPT_Voltage</td>
+            <td id="Second_MPPT_Voltage"></td>
+        </tr>
+        <tr>
+            <td>Second_MPPT_Power</td>
+            <td id="Second_MPPT_Power"></td>
+        </tr>
+        <tr>
+            <td>Last_Data_Update</td>
+            <td id="Last_Data_Update"></td>
+        </tr>
+         <tr>
+            <td>Last_Server_Update</td>
+            <td id="Last_Server_Update"></td>
+        </tr>
 
 
-</div>
+       </table>
+    </div>
+
+     <!-- SETTINGS ELEMENT  -->
+    <div id="bodySettings" style="display: none;" class="content" >
+        <div class="settContainer">
+            <div class="settNadpis">
+                Nastavení
+            </div>
+            <br>
+            <div class="settItem">
+                <div class="settItemNadpis">
+                    Bílý režim
+                </div>
+                <table>
+                    <tr>
+                        <td>
+                            Od
+                        </td>
+                        <td>
+                            <input type="time" name="" id="settTimeFrom" oninput="configThemeChange()">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Do
+                        </td>
+                        <td>
+                            <input type="time" name="" id="settTimeTo" oninput="configThemeChange()"">
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+             <div class="settItem">
+                <div class="settItemNadpis">
+                    Test Error
+                </div>
+                <input type="button" value=" Test Error" onclick="showError();">
+            </div>
+
+
+              <div class="settItem">
+                <div class="settItemNadpis">
+                     Remove DB
+                </div>
+                <input type="button" value="remove" onclick="removeTeplotyDB();">
+            </div>
+            <div class="settItem">
+                <div class="settItemNadpis">
+                     Error Logs
+                </div>
+                <div id="errorLogs"></div>
+            </div>
+        </div>
+    </div>
+
+    
+
+
+
 </body>
 </html>
