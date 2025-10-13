@@ -22,7 +22,7 @@ let login;
 
 dateNow = new Date();
 console.log("[" + dateNow.getHours() + ":" + dateNow.getMinutes() + ":" + dateNow.getSeconds() + "][INFO] login " + login);
-console.log("Version: 1.2")
+console.log("Version: 1.3")
 
 async function growattLogin() {
     login = await growatt.login(user,passwort).catch(e => {console.log(e)})
@@ -169,6 +169,11 @@ app.get('/htmljs.js', function(req, res) {
     var dateNow = new Date();
     console.log("[" + dateNow.getHours() + ":" + dateNow.getMinutes() + ":" + dateNow.getSeconds() + "][GET] " + req.params.tagid);
     res.sendFile(path.join(__dirname, '/growattDisplayerClient/htmljs.js'));
+});
+app.get('/settingsjs.js', function(req, res) {
+    var dateNow = new Date();
+    console.log("[" + dateNow.getHours() + ":" + dateNow.getMinutes() + ":" + dateNow.getSeconds() + "][GET] " + req.params.tagid);
+    res.sendFile(path.join(__dirname, '/growattDisplayerClient/settingsjs.js'));
 });
 app.get('/data.html', function(req, res) {
     var dateNow = new Date();

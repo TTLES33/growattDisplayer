@@ -8,6 +8,7 @@
 
 
     <script src="htmljs.js"></script>
+    <script src="settingsjs.js"></script>
     <script> activepage = "index";</script>
     <title></title>
 
@@ -89,11 +90,11 @@
 
         <div class="export_container">
             <div class="home">
-                <img id="homeElement" src="media/dark/home_icon.png" class="home_img">
+                <img id="homeElement" src="media/dark/home_icon.svg" width="64" class="home_img">
                 <div id="home_text" class="home_text"> 6,1kW</div>
             </div>
             <div class="grid">
-                <img id="gridElement" src="media/dark/power_plant.png" class="grid_img">
+                <img id="gridElement" src="media/dark/power_plant.png" width="64" class="grid_img">
                 <div id="grid_nadpis" class="grid_nadpis">Import</div>
                 <div id="grid_text" class="grid_text">6,1kW</div>
             </div>
@@ -106,11 +107,18 @@
   
         <div class="bazenTeplotaWidgetContainer">
             <div class="bazenTeplotaWidgetContent">
-                <img id="pool_icon" src="media/dark/pool_icon.svg" alt="" srcset="">
-                <div id="bazenTeplotaNadpis" class="bazenTeplotaNadpis"> -- °C</div>
-                <div class="bazenGraf">
-                    <canvas style="height: 80px; width: 250px" id="tempChart"></canvas>
-                </div>
+                <img id="inside_temp_icon" src="media/dark/home_icon.svg"  class="homeTempIcon" srcset="">
+                <div id="tempValue0" class="bazenTeplotaNadpis"> -- °C</div>
+                <!-- <div class="bazenGraf">
+                    <canvas style="height: 80px; width: 250px" id="tempChart0"></canvas>
+                </div> -->
+            </div>
+            <div class="bazenTeplotaWidgetContent">
+                <img id="outside_temp_icon" src="media/dark/outside_icon.svg"  class="homeTempIcon" srcset="">
+                <div id="tempValue1" class="bazenTeplotaNadpis"> -- °C</div>
+                <!-- <div class="bazenGraf">
+                    <canvas style="height: 80px; width: 250px" id="tempChart1"></canvas>
+                </div> -->
             </div>
         </div>
    
@@ -231,6 +239,10 @@
          <tr>
             <td>Last_Server_Update</td>
             <td id="Last_Server_Update"></td>
+        </tr>
+         <tr>
+            <td>Last Temperature Update</td>
+            <td id="Last_Temperature_Update"></td>
         </tr>
 
 
