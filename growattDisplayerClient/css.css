@@ -583,3 +583,20 @@ hr{
   align-self: center;
   margin-right: 15;
 }
+
+.oldData{
+  background: var(--arrow_red);
+  padding: 10px;
+  color: white;
+  border-radius: 10px;
+  font-weight: bold;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  font-size: 20;
+  margin-bottom: 10px;
+}
+.oldDataMessage{
+  font-weight: normal;
+  font-size: 12;
+}

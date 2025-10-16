@@ -17,7 +17,6 @@ function loadData(){
         url: '/plantdata',
         success: function (result) {
             plantdata = result;
-            localStorage.setItem("plantdata", JSON.stringify(plantdata));
             console.log(plantdata);
             if(activepage == "index"){
                 mainPageCreator();
@@ -47,17 +46,17 @@ function mainPageCreator(){
 
     console.log("function: mainPageCreator()");
 
-//battery
+    //battery
     var battery_height = "calc(" + plantdata.Battery_Percentage + "% - 4px)";
     console.log(battery_height)
    
 
- document.getElementById("percentage").innerHTML = plantdata.Battery_Percentage;
- document.getElementById("battery-level").style.setProperty("height", battery_height) ;
-  if(plantdata.Battery_Percentage > 50){
-     document.getElementById("battery-level").style.backgroundColor = "var(--arrow_green)";    
+    document.getElementById("percentage").innerHTML = plantdata.Battery_Percentage;
+    document.getElementById("battery-level").style.setProperty("height", battery_height) ;
+    if(plantdata.Battery_Percentage > 50){
+        document.getElementById("battery-level").style.backgroundColor = "var(--arrow_green)";    
     }else{
-            document.getElementById("battery-level").style.backgroundColor = "var(--arrow_red)";     
+        document.getElementById("battery-level").style.backgroundColor = "var(--arrow_red)";     
     }
 
 
@@ -130,6 +129,18 @@ function mainPageCreator(){
  }
 
 
+ //check for old data
+ const dateToCheck = new Date(plantdata.Last_Data_Update);
+ const currentTimeMillis = Date.now();
+ //if difference is bigger than 10 minutes
+ if((currentTimeMillis - dateToCheck.getTime()) > (10 * 60 * 1000)){
+    document.getElementById("oldDataPlant").style.display = "flex";
+    document.getElementById("oldDataMessagePlant").innerHTML = dateToCheck.toString();
+ }else{
+    document.getElementById("oldDataPlant").style.display = "none";
+    document.getElementById("oldDataMessagePlant").innerHTML = " "
+ }
+
 
  document.getElementById("loadingDiv").style.display = "none";
  document.getElementById("container").style.display = "grid";
@@ -156,27 +167,10 @@ async function onloadfnc(){
     await loadConfig();
     updateTemperatures()
     checkForAutoThemeChange();
-    if (localStorage.getItem("plantdata") !== null) {
-        plantdata = JSON.parse(localStorage.getItem("plantdata"));
-        var olddate = new Date(plantdata.Last_Data_Update);
-        var nowdate = new Date();
-        var minutesdiff = Math.floor(((nowdate - olddate)/1000)/60);
-        console.log(minutesdiff);
-            if(minutesdiff >= 5){
-                loadData();
-                autoupdater();
-            }else{
-                if(activepage == "index"){
-                    mainPageCreator();
-                }else if(activepage == "data"){
-                    dataPageCreator()
-                }
-                autoupdater()
-            }
-        }else{
-            loadData();
-            autoupdater();
-        }
+
+    loadData();
+    autoupdater();
+        
 
 }
 
@@ -479,7 +473,7 @@ function createTemperatureChart(ctx, tempArray, chartLabels, minTemp, maxTemp){
 
 async function loadTemperature(from, to, sensorId){
       console.log("Function: loadTemperature");
-  const url = "/tempbazen//getData";
+  const url = "/temp/getData";
 
    try {
     const response = await fetch(url, {
