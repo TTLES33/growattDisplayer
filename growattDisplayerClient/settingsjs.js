@@ -1,3 +1,6 @@
+let tempSensors = [];
+
+
 async function removeTeplotyDB(){
       console.log("Function: removeTeplotyDB");
   const url = "/temp/removeDB";
@@ -7,7 +10,7 @@ async function removeTeplotyDB(){
             method: "GET"
     });
     if (!response.ok) {
-      let response = `Response status: ${response.status}`;
+      let response = `[removeTeplotyDB] Response status: ${response.status}`;
         showError(response)
         throw new Error(response);
     }
@@ -48,7 +51,7 @@ async function loadConfig(){
   try {
     const response = await fetch(url);
     if (!response.ok) {
-        let response = `Response status: ${response.status}`;
+        let response = `[loadConfig] Response status: ${response.status}`;
         showError(response)
         throw new Error(response);
     }
@@ -79,4 +82,25 @@ function updateCongig(){
         "Content-type": "application/json; charset=UTF-8"
     }
     });
+}
+
+async function loadAvaibleSensor(){
+	const url = "/temp/getSensors";
+  	try {
+    	const response = await fetch(url);
+		if (!response.ok) {
+			let response = `[loadAvaibleSensor] Response status: ${response.status}`;
+			showError(response)
+			throw new Error(response);
+		}
+
+		const json = await response.json();
+		console.log(json);
+		tempSensors = js;
+    
+	} catch (error) {
+		console.error(error.message);
+		showError(error.message)
+	}
+
 }

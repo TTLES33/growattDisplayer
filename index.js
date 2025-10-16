@@ -17,15 +17,123 @@ const growatt = new api({
     "server": 'https://server.growatt.com/' 	
 })
 let login;
-//let 
+let growattCacheData = {
+
+        "Battery_Discharged_Total": -1,
+        "Battery_Discharged_Today":  -1,
+        "Battery_Charge_Now_Power": -1,
+        "Battery_Discharge_Now_Power":   -1,
+        "Battery_Percentage":  -1,
+
+        "Export_To_Grid_Now":  -1,
+        "Export_To_Grid_Today":  -1,
+        "Export_To_Grid_Total":  -1,
+
+        "Import_From_Grid_Now":  -1,
+        "Import_From_Grid_Today":  -1,
+        "Import_From_Grid_Total":  -1,
+
+        "Plant_Production_Now" :  -1,
+        "Plant_Production_Today":  -1,
+        "Plant_Production_Total":  -1,
+
+        "Total_energy_created":  -1,
+
+        "Power_Consumption_Now":  -1,
+        "Power_Consumption_Today":  -1, //(Load Consumption)
+        "Self_Power_Consumption_Today":  -1,
+
+        
+
+        "Battery_Voltage":  -1,
+        "Grid_Voltage":  -1,
+        "Grid_Frequency":  -1,
+        "First_MPPT_Voltage":  -1,
+        "First_MPPT_Power":  -1,
+        "Second_MPPT_Voltage":  -1,
+        "Second_MPPT_Power":  -1,
+
+        "Last_Data_Update":  new Date().toString(),
+        "Last_Server_Update": new Date().toString()
+
+};
+
+
+
 
 
 dateNow = new Date();
 console.log("[" + dateNow.getHours() + ":" + dateNow.getMinutes() + ":" + dateNow.getSeconds() + "][INFO] login " + login);
 console.log("Version: 1.3")
 
+//Refresh plant data periodically
+grawattDataUpdate();
+setInterval(grawattDataUpdate, 110000);
+
+
+//******************************* */
+//      HELPER FUNCTIONS
+//******************************* */
 async function growattLogin() {
-    login = await growatt.login(user,passwort).catch(e => {console.log(e)})
+    login = await growatt.login(user,passwort).catch(e => {console.log(e)});
+    dateNow = new Date();
+    console.log("[" + dateNow.getHours() + ":" + dateNow.getMinutes() + ":" + dateNow.getSeconds() + "][INFO] login succesfull");
+}
+
+async function grawattDataUpdate(){
+    dateNow = new Date();
+    console.log("[" + dateNow.getHours() + ":" + dateNow.getMinutes() + ":" + dateNow.getSeconds() + "][INFO] growattDataUpdate()");
+    
+    if(!login){
+        console.log("[" + dateNow.getHours() + ":" + dateNow.getMinutes() + ":" + dateNow.getSeconds() + "][ERROR] 504 /plantdata - No Login");
+
+        await growattLogin();
+
+    }
+
+    let getAllPlantData = await growatt.getAllPlantData(options).catch(e => {console.log(e)})
+    console.log(getAllPlantData);
+    var simpleoutput = {
+        "Battery_Discharged_Total":  getAllPlantData["1531648"].devices.KHH0B1500P.totalData.edischarge1Total,
+        "Battery_Discharged_Today":   getAllPlantData["1531648"].devices.KHH0B1500P.totalData.edischarge1Today,
+        "Battery_Charge_Now_Power":  getAllPlantData["1531648"].devices.KHH0B1500P.statusData.chargePower,
+        "Battery_Discharge_Now_Power":   getAllPlantData["1531648"].devices.KHH0B1500P.statusData.pdisCharge1,
+        "Battery_Percentage":  getAllPlantData["1531648"].devices.KHH0B1500P.statusData.SOC,
+
+        "Export_To_Grid_Now":  getAllPlantData["1531648"].devices.KHH0B1500P.statusData.pactogrid,
+        "Export_To_Grid_Today":  getAllPlantData["1531648"].devices.KHH0B1500P.totalData.etoGridToday,
+        "Export_To_Grid_Total":  getAllPlantData["1531648"].devices.KHH0B1500P.totalData.etogridTotal,
+
+        "Import_From_Grid_Now":  getAllPlantData["1531648"].devices.KHH0B1500P.statusData.pactouser,
+        "Import_From_Grid_Today":  getAllPlantData["1531648"].devices.KHH0B1500P.totalData.gridPowerToday,
+        "Import_From_Grid_Total":  getAllPlantData["1531648"].devices.KHH0B1500P.totalData.gridPowerTotal,
+
+        "Plant_Production_Now" :  getAllPlantData["1531648"].devices.KHH0B1500P.statusData.ppv,
+        "Plant_Production_Today":  getAllPlantData["1531648"].devices.KHH0B1500P.totalData.epvToday,
+        "Plant_Production_Total":  getAllPlantData["1531648"].devices.KHH0B1500P.totalData.gridPowerTotal,
+
+        "Total_energy_created":  getAllPlantData["1531648"].devices.KHH0B1500P.totalData.epvTotal,
+
+        "Power_Consumption_Now":  getAllPlantData["1531648"].devices.KHH0B1500P.statusData.pLocalLoad,
+        "Power_Consumption_Today":  getAllPlantData["1531648"].devices.KHH0B1500P.totalData.elocalLoadToday, //(Load Consumption)
+        "Self_Power_Consumption_Today":  getAllPlantData["1531648"].devices.KHH0B1500P.totalData.eselfToday,
+
+        
+
+        "Battery_Voltage":  getAllPlantData["1531648"].devices.KHH0B1500P.statusData.vBat,
+        "Grid_Voltage":  getAllPlantData["1531648"].devices.KHH0B1500P.statusData.vac1,
+        "Grid_Frequency":  getAllPlantData["1531648"].devices.KHH0B1500P.statusData.fAc,
+        "First_MPPT_Voltage":  getAllPlantData["1531648"].devices.KHH0B1500P.statusData.vPv1,
+        "First_MPPT_Power":  getAllPlantData["1531648"].devices.KHH0B1500P.statusData.pPv1,
+        "Second_MPPT_Voltage":  getAllPlantData["1531648"].devices.KHH0B1500P.statusData.vPv2,
+        "Second_MPPT_Power":  getAllPlantData["1531648"].devices.KHH0B1500P.statusData.pPv2,
+
+        "Last_Data_Update":   getAllPlantData["1531648"].devices.KHH0B1500P.deviceData.lastUpdateTime,
+        
+        "Last_Server_Update": dateNow.toString()
+      };
+
+      growattCacheData = simpleoutput;
 }
 
 app.use(cors());
@@ -35,70 +143,8 @@ app.get('/plantdata', async function (req, res) {
     let dateNow = new Date();
     console.log("[" + dateNow.getHours() + ":" + dateNow.getMinutes() + ":" + dateNow.getSeconds() + "][GET] /plantdata");
 
-    if(!login){
-            console.log("[" + dateNow.getHours() + ":" + dateNow.getMinutes() + ":" + dateNow.getSeconds() + "][ERROR] 504 /plantdata - No Login");
-        growattLogin();
-          res.status(504).json({
-            message: 'login error'
-        });
-        return 0;
-        
-    }
-    
-
-
-
-
-  
-      let getAllPlantData = await growatt.getAllPlantData(options).catch(e => {console.log(e)})
-    //  console.log('getAllPlatData:',JSON.stringify(getAllPlantData,null,' '));
-      //let logout = await growatt.logout().catch(e => {console.log(e)})
-    //dateNow = new Date();
-    //console.log("[" + dateNow.getHours() + ":" + dateNow.getMinutes() + ":" + dateNow.getSeconds() + "][INFO] logout " + logout);
-     
-      var simpleoutput = {
-       
-  "Battery_Discharged_Total": getAllPlantData["1531648"].devices.KHH0B1500P.totalData.edischarge1Total,
-  "Battery_Discharged_Today":  getAllPlantData["1531648"].devices.KHH0B1500P.totalData.edischarge1Today,
-  "Battery_Charge_Now_Power": getAllPlantData["1531648"].devices.KHH0B1500P.statusData.chargePower,
-  "Battery_Discharge_Now_Power":  getAllPlantData["1531648"].devices.KHH0B1500P.statusData.pdisCharge1,
-  "Battery_Percentage": getAllPlantData["1531648"].devices.KHH0B1500P.statusData.SOC,
-
-  "Export_To_Grid_Now": getAllPlantData["1531648"].devices.KHH0B1500P.statusData.pactogrid,
-  "Export_To_Grid_Today": getAllPlantData["1531648"].devices.KHH0B1500P.totalData.etoGridToday,
-  "Export_To_Grid_Total": getAllPlantData["1531648"].devices.KHH0B1500P.totalData.etogridTotal,
-
-  "Import_From_Grid_Now": getAllPlantData["1531648"].devices.KHH0B1500P.statusData.pactouser,
-  "Import_From_Grid_Today": getAllPlantData["1531648"].devices.KHH0B1500P.totalData.gridPowerToday,
-  "Import_From_Grid_Total": getAllPlantData["1531648"].devices.KHH0B1500P.totalData.gridPowerTotal,
-
-  "Plant_Production_Now" : getAllPlantData["1531648"].devices.KHH0B1500P.statusData.ppv,
-  "Plant_Production_Today": getAllPlantData["1531648"].devices.KHH0B1500P.totalData.epvToday,
-  "Plant_Production_Total": getAllPlantData["1531648"].devices.KHH0B1500P.totalData.gridPowerTotal,
-
-  "Total_energy_created": getAllPlantData["1531648"].devices.KHH0B1500P.totalData.epvTotal,
-
-  "Power_Consumption_Now": getAllPlantData["1531648"].devices.KHH0B1500P.statusData.pLocalLoad,
-  "Power_Consumption_Today": getAllPlantData["1531648"].devices.KHH0B1500P.totalData.elocalLoadToday, //(Load Consumption)
-  "Self_Power_Consumption_Today": getAllPlantData["1531648"].devices.KHH0B1500P.totalData.eselfToday,
-
- 
-
-  "Battery_Voltage": getAllPlantData["1531648"].devices.KHH0B1500P.statusData.vBat,
-  "Grid_Voltage": getAllPlantData["1531648"].devices.KHH0B1500P.statusData.vac1,
-  "Grid_Frequency": getAllPlantData["1531648"].devices.KHH0B1500P.statusData.fAc,
-  "First_MPPT_Voltage": getAllPlantData["1531648"].devices.KHH0B1500P.statusData.vPv1,
-  "First_MPPT_Power": getAllPlantData["1531648"].devices.KHH0B1500P.statusData.pPv1,
-  "Second_MPPT_Voltage": getAllPlantData["1531648"].devices.KHH0B1500P.statusData.vPv2,
-  "Second_MPPT_Power": getAllPlantData["1531648"].devices.KHH0B1500P.statusData.pPv2,
-
-  "Last_Data_Update":  getAllPlantData["1531648"].devices.KHH0B1500P.deviceData.lastUpdateTime,
- 
-  "Last_Server_Update": dateNow.toString()
-      };
-
-      res.send(simpleoutput);
-      res.end();
+    res.send(growattCacheData);
+    res.end();
     
   
 })
@@ -255,7 +301,7 @@ app.post('/temp/getData', function(req, res) {
 
 app.get('/temp/getSensors', async function (req, res) {
     var dateNow = new Date();
-        console.log("[" + dateNow.getHours() + ":" + dateNow.getMinutes() + ":" + dateNow.getSeconds() + "][GET] /temp/getData");
+        console.log("[" + dateNow.getHours() + ":" + dateNow.getMinutes() + ":" + dateNow.getSeconds() + "][GET] /temp/getSensors");
      
         dbController.selectSensors(sqlite3).then(
         result => {
