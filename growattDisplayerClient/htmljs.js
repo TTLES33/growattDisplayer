@@ -269,6 +269,8 @@ function showSettings(){
     for(i = 0; i < errorLogs.length; i++){
         errLogs.innerHTML = errLogs.innerHTML + errorLogs[i] + "<br>";
     }
+
+    renderAvaibleSensors();
 }
 
 function checkForAutoThemeChange(){
