@@ -161,6 +161,9 @@ function autoupdater(){
         loadData();
         checkForAutoThemeChange();
     }, 120000)
+    setInterval(function(){
+        updateTemperatures();
+    }, 1000 * 10);
 }
 
 async function onloadfnc(){
@@ -329,6 +332,22 @@ async function updateTemperatures(){
     document.getElementById("tempValue1").innerHTML = Number.parseFloat(tempdata1[0].teplota).toFixed(1) + "°C";
     Last_Temperature_Update = tempdata0[0].datetime;
     
+
+
+    //check for old data
+    const dateToCheck0 = new Date(tempdata0[0].datetime);
+    const dateToCheck1 = new Date(tempdata1[0].datetime);
+    const currentTimeMillis = Date.now();
+    //if difference is bigger than 10 minutes
+    if((currentTimeMillis - dateToCheck0.getTime()) > (60 * 1000) || (currentTimeMillis - dateToCheck1.getTime()) > (60 * 1000)){
+        document.getElementById("oldDataTemp").style.display = "flex";
+        document.getElementById("oldDataMessageTemp").innerHTML = dateToCheck0.toString();
+    }else{
+        document.getElementById("oldDataTemp").style.display = "none";
+        document.getElementById("oldDataMessageTemp").innerHTML = " "
+    }
+
+
     let tempArray0 = [];
     let chartLabels0 = [];
 
