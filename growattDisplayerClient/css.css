@@ -600,3 +600,14 @@ hr{
   font-weight: normal;
   font-size: 12;
 }
+
+.sensorListItem{
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  background: var(--nav_background);
+  padding: 5px;
+  border-radius: 10px;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}

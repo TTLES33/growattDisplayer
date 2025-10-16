@@ -84,7 +84,30 @@ function updateCongig(){
     });
 }
 
-async function loadAvaibleSensor(){
+async function renderAvaibleSensors(){
+	await loadAvaibleSensors();
+	for(i = 0; i < tempSensors.length; i++){
+		let sensorDiv = document.createElement("div");
+			sensorDiv.className = "sensorListItem";
+		
+		let sensorId = document.createElement("div");
+		let sensorLastTemp = document.createElement("div");
+		let sensorLastTime = document.createElement("div");
+			
+		sensorId.innerHTML = "Id: " + tempSensors[i].sensorId;
+		sensorLastTemp.innerHTML = tempSensors[i].teplota + "˚c";
+		sensorLastTime.innerHTML = "last update: " + new Date(tempSensors[i].sensorId).toString();
+
+		sensorDiv.appendChild(sensorId);
+		sensorDiv.appendChild(sensorLastTemp);
+		sensorDiv.appendChild(sensorLastTime);
+
+		document.getElementById("avaibleTempSensors").appendChild(sensorDiv);
+	}
+
+}
+
+async function loadAvaibleSensors(){
 	const url = "/temp/getSensors";
   	try {
     	const response = await fetch(url);
@@ -96,7 +119,7 @@ async function loadAvaibleSensor(){
 
 		const json = await response.json();
 		console.log(json);
-		tempSensors = js;
+		tempSensors = json;
     
 	} catch (error) {
 		console.error(error.message);
