@@ -202,10 +202,17 @@ app.get('/media/:tagid', function(req, res) {
 });
 
 
-app.post('/bazen/setData', function(req, res) {
+
+
+
+//********************************************** */
+//          TEPLOTY
+//********************************************** */
+
+app.post('/temp/setData', function(req, res) {
  const reqBody = req.body; // Access the data sent in the request body
     var dateNow = new Date();
-    console.log("[" + dateNow.getHours() + ":" + dateNow.getMinutes() + ":" + dateNow.getSeconds() + "][POST] /bazen/setData " + JSON.stringify(reqBody));
+    console.log("[" + dateNow.getHours() + ":" + dateNow.getMinutes() + ":" + dateNow.getSeconds() + "][POST] /temp/setData " + JSON.stringify(reqBody));
 
 
     if(reqBody == []){
@@ -214,7 +221,7 @@ app.post('/bazen/setData', function(req, res) {
     }
 
     for(i = 0; i < reqBody.length; i++){
-    dbController.insertTeplotaRow(sqlite3, reqBody[i].teplota, reqBody[i].sensorId);
+        dbController.insertTeplotaRow(sqlite3, reqBody[i].teplota, reqBody[i].sensorId);
     }
 
     res.status(201).json({
@@ -224,11 +231,11 @@ app.post('/bazen/setData', function(req, res) {
 
 
 
-app.post('/bazen/getData', function(req, res) {
+app.post('/temp/getData', function(req, res) {
  const reqBody = req.body; // Access the data sent in the request body
     var dateNow = new Date();
     console.log(reqBody)
-    console.log("[" + dateNow.getHours() + ":" + dateNow.getMinutes() + ":" + dateNow.getSeconds() + "][GET] /bazen/getData " + JSON.stringify(reqBody));
+    console.log("[" + dateNow.getHours() + ":" + dateNow.getMinutes() + ":" + dateNow.getSeconds() + "][GET] /temp/getData " + JSON.stringify(reqBody));
 
 
 
@@ -245,7 +252,29 @@ app.post('/bazen/getData', function(req, res) {
    
 });
 
-app.get('/bazen/removeDB', function(req, res) {
+
+app.get('/temp/getSensors', async function (req, res) {
+    var dateNow = new Date();
+        console.log("[" + dateNow.getHours() + ":" + dateNow.getMinutes() + ":" + dateNow.getSeconds() + "][GET] /temp/getData");
+     
+        dbController.selectSensors(sqlite3).then(
+        result => {
+            res.setHeader('Content-Type', 'application/json');
+            res.send(result);
+            res.end();
+        }
+        ).catch(err => {
+            console.log(err);
+            res.sendStatus(501);
+        });
+     
+  
+})
+
+
+
+
+app.get('/temp/removeDB', function(req, res) {
     var dateNow = new Date();
     console.log("[" + dateNow.getHours() + ":" + dateNow.getMinutes() + ":" + dateNow.getSeconds() + "][GET] /bazen/removeDB" + req.params.tagid);
     dbController.removeDB(sqlite3);

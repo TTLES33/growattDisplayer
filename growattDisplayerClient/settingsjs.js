@@ -1,6 +1,6 @@
 async function removeTeplotyDB(){
       console.log("Function: removeTeplotyDB");
-  const url = "/bazen/removeDB";
+  const url = "/temp/removeDB";
 
    try {
     const response = await fetch(url, {

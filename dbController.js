@@ -1,7 +1,9 @@
 
-module.exports = {insertTeplotaRow, selectTeplotaData, removeDB};
+module.exports = {insertTeplotaRow, selectTeplotaData, selectSensors, removeDB};
+
+const dbName = 'bazenTeplotaDB';
 function insertTeplotaRow(sqlite3, teplota, sensorId){
-    const db = new sqlite3.Database("bazenTeplotaDB");
+    const db = new sqlite3.Database(dbName);
     let curDate = Date.now();
     teplota = Number.parseFloat(teplota).toFixed(2);
     db.run('INSERT INTO teploty(teplota, datetime, sensorId) VALUES(?, ?, ?)', [teplota, curDate, sensorId], function (err) {
@@ -12,7 +14,7 @@ function insertTeplotaRow(sqlite3, teplota, sensorId){
 }
 
 async function selectTeplotaData(sqlite3, from, to, sensorId){
-    const db = new sqlite3.Database("bazenTeplotaDB"); 
+    const db = new sqlite3.Database(dbName); 
     let sql = "SELECT datetime, teplota FROM teploty WHERE sensorId = " + sensorId + " AND datetime < " + to + " AND datetime > " + from + "  ORDER BY datetime DESC;"; 
     try {
         const products = await fetchAll(db, sql);
@@ -24,8 +26,21 @@ async function selectTeplotaData(sqlite3, from, to, sensorId){
     } 
 }
 
+async function selectSensors(sqlite3){
+    const db = new sqlite3.Database(dbName); 
+    let sql = "SELECT t1.* FROM teploty t1 INNER JOIN (SELECT sensorId, MAX(datetime) AS max_datetime FROM teploty GROUP BY sensorId) t2 ON t1.sensorId = t2.sensorId AND t1.datetime = t2.max_datetime;"; 
+    try {
+        const products = await fetchAll(db, sql);
+        return products;
+    } catch (err) {
+        console.log(err);
+    } finally {
+        db.close();
+    } 
+}
+
 async function removeDB(sqlite3) {
-     const db = new sqlite3.Database("bazenTeplotaDB"); 
+     const db = new sqlite3.Database(dbName); 
     
     try {
         db.run(`DELETE FROM teploty`, function(err) {

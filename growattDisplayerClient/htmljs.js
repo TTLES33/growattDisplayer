@@ -479,7 +479,7 @@ function createTemperatureChart(ctx, tempArray, chartLabels, minTemp, maxTemp){
 
 async function loadTemperature(from, to, sensorId){
       console.log("Function: loadTemperature");
-  const url = "/bazen/getData";
+  const url = "/tempbazen//getData";
 
    try {
     const response = await fetch(url, {
