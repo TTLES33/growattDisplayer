@@ -1,0 +1,59 @@
+   <div id="bodySettings" class="content" >
+        <div class="settContainer">
+            <div class="settNadpis">
+                Nastavení
+            </div>
+            <br>
+            <div class="settItem">
+                <div class="settItemNadpis">
+                    Bílý režim
+                </div>
+                <table>
+                    <tr>
+                        <td>
+                            Od
+                        </td>
+                        <td>
+                            <input type="time" name="" id="settTimeFrom" oninput="configThemeChange()">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Do
+                        </td>
+                        <td>
+                            <input type="time" name="" id="settTimeTo" oninput="configThemeChange()"">
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="settItem">
+                <div class="settItemNadpis">
+                    Dostupné senzory teploty:
+                </div>
+                <div id="avaibleTempSensors"></div>
+            </div>
+
+             <div class="settItem">
+                <div class="settItemNadpis">
+                    Test Error
+                </div>
+                <input type="button" value=" Test Error" onclick="showError();">
+            </div>
+
+
+              <div class="settItem">
+                <div class="settItemNadpis">
+                     Remove DB
+                </div>
+                <input type="button" value="remove" onclick="removeTeplotyDB();">
+            </div>
+            <div class="settItem">
+                <div class="settItemNadpis">
+                     Error Logs
+                </div>
+                <div id="errorLogs"></div>
+            </div>
+        </div>
+    </div>

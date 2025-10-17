@@ -27,13 +27,13 @@
     <div class="bar">
      
         <a class="barItem" onclick="showIndex()">
-            <img id="homeIcon" src="media/dark/home_icon_fill.svg" class="baricon active" alt="">
+            <span class="icon-home baricon active"></span>
             <div>Domů</div>    
         </a>
      
     
-        <a class="barItem" onclick="showData()"">
-            <img id="dataIcon" src="media/dark/stats_icon.svg" class="baricon" alt="">
+        <a class="barItem" onclick="showData()">
+            <span class="icon-data baricon active"></span>
             <div>Data</div>
         </a>
 
@@ -42,13 +42,12 @@
             <div>Fullscreen</div>
         </a>
         <a class="barItem" onclick="toggleTheme()">
-            <img id="themeIcon" src="media/dark/theme_icon.svg" class="baricon" alt="">
+            <span class="icon-theme baricon active"  ></span>
             <div>Theme</div>
         </a>
 
         <a class="barItem barCenter" onclick="showSettings()">
-            <img id="settingsIcon" src="media/dark/settings_icon.svg" class="baricon" alt="">
-            <div></div>
+            <span class="icon-settings baricon active"  ></span>
         </a>
   
    
@@ -56,270 +55,14 @@
 
         
     </div>
-    <!-- INDEX ELEMENT  -->
-    <div id="body" class="content">
-        <div id="container" style="display: none;" class="container">
-            <div class="baterry">
-                <div class="battery_img">
-                    <div id="battery-level" class="battery-level">
-                </div>
-            </div>
-            <div class="percentage">
-                <div id="percentage">80</div>
-                <div class="perc">%</div>
-            </div>
-            <div id="battery_text" class="battery_text">nabíjení</div>
-            <div id="power" class="power">7.6 kW</div>
-        </div>
-
-        <div id="arrow_0" class="arrow_0"><div class="arrow_down"></div><div class="arrow_down"></div><div class="arrow_down"></div></div>
-
-        <div class="center">
-            <div id="oldDataPlant" style="display:none;" class="oldData">Data elektrárny starší než 10 minut!<br>
-                <div class="oldDataMessage" id="oldDataMessagePlant">
-                    Thu Oct 16 2025 20:25:02 GMT+0200 (Central European Summer Time)
-                </div>
-            </div>
-            <div id="oldDataTemp" style="display:none;" class="oldData">Data teploměrů starší než 1 minuta!<br>
-                <div class="oldDataMessage" id="oldDataMessageTemp">
-                    Thu Oct 16 2025 20:25:02 GMT+0200 (Central European Summer Time)
-                </div>
-            </div>
-        </div>
-
-        <div id="arrow_1" class="arrow_1"><div class="arrow_right"></div><div class="arrow_right"></div><div class="arrow_right"></div></div>
 
 
-        <div class="export_arrows_container">
-
-            <!-- grid -->
-            <div id="arrow_2" class="arrow_2"><div class="arrow_top"></div><div class="arrow_top"></div><div class="arrow_top"></div></div>
-            <!-- home -->
-            <div id="arrow_3" class="arrow_3"><div class="arrow_right"></div><div class="arrow_right"></div><div class="arrow_right"></div></div>
-
-        </div>
-
-        <div class="export_container">
-            <div class="home">
-                <img id="homeElement" src="media/dark/home_icon.svg" width="64" class="home_img">
-                <div id="home_text" class="home_text"> 6,1kW</div>
-            </div>
-            <div class="grid">
-                <img id="gridElement" src="media/dark/power_plant.png" width="64" class="grid_img">
-                <div id="grid_nadpis" class="grid_nadpis">Import</div>
-                <div id="grid_text" class="grid_text">6,1kW</div>
-            </div>
-        </div>
-        
-        <div class="fotovaltaika">
-            <img id="solarElement" src="media/dark/solar_panel_icon.png" class="img">
-            <div id="foto_text" class="foto_text"> 6,1kW</div>
-        </div>
-  
-        <div class="bazenTeplotaWidgetContainer">
-            <div class="bazenTeplotaWidgetContent">
-                <img id="inside_temp_icon" src="media/dark/home_icon.svg"  class="homeTempIcon" srcset="">
-                <div id="tempValue0" class="bazenTeplotaNadpis"> -- °C</div>
-                <!-- <div class="bazenGraf">
-                    <canvas style="height: 80px; width: 250px" id="tempChart0"></canvas>
-                </div> -->
-            </div>
-            <div class="bazenTeplotaWidgetContent">
-                <img id="outside_temp_icon" src="media/dark/outside_icon.svg"  class="homeTempIcon" srcset="">
-                <div id="tempValue1" class="bazenTeplotaNadpis"> -- °C</div>
-                <!-- <div class="bazenGraf">
-                    <canvas style="height: 80px; width: 250px" id="tempChart1"></canvas>
-                </div> -->
-            </div>
-        </div>
-   
-   
-    </div>
-    <!-- LOADING ELEMENT  -->
-    <div id="loadingDiv" class="loadingDiv">
-        <div class="custom-loader"></div>
-    </div>
-</div>
-    <!-- DATA ELEMENT  -->
-    <div id="bodyData" style="display: none;" class="content" >
-       <table div="datatable">
-        <tr>
-            <td>Battery_Discharged_Total</td>
-            <td id="Battery_Discharged_Total"></td>
-        </tr>
-        <tr>
-            <td>Battery_Discharged_Today</td>
-            <td id="Battery_Discharged_Today"></td>
-        </tr>
-        <tr>
-            <td>Battery_Charge_Now_Power</td>
-            <td id="Battery_Charge_Now_Power"></td>
-        </tr>
-        <tr>
-            <td>Battery_Discharge_Now_Power</td>
-            <td id="Battery_Discharge_Now_Power"></td>
-        </tr>
-        <tr>
-            <td>Battery_Percentage</td>
-            <td id="Battery_Percentage"></td>
-        </tr>
-        <tr>
-            <td>Export_To_Grid_Now</td>
-            <td id="Export_To_Grid_Now"></td>
-        </tr>
-        <tr>
-            <td>Export_To_Grid_Today</td>
-            <td id="Export_To_Grid_Today"></td>
-        </tr>
-        <tr>
-            <td>Export_To_Grid_Total</td>
-            <td id="Export_To_Grid_Total"></td>
-        </tr>
-        <tr>
-            <td>Import_From_Grid_Now</td>
-            <td id="Import_From_Grid_Now"></td>
-        </tr>
-        <tr>
-            <td>Import_From_Grid_Today</td>
-            <td id="Import_From_Grid_Today"></td>
-        </tr>
-        <tr>
-            <td>Import_From_Grid_Total</td>
-            <td id="Import_From_Grid_Total"></td>
-        </tr>
-        <tr>
-            <td>Plant_Production_Now</td>
-            <td id="Plant_Production_Now"></td>
-        </tr>
-        <tr>
-            <td>Plant_Production_Today</td>
-            <td id="Plant_Production_Today"></td>
-        </tr>
-        <tr>
-            <td>Plant_Production_Total</td>
-            <td id="Plant_Production_Total"></td>
-        </tr>
-        <tr>
-            <td>Total_energy_created</td>
-            <td id="Total_energy_created"></td>
-        </tr>
-        <tr>
-            <td>Power_Consumption_Now</td>
-            <td id="Power_Consumption_Now"></td>
-        </tr>
-        <tr>
-            <td>Power_Consumption_Today</td>
-            <td id="Power_Consumption_Today"></td>
-        </tr>
-        <tr>
-            <td>Self_Power_Consumption_Today</td>
-            <td id="Self_Power_Consumption_Today"></td>
-        </tr>
-        <tr>
-            <td>Battery_Voltage</td>
-            <td id="Battery_Voltage"></td>
-        </tr>
-        <tr>
-            <td>Grid_Voltage</td>
-            <td id="Grid_Voltage"></td>
-        </tr>
-        <tr>
-            <td>Grid_Frequency</td>
-            <td id="Grid_Frequency"></td>
-        </tr>
-        <tr>
-            <td>First_MPPT_Voltage</td>
-            <td id="First_MPPT_Voltage"></td>
-        </tr>
-        <tr>
-            <td>First_MPPT_Power</td>
-            <td id="First_MPPT_Power"></td>
-        </tr>
-        <tr>
-            <td>Second_MPPT_Voltage</td>
-            <td id="Second_MPPT_Voltage"></td>
-        </tr>
-        <tr>
-            <td>Second_MPPT_Power</td>
-            <td id="Second_MPPT_Power"></td>
-        </tr>
-        <tr>
-            <td>Last_Data_Update</td>
-            <td id="Last_Data_Update"></td>
-        </tr>
-         <tr>
-            <td>Last_Server_Update</td>
-            <td id="Last_Server_Update"></td>
-        </tr>
-         <tr>
-            <td>Last Temperature Update</td>
-            <td id="Last_Temperature_Update"></td>
-        </tr>
 
 
-       </table>
-    </div>
+    <div id="pageIFrame"></div>
 
-     <!-- SETTINGS ELEMENT  -->
-    <div id="bodySettings" style="display: none;" class="content" >
-        <div class="settContainer">
-            <div class="settNadpis">
-                Nastavení
-            </div>
-            <br>
-            <div class="settItem">
-                <div class="settItemNadpis">
-                    Bílý režim
-                </div>
-                <table>
-                    <tr>
-                        <td>
-                            Od
-                        </td>
-                        <td>
-                            <input type="time" name="" id="settTimeFrom" oninput="configThemeChange()">
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            Do
-                        </td>
-                        <td>
-                            <input type="time" name="" id="settTimeTo" oninput="configThemeChange()"">
-                        </td>
-                    </tr>
-                </table>
-            </div>
+    
 
-            <div class="settItem">
-                <div class="settItemNadpis">
-                    Dostupné senzory teploty:
-                </div>
-                <div id="avaibleTempSensors"></div>
-            </div>
-
-             <div class="settItem">
-                <div class="settItemNadpis">
-                    Test Error
-                </div>
-                <input type="button" value=" Test Error" onclick="showError();">
-            </div>
-
-
-              <div class="settItem">
-                <div class="settItemNadpis">
-                     Remove DB
-                </div>
-                <input type="button" value="remove" onclick="removeTeplotyDB();">
-            </div>
-            <div class="settItem">
-                <div class="settItemNadpis">
-                     Error Logs
-                </div>
-                <div id="errorLogs"></div>
-            </div>
-        </div>
-    </div>
 
     
 

@@ -91,8 +91,8 @@ async function grawattDataUpdate(){
 
     }
 
-    let getAllPlantData = await growatt.getAllPlantData(options).catch(e => {console.log(e)})
-    console.log(getAllPlantData);
+    let getAllPlantData = await growatt.getAllPlantData(options).catch(e => {})
+    //console.log(getAllPlantData);
     var simpleoutput = {
         "Battery_Discharged_Total":  getAllPlantData["1531648"].devices.KHH0B1500P.totalData.edischarge1Total,
         "Battery_Discharged_Today":   getAllPlantData["1531648"].devices.KHH0B1500P.totalData.edischarge1Today,
@@ -231,6 +231,13 @@ app.get('/css.css', function(req, res) {
     console.log("[" + dateNow.getHours() + ":" + dateNow.getMinutes() + ":" + dateNow.getSeconds() + "][GET] " + req.params.tagid);
     res.sendFile(path.join(__dirname, '/growattDisplayerClient/css.css'));
 });
+app.get('/iframe/:tagid', function(req, res) {
+    var dateNow = new Date();
+   console.log("[" + dateNow.getHours() + ":" + dateNow.getMinutes() + ":" + dateNow.getSeconds() + "][GET] " + req.params.tagid)
+    res.sendFile(path.join(__dirname, '/growattDisplayerClient/iframe/' + req.params.tagid));
+});
+
+
 app.get('/media/dark/:tagid', function(req, res) {
     var dateNow = new Date();
    console.log("[" + dateNow.getHours() + ":" + dateNow.getMinutes() + ":" + dateNow.getSeconds() + "][GET] " + req.params.tagid)
