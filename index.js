@@ -64,7 +64,7 @@ let growattCacheData = {
 
 dateNow = new Date();
 console.log("[" + dateNow.getHours() + ":" + dateNow.getMinutes() + ":" + dateNow.getSeconds() + "][INFO] login " + login);
-console.log("Version: 1.3")
+console.log("Version: 1.4")
 
 //Refresh plant data periodically
 grawattDataUpdate();
@@ -287,7 +287,7 @@ app.post('/temp/setData', function(req, res) {
 app.post('/temp/getData', function(req, res) {
  const reqBody = req.body; // Access the data sent in the request body
     var dateNow = new Date();
-    console.log(reqBody)
+    //console.log(reqBody)
     console.log("[" + dateNow.getHours() + ":" + dateNow.getMinutes() + ":" + dateNow.getSeconds() + "][GET] /temp/getData " + JSON.stringify(reqBody));
 
 
