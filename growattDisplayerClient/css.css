@@ -1,27 +1,70 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400&family=Rubik:wght@500&display=swap');
+
 :root{
   --batteryper: calc(100% - 4px);
   --arrow_green: #30b455;
   --arrow_red: #b43030;
+}
+
+:root[data-theme="dark"]{
   --nav_background: #141218;
   --nav_button_background: #4a4458;
   --background: #0f0d13;
   --text_color: #e6e6e6;
-  
-  /*
+    --icon-home: url("media/dark/home_icon_fill.svg");
+    --icon-data: url("media/dark/stats_icon.svg");
+    --icon-theme: url("media/dark/theme_icon.svg");
+    --icon-settings: url("media/dark/settings_icon.svg");
+    --icon-home-grid: url("media/dark/home_icon.svg");
+    --icon-grid: url("media/dark/power_plant.png");
+    --icon-solar: url("media/dark/solar_panel_icon.png");
+    --icon-temp-inside: url("media/dark/home_icon.svg");
+    --icon-temp-outside: url("media/dark/outside_icon.svg");
+}
+:root[data-theme="light"]{
   --nav_background: #fef7ff;
-  --background: #ffffff;
   --nav_button_background: #e8def8;
-  --text_color: black;*/
+  --background: #ffffff;
+  --text_color: black;
 
 
-
-
-
-
-  
-
+  --icon-home: url("media/white/home_icon_fill.svg");
+  --icon-data: url("media/white/stats_icon.svg");
+  --icon-theme: url("media/white/theme_icon.svg");
+  --icon-settings: url("media/white/settings_icon.svg");
+  --icon-home-grid: url("media/white/home_icon.svg");
+  --icon-grid: url("media/white/power_plant.png");
+  --icon-solar: url("media/white/solar_panel_icon.png");
+  --icon-temp-inside: url("media/white/home_icon.svg");
+  --icon-temp-outside: url("media/white/outside_icon.svg");
+}
+.icon-home {
+  background-image: var(--icon-home);
+}
+.icon-data {
+  background-image: var(--icon-data);
+}
+.icon-theme {
+  background-image: var(--icon-theme);
+}
+.icon-settings {
+  background-image: var(--icon-settings);
+}
+.icon-home-grid {
+  background-image: var(--icon-home-grid);
+}
+.icon-grid {
+  background-image: var(--icon-grid);
+}
+.icon-solar {
+  background-image: var(--icon-solar);
+}
+.icon-temp-inside{
+  background-image: var(--icon-temp-inside);
+}
+.icon-temp-outside{
+  background-image: var(--icon-temp-outside);
 }
 
 
@@ -54,6 +97,10 @@ body{
 .body{
 
 }
+
+
+
+
 .loadingDiv{
   display: flex;
   align-items: center;
@@ -250,7 +297,7 @@ body{
   
   .img { grid-area: img;
     justify-self: center; 
-    align-self: center;}
+    align-self: end;}
   
   .foto_text { 
     grid-area: foto_text;
@@ -263,9 +310,17 @@ body{
     justify-self: center;
   }
 
-  .home_img { grid-area: home_img;
+  .gridIcon{
+    background-size: cover;
+    width: 72px;
+    height: 72px;
+  }
+
+  .home_img { 
+    grid-area: home_img;
     justify-self: center; 
-    align-self: center;}
+    align-self: end;
+  }
   
   .home_text { 
     grid-area: home_text;
@@ -294,7 +349,7 @@ body{
   .grid_img{
     grid-area: grid_img;
 justify-self: center;
-align-self: center;
+align-self: end;
   }
   .grid_nadpis{
     grid-area: grid_nadpis;
@@ -470,16 +525,12 @@ align-self: center;
   }
 
   .baricon{
-    /* width: 60%;
-    padding: 10%;
-    color: #fff;
-    background: #2c2c2c;
-    margin: 0% 10% 10% 10%;
-    border-radius: 20px; */
     padding-right: 5px;
-  height: 40px;
-  font-size: 24;
-  color: white;
+    height: 35px;
+    font-size: 24;
+    color: white;
+    background-size: cover;
+    width: 35px;
   }
 
   .barItem{
@@ -579,6 +630,7 @@ hr{
 }
 .homeTempIcon{
   height: 60px;
+  width: 60px;
   text-align: center;
   align-self: center;
   margin-right: 15;
