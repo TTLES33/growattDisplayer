@@ -1,4 +1,3 @@
-let tempSensors = [];
 
 
 async function removeTeplotyDB(){
@@ -85,7 +84,7 @@ function updateCongig(){
 }
 
 async function renderAvaibleSensors(){
-	await loadAvaibleSensors();
+  let tempSensors = await loadAvaibleSensors();
 	for(i = 0; i < tempSensors.length; i++){
 		let sensorDiv = document.createElement("div");
 			sensorDiv.className = "sensorListItem";
@@ -119,7 +118,7 @@ async function loadAvaibleSensors(){
 
 		const json = await response.json();
 		console.log(json);
-		tempSensors = json;
+		return json;
     
 	} catch (error) {
 		console.error(error.message);

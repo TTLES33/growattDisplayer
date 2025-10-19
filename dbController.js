@@ -1,7 +1,7 @@
 
 module.exports = {insertTeplotaRow, selectTeplotaData, selectSensors, removeDB};
 
-const dbName = 'bazenTeplotaDB';
+const dbName = 'data/tempDB.db';
 function insertTeplotaRow(sqlite3, teplota, sensorId){
     const db = new sqlite3.Database(dbName);
     let curDate = Date.now();

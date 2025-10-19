@@ -13,48 +13,28 @@ async function onloadfnc(){
     updateTemperatures()
     checkForAutoThemeChange();
 
-    loadData();
+    showIndex();
+
     autoupdater();
 
-    showIndex();
-        
-
 }
 
 
-function loadData(){
-    console.log("Function: loadData()");
-
-    $.ajax({
-        type: "GET",
-        url: '/plantdata',
-        success: function (result) {
-            plantdata = result;
-            console.log(plantdata);
-
-        },
-        error: function (xhr, ajaxOptions, thrownError) {
-          //alert(xhr.status);
-         // alert(thrownError);
-
-          showError(thrownError);
-
-           setTimeout(() => {
-               loadData(); 
-
-            }, "5000");
-
-        }
-      });
-}
-
+let plantDataIntervel;
+let tempInterval;
 function autoupdater(){
     console.log("function: autoupdater()");
-    setInterval(function(){
-        loadData();
+    loadData();
+    updateTemperatures();
+
+    plantDataIntervel = setInterval(function(){
+        if(activepage = "index"){
+            loadData();
+        }
         checkForAutoThemeChange();
     }, 120000)
-    setInterval(function(){
+
+    tempInterval = setInterval(function(){
         updateTemperatures();
     }, 1000 * 10);
 }
@@ -110,101 +90,7 @@ async function showIndex(){
 
     await loadPage("index");
 
-    //battery
-    var battery_height = "calc(" + plantdata.Battery_Percentage + "% - 4px)";
-    console.log(battery_height)
-   
-
-    document.getElementById("percentage").innerHTML = plantdata.Battery_Percentage;
-    document.getElementById("battery-level").style.setProperty("height", battery_height) ;
-    if(plantdata.Battery_Percentage > 50){
-        document.getElementById("battery-level").style.backgroundColor = "var(--arrow_green)";    
-    }else{
-        document.getElementById("battery-level").style.backgroundColor = "var(--arrow_red)";     
-    }
-
-
-
-    if(plantdata.Battery_Charge_Now_Power > 0){
-        document.getElementById("battery_text").innerHTML = "nabíjení";
-        document.getElementById("power").innerHTML = plantdata.Battery_Charge_Now_Power + "kW";
-        for(i=0; i < document.getElementById("arrow_0").childNodes.length; i++ ){
-            document.getElementById("arrow_0").childNodes[i].className = "arrow_top";
-            document.getElementById("arrow_0").childNodes[i].classList.add("charging");
-            document.getElementById("arrow_0").childNodes[i].style.borderBottomColor = "var(--arrow_green)";
-            document.getElementById("arrow_0").childNodes[i].style.display = "block";
-        }
-    }else{
-        if(plantdata.Battery_Discharge_Now_Power > 0){
-            document.getElementById("battery_text").innerHTML = "vybíjení";
-            document.getElementById("power").innerHTML = plantdata.Battery_Discharge_Now_Power + "kW";
-            for(i=0; i < document.getElementById("arrow_0").childNodes.length; i++ ){
-                console.log(document.getElementById("arrow_0"));
-                document.getElementById("arrow_0").childNodes[i].className = "arrow_down";
-                document.getElementById("arrow_0").childNodes[i].style.borderTopColor = "var(--arrow_red)";
-                document.getElementById("arrow_0").childNodes[i].style.display = "block";
-            }
-        }else{
-            document.getElementById("power").innerHTML = "0 kW";
-            document.getElementById("battery_text").innerHTML = "";
-            for(i=0; i < document.getElementById("arrow_0").childNodes.length; i++ ){
-                console.log(i);
-                document.getElementById("arrow_0").childNodes[i].style.display = "none";
-            }
-        }
-
-    }
-
-    //home
-    document.getElementById("home_text").innerHTML = plantdata.Power_Consumption_Now + "kW";
-
-    //plant
-    document.getElementById("foto_text").innerHTML = plantdata.Plant_Production_Now;
-    if(plantdata.Plant_Production_Now > 0){
-        document.getElementById("foto_text").innerHTML = plantdata.Plant_Production_Now + "kW";
-        for(i=0; i < document.getElementById("arrow_1").childNodes.length; i++ ){
-            document.getElementById("arrow_1").childNodes[i].className = "arrow_right";
-            document.getElementById("arrow_1").childNodes[i].style.borderLeftColor = "var(--arrow_green)";
-            document.getElementById("arrow_1").childNodes[i].style.display = "block";
-        }
-    }else{
-        document.getElementById("foto_text").innerHTML = "0 kW";
-        for(i=0; i < document.getElementById("arrow_1").childNodes.length; i++ ){
-            document.getElementById("arrow_1").childNodes[i].style.display = "none";
-        }
-    }
-
-    //grid
-    if(plantdata.ExportToGrid <= 0){
-        document.getElementById("grid_nadpis").innerHTML = "Import";
-        document.getElementById("grid_text").innerHTML = plantdata.Import_From_Grid_Now + " kW";
-        for(i=0; i < document.getElementById("arrow_2").childNodes.length; i++ ){
-            document.getElementById("arrow_2").childNodes[i].className =  "arrow_left";
-            document.getElementById("arrow_2").childNodes[i].style.borderLeftColor = "var(--arrow_red)";
-        }
-    }else{
-        document.getElementById("grid_nadpis").innerHTML = "Export";
-        document.getElementById("grid_text").innerHTML = plantdata.Export_To_Grid_Now + " kW";
-
-        for(i=0; i < document.getElementById("arrow_2").childNodes.length; i++ ){
-            document.getElementById("arrow_2").childNodes[i].className = "arrow_right";
-            document.getElementById("arrow_2").childNodes[i].style.borderRightColor = "var(--arrow_green)";
-        }
-    }
-
-
-    //check for old data
-    const dateToCheck = new Date(plantdata.Last_Data_Update);
-    const currentTimeMillis = Date.now();
-    //if difference is bigger than 10 minutes
-    if((currentTimeMillis - dateToCheck.getTime()) > (10 * 60 * 1000)){
-        document.getElementById("oldDataPlant").style.display = "flex";
-        document.getElementById("oldDataMessagePlant").innerHTML = dateToCheck.toString();
-    }else{
-        document.getElementById("oldDataPlant").style.display = "none";
-        document.getElementById("oldDataMessagePlant").innerHTML = " "
-    }
-
+    loadData();
 }
 
 async function showData(){
@@ -237,6 +123,15 @@ async function showSettings(){
     renderAvaibleSensors();
 }
 
+async function showTemps(params) {
+    activepage = "temps";
+    console.log("function: dataPageCreator()");
+
+    await loadPage("temps");
+
+    loadAllTemperatures();
+}
+
 async function loadPage(page){
         return $.ajax({
         type: "GET",
@@ -249,6 +144,125 @@ async function loadPage(page){
         },
         error: function (xhr, ajaxOptions, thrownError) {
           showError(thrownError);
+        }
+      });
+}
+
+
+
+function loadData(){
+    console.log("Function: loadData()");
+
+    $.ajax({
+        type: "GET",
+        url: '/plantdata',
+        success: function (result) {
+            plantdata = result;
+
+            //battery
+            var battery_height = "calc(" + plantdata.Battery_Percentage + "% - 4px)";
+            console.log(battery_height)
+        
+
+            document.getElementById("percentage").innerHTML = plantdata.Battery_Percentage;
+            document.getElementById("battery-level").style.setProperty("height", battery_height) ;
+            if(plantdata.Battery_Percentage > 50){
+                document.getElementById("battery-level").style.backgroundColor = "var(--arrow_green)";    
+            }else{
+                document.getElementById("battery-level").style.backgroundColor = "var(--arrow_red)";     
+            }
+
+
+
+            if(plantdata.Battery_Charge_Now_Power > 0){
+                document.getElementById("battery_text").innerHTML = "nabíjení";
+                document.getElementById("power").innerHTML = plantdata.Battery_Charge_Now_Power + "kW";
+                for(i=0; i < document.getElementById("arrow_0").childNodes.length; i++ ){
+                    document.getElementById("arrow_0").childNodes[i].className = "arrow_top";
+                    document.getElementById("arrow_0").childNodes[i].classList.add("charging");
+                    document.getElementById("arrow_0").childNodes[i].style.borderBottomColor = "var(--arrow_green)";
+                    document.getElementById("arrow_0").childNodes[i].style.display = "block";
+                }
+            }else{
+                if(plantdata.Battery_Discharge_Now_Power > 0){
+                    document.getElementById("battery_text").innerHTML = "vybíjení";
+                    document.getElementById("power").innerHTML = plantdata.Battery_Discharge_Now_Power + "kW";
+                    for(i=0; i < document.getElementById("arrow_0").childNodes.length; i++ ){
+                        console.log(document.getElementById("arrow_0"));
+                        document.getElementById("arrow_0").childNodes[i].className = "arrow_down";
+                        document.getElementById("arrow_0").childNodes[i].style.borderTopColor = "var(--arrow_red)";
+                        document.getElementById("arrow_0").childNodes[i].style.display = "block";
+                    }
+                }else{
+                    document.getElementById("power").innerHTML = "0 kW";
+                    document.getElementById("battery_text").innerHTML = "";
+                    for(i=0; i < document.getElementById("arrow_0").childNodes.length; i++ ){
+                        console.log(i);
+                        document.getElementById("arrow_0").childNodes[i].style.display = "none";
+                    }
+                }
+
+            }
+
+            //home
+            document.getElementById("home_text").innerHTML = plantdata.Power_Consumption_Now + "kW";
+
+            //plant
+            document.getElementById("foto_text").innerHTML = plantdata.Plant_Production_Now;
+            if(plantdata.Plant_Production_Now > 0){
+                document.getElementById("foto_text").innerHTML = plantdata.Plant_Production_Now + "kW";
+                for(i=0; i < document.getElementById("arrow_1").childNodes.length; i++ ){
+                    document.getElementById("arrow_1").childNodes[i].className = "arrow_right";
+                    document.getElementById("arrow_1").childNodes[i].style.borderLeftColor = "var(--arrow_green)";
+                    document.getElementById("arrow_1").childNodes[i].style.display = "block";
+                }
+            }else{
+                document.getElementById("foto_text").innerHTML = "0 kW";
+                for(i=0; i < document.getElementById("arrow_1").childNodes.length; i++ ){
+                    document.getElementById("arrow_1").childNodes[i].style.display = "none";
+                }
+            }
+
+            //grid
+            if(plantdata.ExportToGrid <= 0){
+                document.getElementById("grid_nadpis").innerHTML = "Import";
+                document.getElementById("grid_text").innerHTML = plantdata.Import_From_Grid_Now + " kW";
+                for(i=0; i < document.getElementById("arrow_2").childNodes.length; i++ ){
+                    document.getElementById("arrow_2").childNodes[i].className =  "arrow_left";
+                    document.getElementById("arrow_2").childNodes[i].style.borderLeftColor = "var(--arrow_red)";
+                }
+            }else{
+                document.getElementById("grid_nadpis").innerHTML = "Export";
+                document.getElementById("grid_text").innerHTML = plantdata.Export_To_Grid_Now + " kW";
+
+                for(i=0; i < document.getElementById("arrow_2").childNodes.length; i++ ){
+                    document.getElementById("arrow_2").childNodes[i].className = "arrow_right";
+                    document.getElementById("arrow_2").childNodes[i].style.borderRightColor = "var(--arrow_green)";
+                }
+            }
+
+
+            //check for old data
+            const dateToCheck = new Date(plantdata.Last_Data_Update);
+            const currentTimeMillis = Date.now();
+            //if difference is bigger than 10 minutes
+            if((currentTimeMillis - dateToCheck.getTime()) > (10 * 60 * 1000)){
+                document.getElementById("oldDataPlant").style.display = "flex";
+                document.getElementById("oldDataMessagePlant").innerHTML = dateToCheck.toString();
+            }else{
+                document.getElementById("oldDataPlant").style.display = "none";
+                document.getElementById("oldDataMessagePlant").innerHTML = " "
+            }
+
+        },
+        error: function (xhr, ajaxOptions, thrownError) {
+
+            showError(thrownError);
+
+            setTimeout(() => {
+                loadData(); 
+
+            }, "5000");
         }
       });
 }
