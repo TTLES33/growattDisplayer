@@ -9,6 +9,7 @@
 
     <script src="htmljs.js"></script>
     <script src="settingsjs.js"></script>
+    <script src="temps.js"></script>
     <script> activepage = "index";</script>
     <title></title>
 
@@ -37,6 +38,11 @@
             <div>Data</div>
         </a>
 
+        <a class="barItem" onclick="showTemps()">
+            <span class="icon-temp baricon active"></span>
+            <div>Teploty</div>
+        </a>
+
         <div class="barBottom">
             <a class="barItem barBottom" onclick="toggleFullScreen()">
             <div>Fullscreen</div>
@@ -59,7 +65,7 @@
 
 
 
-    <div id="pageIFrame"></div>
+    <div id="pageIFrame" class="content"></div>
 
     
 

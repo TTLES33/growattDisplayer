@@ -150,7 +150,7 @@ app.get('/plantdata', async function (req, res) {
 })
 app.get('/config', async function (req, res) {
    
-        fs.readFile('config.json', 'utf8', (err, data) => {
+        fs.readFile('data/config.json', 'utf8', (err, data) => {
         if (err) {
             console.error(err);
             return;
@@ -170,7 +170,7 @@ app.post('/config/set/theme', (req, res) => {
         return res.status(400).json({ message: 'from and to are required' });
     }
 
-    const fileName = 'config.json';
+    const fileName = 'data/config.json';
 
     fs.readFile(fileName, 'utf8', (err, data) => {
         if (err) {
@@ -193,6 +193,7 @@ app.post('/config/set/theme', (req, res) => {
 
     });
    
+        
         
   
 });
@@ -220,6 +221,11 @@ app.get('/settingsjs.js', function(req, res) {
     var dateNow = new Date();
     console.log("[" + dateNow.getHours() + ":" + dateNow.getMinutes() + ":" + dateNow.getSeconds() + "][GET] " + req.params.tagid);
     res.sendFile(path.join(__dirname, '/growattDisplayerClient/settingsjs.js'));
+});
+app.get('/temps.js', function(req, res) {
+    var dateNow = new Date();
+    console.log("[" + dateNow.getHours() + ":" + dateNow.getMinutes() + ":" + dateNow.getSeconds() + "][GET] " + req.params.tagid);
+    res.sendFile(path.join(__dirname, '/growattDisplayerClient/temps.js'));
 });
 app.get('/data.html', function(req, res) {
     var dateNow = new Date();
@@ -287,7 +293,6 @@ app.post('/temp/setData', function(req, res) {
 app.post('/temp/getData', function(req, res) {
  const reqBody = req.body; // Access the data sent in the request body
     var dateNow = new Date();
-    //console.log(reqBody)
     console.log("[" + dateNow.getHours() + ":" + dateNow.getMinutes() + ":" + dateNow.getSeconds() + "][GET] /temp/getData " + JSON.stringify(reqBody));
 
 
