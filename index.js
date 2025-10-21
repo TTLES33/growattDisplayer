@@ -60,11 +60,7 @@ let growattCacheData = {
 
 
 
-
-
-dateNow = new Date();
-console.log("[" + dateNow.getHours() + ":" + dateNow.getMinutes() + ":" + dateNow.getSeconds() + "][INFO] login " + login);
-console.log("Version: 1.4")
+addlog("INFO", "Version: 1.4");;
 
 //Refresh plant data periodically
 grawattDataUpdate();
@@ -74,19 +70,23 @@ setInterval(grawattDataUpdate, 110000);
 //******************************* */
 //      HELPER FUNCTIONS
 //******************************* */
+function addlog(type, message){
+    dateNow = new Date();
+    let consoleMessage = "[" + dateNow.getHours() + ":" + dateNow.getMinutes() + ":" + dateNow.getSeconds() + "]";
+    consoleMessage += "[" + type + "]" ;
+    consoleMessage +=  message;
+    console.log(consoleMessage);
+}
+
 async function growattLogin() {
     login = await growatt.login(user,passwort).catch(e => {console.log(e)});
-    dateNow = new Date();
-    console.log("[" + dateNow.getHours() + ":" + dateNow.getMinutes() + ":" + dateNow.getSeconds() + "][INFO] login succesfull");
+    addlog("INFO", "login succesfull");
 }
 
 async function grawattDataUpdate(){
-    dateNow = new Date();
-    console.log("[" + dateNow.getHours() + ":" + dateNow.getMinutes() + ":" + dateNow.getSeconds() + "][INFO] growattDataUpdate()");
-    
+    addlog("INFO", "growattDataUpdate()");
     if(!login){
-        console.log("[" + dateNow.getHours() + ":" + dateNow.getMinutes() + ":" + dateNow.getSeconds() + "][ERROR] 504 /plantdata - No Login");
-
+        addlog("ERROR", "504 /plantdata - No Login");
         await growattLogin();
 
     }
@@ -140,14 +140,11 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true}));
 app.get('/plantdata', async function (req, res) {
-    let dateNow = new Date();
-    console.log("[" + dateNow.getHours() + ":" + dateNow.getMinutes() + ":" + dateNow.getSeconds() + "][GET] /plantdata");
-
+    addlog("GET", "/plantdata");
     res.send(growattCacheData);
     res.end();
-    
-  
 })
+
 app.get('/config', async function (req, res) {
    
         fs.readFile('data/config.json', 'utf8', (err, data) => {
@@ -163,8 +160,7 @@ app.get('/config', async function (req, res) {
 })
 app.post('/config/set/theme', (req, res) => {
     const reqBody = req.body; // Access the data sent in the request body
-     var dateNow = new Date();
-    console.log("[" + dateNow.getHours() + ":" + dateNow.getMinutes() + ":" + dateNow.getSeconds() + "][POST] " + reqBody);
+    addlog("POST", reqBody);
     // Basic validation (in a real app, this would be more robust)
     if (!reqBody || !reqBody.from || !reqBody.to) {
         return res.status(400).json({ message: 'from and to are required' });
@@ -184,7 +180,7 @@ app.post('/config/set/theme', (req, res) => {
         fs.writeFile(fileName, JSON.stringify(file, null, 2), function writeJSON(err) {
             if (err) return console.log(err);
             console.log(JSON.stringify(file, null, 2));
-            console.log('writing to ' + fileName);
+            //console.log('writing to ' + fileName);
         });
 
         res.status(201).json({
@@ -198,65 +194,53 @@ app.post('/config/set/theme', (req, res) => {
   
 });
 app.get('/', function(req, res) {
-    var dateNow = new Date();
-   console.log("[" + dateNow.getHours() + ":" + dateNow.getMinutes() + ":" + dateNow.getSeconds() + "][GET] " + req.params.tagid);
+    addlog("GET", req.params.tagid);
     res.sendFile(path.join(__dirname, '/growattDisplayerClient/index.html'));
 });
 app.get('/index.html', function(req, res) {
-    var dateNow = new Date();
-   console.log("[" + dateNow.getHours() + ":" + dateNow.getMinutes() + ":" + dateNow.getSeconds() + "][GET] " + req.params.tagid)
+    addlog("GET", req.params.tagid);
     res.sendFile(path.join(__dirname, '/growattDisplayerClient/index.html'));
 });
 app.get('/data.html', function(req, res) {
-    var dateNow = new Date();
-    console.log("[" + dateNow.getHours() + ":" + dateNow.getMinutes() + ":" + dateNow.getSeconds() + "][GET] " + req.params.tagid);
+    addlog("GET", req.params.tagid);
     res.sendFile(path.join(__dirname, '/growattDisplayerClient/data.html'));
 });
 app.get('/htmljs.js', function(req, res) {
-    var dateNow = new Date();
-    console.log("[" + dateNow.getHours() + ":" + dateNow.getMinutes() + ":" + dateNow.getSeconds() + "][GET] " + req.params.tagid);
+    addlog("GET", req.params.tagid);
     res.sendFile(path.join(__dirname, '/growattDisplayerClient/htmljs.js'));
 });
 app.get('/settingsjs.js', function(req, res) {
-    var dateNow = new Date();
-    console.log("[" + dateNow.getHours() + ":" + dateNow.getMinutes() + ":" + dateNow.getSeconds() + "][GET] " + req.params.tagid);
+    addlog("GET", req.params.tagid);
     res.sendFile(path.join(__dirname, '/growattDisplayerClient/settingsjs.js'));
 });
 app.get('/temps.js', function(req, res) {
-    var dateNow = new Date();
-    console.log("[" + dateNow.getHours() + ":" + dateNow.getMinutes() + ":" + dateNow.getSeconds() + "][GET] " + req.params.tagid);
+    addlog("GET", req.params.tagid);
     res.sendFile(path.join(__dirname, '/growattDisplayerClient/temps.js'));
 });
 app.get('/data.html', function(req, res) {
-    var dateNow = new Date();
-    console.log("[" + dateNow.getHours() + ":" + dateNow.getMinutes() + ":" + dateNow.getSeconds() + "][GET] " + req.params.tagid);
+    addlog("GET", req.params.tagid);
     res.sendFile(path.join(__dirname, '/growattDisplayerClient/data.html'));
 });
 app.get('/css.css', function(req, res) {
-    var dateNow = new Date();
-    console.log("[" + dateNow.getHours() + ":" + dateNow.getMinutes() + ":" + dateNow.getSeconds() + "][GET] " + req.params.tagid);
+    addlog("GET", req.params.tagid);
     res.sendFile(path.join(__dirname, '/growattDisplayerClient/css.css'));
 });
 app.get('/iframe/:tagid', function(req, res) {
-    var dateNow = new Date();
-   console.log("[" + dateNow.getHours() + ":" + dateNow.getMinutes() + ":" + dateNow.getSeconds() + "][GET] " + req.params.tagid)
+    addlog("GET", req.params.tagid);
     res.sendFile(path.join(__dirname, '/growattDisplayerClient/iframe/' + req.params.tagid));
 });
 
 
 app.get('/media/dark/:tagid', function(req, res) {
-    var dateNow = new Date();
-   console.log("[" + dateNow.getHours() + ":" + dateNow.getMinutes() + ":" + dateNow.getSeconds() + "][GET] " + req.params.tagid)
+    addlog("GET", req.params.tagid);
     res.sendFile(path.join(__dirname, '/growattDisplayerClient/media/dark/' + req.params.tagid));
 });
 app.get('/media/white/:tagid', function(req, res) {
-    var dateNow = new Date();
-    console.log("[" + dateNow.getHours() + ":" + dateNow.getMinutes() + ":" + dateNow.getSeconds() + "][GET] " + req.params.tagid);
+    addlog("GET", req.params.tagid);
     res.sendFile(path.join(__dirname, '/growattDisplayerClient/media/white/' + req.params.tagid));
 });
 app.get('/media/:tagid', function(req, res) {
-    var dateNow = new Date();
-    console.log("[" + dateNow.getHours() + ":" + dateNow.getMinutes() + ":" + dateNow.getSeconds() + "][GET] " + req.params.tagid);
+    addlog("GET", req.params.tagid);
     res.sendFile(path.join(__dirname, '/growattDisplayerClient/media/' + req.params.tagid));
 });
 
@@ -270,9 +254,7 @@ app.get('/media/:tagid', function(req, res) {
 
 app.post('/temp/setData', function(req, res) {
  const reqBody = req.body; // Access the data sent in the request body
-    var dateNow = new Date();
-    console.log("[" + dateNow.getHours() + ":" + dateNow.getMinutes() + ":" + dateNow.getSeconds() + "][POST] /temp/setData " + JSON.stringify(reqBody));
-
+    addlog("POST", "/temp/setData " + JSON.stringify(reqBody))
 
     if(reqBody == []){
         res.sendStatus(201);
@@ -292,10 +274,7 @@ app.post('/temp/setData', function(req, res) {
 
 app.post('/temp/getData', function(req, res) {
  const reqBody = req.body; // Access the data sent in the request body
-    var dateNow = new Date();
-    console.log("[" + dateNow.getHours() + ":" + dateNow.getMinutes() + ":" + dateNow.getSeconds() + "][GET] /temp/getData " + JSON.stringify(reqBody));
-
-
+    addlog("GET", "/temp/getData " + JSON.stringify(reqBody));
 
     dbController.selectTeplotaData(sqlite3, reqBody.from, reqBody.to, reqBody.sensorId).then(
         result => {
@@ -304,7 +283,7 @@ app.post('/temp/getData', function(req, res) {
             res.end();
         }
         ).catch(err => {
-            console.log(err);
+            addlog("ERROR", "/temp/getData - " + err);
             res.sendStatus(501);
         });
    
@@ -312,9 +291,8 @@ app.post('/temp/getData', function(req, res) {
 
 
 app.get('/temp/getSensors', async function (req, res) {
-    var dateNow = new Date();
-        console.log("[" + dateNow.getHours() + ":" + dateNow.getMinutes() + ":" + dateNow.getSeconds() + "][GET] /temp/getSensors");
-     
+        addlog("GET", "/temp/getSensors");
+
         dbController.selectSensors(sqlite3).then(
         result => {
             res.setHeader('Content-Type', 'application/json');
@@ -322,7 +300,7 @@ app.get('/temp/getSensors', async function (req, res) {
             res.end();
         }
         ).catch(err => {
-            console.log(err);
+            addlog("ERROR", "/temp/getSensors - " + err);
             res.sendStatus(501);
         });
      
@@ -333,8 +311,8 @@ app.get('/temp/getSensors', async function (req, res) {
 
 
 app.get('/temp/removeDB', function(req, res) {
-    var dateNow = new Date();
-    console.log("[" + dateNow.getHours() + ":" + dateNow.getMinutes() + ":" + dateNow.getSeconds() + "][GET] /bazen/removeDB" + req.params.tagid);
+    addlog("GET", "/bazen/removeDB" + req.params.tagid);
+  
     dbController.removeDB(sqlite3);
       res.status(201).json({
         message: 'deleted successfully!'
