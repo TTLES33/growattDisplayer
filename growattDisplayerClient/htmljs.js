@@ -130,6 +130,13 @@ async function showTemps(params) {
     await loadPage("temps");
 
     loadAllTemperatures();
+    const tempsInterval = setInterval(function () {
+        if(activepage != "temps"){
+            clearInterval(tempsInterval);
+        }
+        loadAllTemperatures();
+    }, 1000 * 30);
+
 }
 
 async function loadPage(page){
@@ -313,150 +320,9 @@ async function updateTemperatures(){
         document.getElementById("oldDataTemp").style.display = "none";
         document.getElementById("oldDataMessageTemp").innerHTML = " "
     }
-
-        
-
- 
-
-    let tempArray0 = [];
-    let chartLabels0 = [];
-
-    let tempArray1 = [];
-    let chartLabels1 = [];
-
-    // let minTemp = Number.MAX_SAFE_INTEGER;
-    // let maxTemp = Number.MIN_SAFE_INTEGER;
-
-
-    // //tempdata0
-    // for(i = tempdata0.length - 1; i >= 0; i--){
-    //     let temp = tempdata0[i].teplota
-    //     tempArray0.push(parseFloat(temp));
-    //     if(temp < minTemp){
-    //         minTemp = temp;
-    //     }
-    //     if(temp > maxTemp){
-    //         maxTemp = temp;
-    //     }
-
-
-    //     var date = new Date(tempdata0[i].datetime);
-    //     var hours = date.getHours();
-
-    //     // Minutes part from the timestamp
-    //     var minutes = "0" + date.getMinutes();
-
-    //     // Seconds part from the timestamp
-    //     var seconds = "0" + date.getSeconds();
-
-    //     // Will display time in 10:30:23 format
-    //     var formattedTime = hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
-
-    //     chartLabels0.push(formattedTime);
-    // }
-    
-    // //tempdata1
-    // for(i = tempdata1.length - 1; i >= 0; i--){
-    //     let temp = tempdata1[i].teplota
-    //     tempArray1.push(parseFloat(temp));
-    //     if(temp < minTemp){
-    //         minTemp = temp;
-    //     }
-    //     if(temp > maxTemp){
-    //         maxTemp = temp;
-    //     }
-
-
-    //     var date = new Date(tempdata1[i].datetime);
-    //     var hours = date.getHours();
-
-    //     // Minutes part from the timestamp
-    //     var minutes = "0" + date.getMinutes();
-
-    //     // Seconds part from the timestamp
-    //     var seconds = "0" + date.getSeconds();
-
-    //     // Will display time in 10:30:23 format
-    //     var formattedTime = hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
-
-    //     chartLabels1.push(formattedTime);
-    // }
-
-    // console.log("minTemp: " + minTemp);
-    // console.log("maxTemp: " + maxTemp);
-
-    // //console.log(tempArray);
-    // const ctx0 = document.getElementById('tempChart0');
-    // ctx0.innerHTML = "";
-    
-    // const ctx1 = document.getElementById('tempChart1');
-    // ctx1.innerHTML = "";
-  
-    // let chart0 = createTemperatureChart(ctx0, tempArray0, chartLabels0, minTemp, maxTemp);
-    // let chart1 = createTemperatureChart(ctx1, tempArray1, chartLabels1, minTemp, maxTemp);
-
-    // setTimeout(() => {
-    //     chart0.destroy();
-    //     chart1.destroy();
-    //     updateTemperatures();
-    // }, "120000");
 }
 
-function createTemperatureChart(ctx, tempArray, chartLabels, minTemp, maxTemp){
-    const data = {
-        labels: chartLabels,
-        datasets: [{
-            label: 'temps',
-            data: tempArray,
-            fill: false,
-            borderColor: 'rgb(75, 192, 192)',
-            pointRadius: 0,
-        }]
-    };
-    let chrt = new Chart(ctx, {
-        type: 'line',
-        data: data,
-  
-         options: {
-            layout: {
-                padding: 0
-            },
-            maintainAspectRatio: false,
-            responsive: true,
-            plugins: {
-                legend: false
-            },
-            scales: {
-                y: {
-                    min: minTemp,
-                    max: maxTemp,
-                    grid: {
-                        display: false
-                    },
-                    
-                    border:{
-                        display:false
-                    }
-                },
-                x: {
-                    ticks:{
-                        display: false
-                    },
-                    grid: {
-                        display: false
-                    },
-                    border:{
-                        display:false
-                    }
-                }
 
-            }
-        }
-    });
-
-    console.log(chrt);
-    return chrt;
-}
 
 async function loadTemperature(from, to, sensorId){
       console.log("Function: loadTemperature");
