@@ -225,6 +225,12 @@ app.get('/css.css', function(req, res) {
     addlog("GET", req.params.tagid);
     res.sendFile(path.join(__dirname, '/growattDisplayerClient/css.css'));
 });
+app.get('/temps.css', function(req, res) {
+    var dateNow = new Date();
+    console.log("[" + dateNow.getHours() + ":" + dateNow.getMinutes() + ":" + dateNow.getSeconds() + "][GET] " + req.params.tagid);
+    res.sendFile(path.join(__dirname, '/growattDisplayerClient/temps.css'));
+});
+
 app.get('/iframe/:tagid', function(req, res) {
     addlog("GET", req.params.tagid);
     res.sendFile(path.join(__dirname, '/growattDisplayerClient/iframe/' + req.params.tagid));
