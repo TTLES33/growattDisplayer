@@ -1,5 +1,4 @@
-let minTemp = Number.MAX_SAFE_INTEGER;
-let maxTemp = Number.MIN_SAFE_INTEGER;
+
 
 let chartArr = [];
 
@@ -15,20 +14,46 @@ async function loadAllTemperatures(){
 
     document.getElementById("tempsData").innerHTML = "";
       let tempSensors = await loadAvaibleSensors();
+      let config = await loadConfig();
+
       console.log(tempSensors);
       console.log(tempSensors.length);
       	for(i = 0; i < tempSensors.length; i++){
             console.log(tempSensors[i]);
+            let sensorId = tempSensors[i].sensorId;
+            let sensorName = tempSensors[i].name;
+
 		    let sensorContainer = document.createElement("div");
 			sensorContainer.className = "sensorContainer";
 
             let gridName = document.createElement("div");
             gridName.className = "grid_name";
-            gridName.innerHTML = "Vevnitř";
+            gridName.innerHTML = "Undefined";
+            gridName.onclick = function(){
+                changeSensorName(sensorId, sensorName);
+            }
+
+            //find sensor name in config json
+            for(x = 0; x < config.sensorNames.length; x++){
+                if(config.sensorNames[x].sensorId == sensorId){
+                    gridName.innerHTML = config.sensorNames[x].name;
+                }
+            }
+
 
             let gridTemp = document.createElement("div");
             gridTemp.className = "grid_temp";
-            gridTemp.innerHTML = tempSensors[i].teplota;
+
+            let gridTempValue = document.createElement("div");
+            gridTempValue.innerHTML = Number(tempSensors[i].teplota).toFixed(1);
+            gridTempValue.className = "gridTempValue";
+
+            let celsius = document.createElement("div");
+            celsius.className = "celsiusSign";
+            celsius.innerHTML = "˚C";
+
+            gridTemp.appendChild(gridTempValue);
+            gridTemp.appendChild(celsius);
 
             let gridLine = document.createElement("div");
             gridLine.className = "grid_line";
@@ -38,7 +63,7 @@ async function loadAllTemperatures(){
             gridLine.appendChild(line);
             
 
-            let gridGraph = document.createElement("div");
+            let gridGraph = document.createElement("canvas");
             gridGraph.className = "grid_graph";
 
 
@@ -58,9 +83,11 @@ async function createGraph(containerElement, sensorId){
     let yesterdayDateTime = Date.now() - 1000 * 60 * 60 * 24;
 
     let tempdata = await loadTemperature(yesterdayDateTime, currentDateTime, sensorId);
-    
     let tempArray = [];
     let chartLabels = [];
+
+    let minTemp = Number.MAX_SAFE_INTEGER;
+    let maxTemp = Number.MIN_SAFE_INTEGER;
 
     for(x = tempdata.length - 1; x >= 0; x--){
         let temp = tempdata[x].teplota
@@ -89,24 +116,31 @@ async function createGraph(containerElement, sensorId){
         chartLabels.push(formattedTime);
     }
     
+    minTemp -= 1;
+    maxTemp += 1;
+
+
     console.log("minTemp: " + minTemp);
     console.log("maxTemp: " + maxTemp);
     
 
-  //  let chart = createTemperatureChart(containerElement, tempArray, chartLabels, minTemp, maxTemp);
+    let chart = createTemperatureChart(containerElement, tempArray, chartLabels, minTemp, maxTemp);
    
-    //chartArr.push(chart);
+    chartArr.push(chart);
 
 }
 
 function createTemperatureChart(ctx, tempArray, chartLabels, minTemp, maxTemp){
+    let chartColor = "white";
+    if(theme == "light"){
+        chartColor = "black";
+    }
     const data = {
         labels: chartLabels,
         datasets: [{
-            label: 'temps',
             data: tempArray,
             fill: false,
-            borderColor: 'rgb(75, 192, 192)',
+            borderColor: chartColor,
             pointRadius: 0,
         }]
     };
@@ -125,12 +159,18 @@ function createTemperatureChart(ctx, tempArray, chartLabels, minTemp, maxTemp){
             },
             scales: {
                 y: {
+       
                     min: minTemp,
                     max: maxTemp,
                     grid: {
                         display: false
                     },
-                    
+                    ticks:{
+                        color: chartColor,
+                        callback: function (value) {
+                            return Number(value).toFixed(1);
+                        }
+                    },
                     border:{
                         display:false
                     }
@@ -155,5 +195,20 @@ function createTemperatureChart(ctx, tempArray, chartLabels, minTemp, maxTemp){
     return chrt;
 }
 
+function changeSensorName(sensorId, sensorNameInput){
+    let sensorName = prompt("Název teploměru " + sensorId, sensorNameInput); 
 
+    fetch("/temp/setSensorName", {
+    method: "POST",
+    body: JSON.stringify({
+        sensorId: sensorId,
+        name: sensorName
+    }),
+    headers: {
+        "Content-type": "application/json; charset=UTF-8"
+    }
+    });
+
+    loadAllTemperatures();
+}
 
