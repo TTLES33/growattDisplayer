@@ -326,6 +326,53 @@ app.get('/temp/removeDB', function(req, res) {
 });
 
 
+app.post('/temp/setSensorName', function(req, res) {
+ const reqBody = req.body; // Access the data sent in the request body
+    addlog("GET", "/temp/setSensorName " + JSON.stringify(reqBody));
+
+
+  if (!reqBody || !reqBody.sensorId || !reqBody.name) {
+        return res.status(400).json({ message: 'sensorId and name are required' });
+    }
+
+    const fileName = 'data/config.json';
+
+    fs.readFile(fileName, 'utf8', (err, data) => {
+        if (err) {
+            console.error(err);
+            return;
+        }
+        let file = JSON.parse(data);
+
+        let sensorInFile = false;
+        for(i = 0; i < file.sensorNames.length; i++){
+            if(file.sensorNames[i].sensorId == reqBody.sensorId){
+                file.sensorNames[i].name = reqBody.name;
+                sensorInFile = true;
+                break;
+            }
+        }
+
+        if(sensorInFile == false){
+            file.sensorNames.push(
+                {
+                    "sensorId": reqBody.sensorId,
+                    "name": reqBody.name
+                }
+            )
+        }
+
+        fs.writeFile(fileName, JSON.stringify(file, null, 2), function writeJSON(err) {
+            if (err) return console.log(err);
+            console.log(JSON.stringify(file, null, 2));
+        });
+
+        res.status(201).json({
+            message: 'updated successfully!'
+        });
+
+    });
+});
 
 
 

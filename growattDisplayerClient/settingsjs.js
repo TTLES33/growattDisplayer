@@ -59,6 +59,7 @@ async function loadConfig(){
     console.log(json.theme);
     config = json.theme;
     
+    return json;
     
   } catch (error) {
     console.error(error.message);
