@@ -89,7 +89,7 @@ async function createGraph(containerElement, sensorId){
     let minTemp = Number.MAX_SAFE_INTEGER;
     let maxTemp = Number.MIN_SAFE_INTEGER;
 
-    for(x = tempdata.length - 1; x >= 0; x--){
+    for(x = tempdata.length - 1; x >= 0; x=x-5){
         let temp = tempdata[x].teplota
 
         tempArray.push(parseFloat(temp));
@@ -107,11 +107,9 @@ async function createGraph(containerElement, sensorId){
         // Minutes part from the timestamp
         var minutes = "0" + date.getMinutes();
 
-        // Seconds part from the timestamp
-        var seconds = "0" + date.getSeconds();
 
         // Will display time in 10:30:23 format
-        var formattedTime = hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
+        var formattedTime = hours + ':' + minutes.substr(-2);
 
         chartLabels.push(formattedTime);
     }
@@ -131,6 +129,8 @@ async function createGraph(containerElement, sensorId){
 }
 
 function createTemperatureChart(ctx, tempArray, chartLabels, minTemp, maxTemp){
+    console.log(chartLabels);
+    console.log(tempArray);
     let chartColor = "white";
     if(theme == "light"){
         chartColor = "black";
@@ -142,6 +142,7 @@ function createTemperatureChart(ctx, tempArray, chartLabels, minTemp, maxTemp){
             fill: false,
             borderColor: chartColor,
             pointRadius: 0,
+            tension: 0.1
         }]
     };
     let chrt = new Chart(ctx, {
@@ -159,7 +160,6 @@ function createTemperatureChart(ctx, tempArray, chartLabels, minTemp, maxTemp){
             },
             scales: {
                 y: {
-       
                     min: minTemp,
                     max: maxTemp,
                     grid: {
@@ -176,9 +176,9 @@ function createTemperatureChart(ctx, tempArray, chartLabels, minTemp, maxTemp){
                     }
                 },
                 x: {
-                    ticks:{
-                        display: false
-                    },
+                    // ticks:{
+                    //     display: false
+                    // },
                     grid: {
                         display: false
                     },
