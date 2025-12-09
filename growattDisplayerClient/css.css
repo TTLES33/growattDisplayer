@@ -18,10 +18,11 @@
     --icon-theme: url("media/dark/theme_icon.svg");
     --icon-settings: url("media/dark/settings_icon.svg");
     --icon-home-grid: url("media/dark/home_icon.svg");
-    --icon-grid: url("media/dark/power_plant.png");
+    --icon-grid: url("media/dark/utility-pole.svg");
     --icon-solar: url("media/dark/solar_panel_icon.png");
     --icon-temp-inside: url("media/dark/home_icon.svg");
     --icon-temp-outside: url("media/dark/outside_icon.svg");
+    --icon-expand: url("media/dark/expand.svg");
 }
 :root[data-theme="light"]{
   --nav_background: #fef7ff;
@@ -36,10 +37,12 @@
   --icon-theme: url("media/white/theme_icon.svg");
   --icon-settings: url("media/white/settings_icon.svg");
   --icon-home-grid: url("media/white/home_icon.svg");
-  --icon-grid: url("media/white/power_plant.png");
+  --icon-grid: url("media/white/utility-pole.svg");
   --icon-solar: url("media/white/solar_panel_icon.png");
   --icon-temp-inside: url("media/white/home_icon.svg");
   --icon-temp-outside: url("media/white/outside_icon.svg");
+  --icon-expand: url("media/white/expand.svg");
+
 }
 .icon-home {
   background-image: var(--icon-home);
@@ -71,7 +74,9 @@
 .icon-temp-outside{
   background-image: var(--icon-temp-outside);
 }
-
+.icon-expand{
+  background-image: var(--icon-expand);
+}
 
 @keyframes arrow-animation {
             0% {
@@ -132,6 +137,9 @@ body{
 }
 .barBottom{
   margin-top: auto;
+  display: flex;
+  flex-direction: row;
+  column-gap: 0.5em;
 }
 .content{ 
     
@@ -529,7 +537,6 @@ align-self: end;
   }
 
   .baricon{
-    padding-right: 5px;
     height: 35px;
     font-size: 24;
     color: white;
@@ -544,8 +551,8 @@ align-self: end;
     color: white;
     align-content: center;
     background: var(--nav_button_background);
-    padding: 5px;
-    padding: 5px 20px;
+
+    padding: 5px 10px 5px 10px;
     margin-bottom: 20px;
     text-align: center;
     text-decoration: none;
@@ -553,7 +560,6 @@ align-self: end;
   }
   .barItem div{
     color: var(--text_color);
-    line-height: 40px;
   }
 
   .barCenter{
@@ -669,4 +675,6 @@ hr{
 }
 #pageIFrame{
   width: 100%;
+  height: calc(100vh - 10px);
+  overflow: auto;
 }
