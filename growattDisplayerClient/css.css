@@ -227,7 +227,7 @@ body{
     align-self: center;
     color: var(--text_color);
     font-size: 30px;
-  
+    text-align: center;
   }
   .battery_text{
     grid-area: battery_text;
