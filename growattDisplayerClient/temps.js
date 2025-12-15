@@ -156,7 +156,11 @@ function createTemperatureChart(ctx, tempArray, chartLabels, minTemp, maxTemp){
             maintainAspectRatio: false,
             responsive: true,
             plugins: {
-                legend: false
+                legend: false,
+                decimation: {
+                    enabled: true,
+                    algorithm: 'min-max',
+                }
             },
             scales: {
                 y: {
