@@ -96,7 +96,7 @@ async function renderAvaibleSensors(){
 			
 		sensorId.innerHTML = "Id: " + tempSensors[i].sensorId;
 		sensorLastTemp.innerHTML = tempSensors[i].teplota + "˚c";
-		sensorLastTime.innerHTML = "last update: " + new Date(tempSensors[i].sensorId).toString();
+		sensorLastTime.innerHTML = "last update: " + new Date(tempSensors[i].datetime).toString();
 
 		sensorDiv.appendChild(sensorId);
 		sensorDiv.appendChild(sensorLastTemp);
