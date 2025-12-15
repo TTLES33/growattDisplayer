@@ -250,6 +250,11 @@ app.get('/media/:tagid', function(req, res) {
     res.sendFile(path.join(__dirname, '/growattDisplayerClient/media/' + req.params.tagid));
 });
 
+app.get('/database/download', function(req, res) {
+    addlog("GET", req.params.tagid);
+    res.download(path.join(__dirname, '/data/tempDB.db'));
+});
+
 
 
 
