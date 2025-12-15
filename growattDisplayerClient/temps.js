@@ -129,8 +129,8 @@ async function createGraph(containerElement, sensorId){
 }
 
 function createTemperatureChart(ctx, tempArray, chartLabels, minTemp, maxTemp){
-    console.log(chartLabels);
-    console.log(tempArray);
+    // console.log(chartLabels);
+    // console.log(tempArray);
     let chartColor = "white";
     if(theme == "light"){
         chartColor = "black";
@@ -142,19 +142,18 @@ function createTemperatureChart(ctx, tempArray, chartLabels, minTemp, maxTemp){
             fill: false,
             borderColor: chartColor,
             pointRadius: 0,
-            tension: 0.1
+            tension: 0.1,
         }]
     };
     let chrt = new Chart(ctx, {
         type: 'line',
         data: data,
-  
          options: {
+            animation: false,
             layout: {
                 padding: 0
             },
             maintainAspectRatio: false,
-            responsive: true,
             plugins: {
                 legend: false,
                 decimation: {
@@ -180,9 +179,6 @@ function createTemperatureChart(ctx, tempArray, chartLabels, minTemp, maxTemp){
                     }
                 },
                 x: {
-                    // ticks:{
-                    //     display: false
-                    // },
                     grid: {
                         display: false
                     },
@@ -190,12 +186,11 @@ function createTemperatureChart(ctx, tempArray, chartLabels, minTemp, maxTemp){
                         display:false
                     }
                 }
-
             }
         }
     });
 
-    console.log(chrt);
+    // console.log(chrt);
     return chrt;
 }
 

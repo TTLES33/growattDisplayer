@@ -299,10 +299,8 @@ async function updateTemperatures(){
     let tempdata0 = await loadTemperature(dateFrom, dateNow, 45);
     let tempdata1 = await loadTemperature(dateFrom, dateNow, 129);
 
-    
-
-    document.getElementById("tempValue0").innerHTML = Number.parseFloat(tempdata0[0].teplota).toFixed(1) + "°C";
-    document.getElementById("tempValue1").innerHTML = Number.parseFloat(tempdata1[0].teplota).toFixed(1) + "°C";
+    let tempString0 = Number.parseFloat(tempdata0[0].teplota).toFixed(1) + "°C";
+    let tempString1 = Number.parseFloat(tempdata0[1].teplota).toFixed(1) + "°C";
 
     Last_Temperature_Update = tempdata0[0].datetime;
 
@@ -312,14 +310,26 @@ async function updateTemperatures(){
     const dateToCheck0 = new Date(tempdata0[0].datetime);
     const dateToCheck1 = new Date(tempdata1[0].datetime);
     const currentTimeMillis = Date.now();
-    //if difference is bigger than 10 minutes
-    if((currentTimeMillis - dateToCheck0.getTime()) > (60 * 1000) || (currentTimeMillis - dateToCheck1.getTime()) > (60 * 1000)){
-        document.getElementById("oldDataTemp").style.display = "flex";
-        document.getElementById("oldDataMessageTemp").innerHTML = dateToCheck0.toString();
+    //if difference is bigger than 1 minute
+    if((currentTimeMillis - dateToCheck0.getTime()) > (60 * 1000)){
+        document.getElementById("tempContainer0").style.background = "var(--arrow_red)";
+        tempString0 = tempString0 + " ⚠";
     }else{
-        document.getElementById("oldDataTemp").style.display = "none";
-        document.getElementById("oldDataMessageTemp").innerHTML = " "
+        document.getElementById("tempContainer0").style.background = "var(--nav_button_background)";
     }
+
+    if((currentTimeMillis - dateToCheck1.getTime()) > (60 * 1000)){
+        document.getElementById("tempContainer1").style.background = "var(--arrow_red)";
+        tempString1 = tempString1 + " ⚠";
+    }else{
+        document.getElementById("tempContainer1").style.background = "var(--nav_button_background)";
+    }
+
+
+    //insert data to HTML elements
+    document.getElementById("tempValue0").innerHTML = tempString0;
+    document.getElementById("tempValue1").innerHTML = tempString1;
+
 }
 
 

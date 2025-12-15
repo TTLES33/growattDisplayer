@@ -1,3 +1,6 @@
+data/tempDB.db
+
+
 # Logs
 logs
 *.log
@@ -132,3 +135,4 @@ dist
 
 # idea files
 .idea
+data/tempDB.db
