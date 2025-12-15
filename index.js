@@ -1,5 +1,3 @@
-
-
 const api = require('growatt')
 var express = require('express');
 var app = express();
@@ -8,6 +6,7 @@ const fs = require('node:fs');
 const dbController = require("./dbController.js");
 const sqlite3 = require("sqlite3");
 
+const version = "1.5";
 
 const user="FVE Grygar"
 const passwort="Serikova40"
@@ -60,7 +59,7 @@ let growattCacheData = {
 
 
 
-addlog("INFO", "Version: 1.4");;
+addlog("INFO", `Version: ${version}`, version);
 
 //Refresh plant data periodically
 grawattDataUpdate();

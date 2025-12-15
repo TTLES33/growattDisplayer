@@ -89,7 +89,7 @@ async function showIndex(){
     console.log("function: showIndex()");
 
     await loadPage("index");
-
+    updateTemperatures();
     loadData();
 }
 
@@ -366,10 +366,7 @@ async function updateTemperatures(){
     let tempdata1 = await loadTemperature(dateFrom, dateNow, 129);
 
     let tempString0 = Number.parseFloat(tempdata0[0].teplota).toFixed(1) + "°C";
-    let tempString1 = Number.parseFloat(tempdata0[1].teplota).toFixed(1) + "°C";
-
-    Last_Temperature_Update = tempdata0[0].datetime;
-
+    let tempString1 = Number.parseFloat(tempdata1[0].teplota).toFixed(1) + "°C";
 
 
     //check for old data
