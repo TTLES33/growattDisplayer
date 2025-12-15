@@ -667,7 +667,7 @@ hr{
   display: flex;
   flex-direction: row;
   width: 100%;
-  background: var(--nav_background);
+  background: var(--text_color);
   padding: 5px;
   border-radius: 10px;
   justify-content: space-around;
