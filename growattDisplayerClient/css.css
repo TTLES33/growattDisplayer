@@ -667,11 +667,12 @@ hr{
   display: flex;
   flex-direction: row;
   width: 100%;
-  background: var(--text_color);
   padding: 5px;
   border-radius: 10px;
   justify-content: space-around;
   margin-bottom: 10px;
+  background: var(--background);
+  color: var(--text_color);
 }
 #pageIFrame{
   width: 100%;
