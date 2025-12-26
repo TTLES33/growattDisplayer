@@ -162,7 +162,7 @@ function renderDataBattery(plantdata, error){
     if(error){
         document.getElementById("percentage").innerHTML = "error";
         document.getElementById("power").innerHTML = "data elektrárny starší než 10min";
-                document.getElementById("battery_text").innerHTML = "";
+        document.getElementById("battery_text").innerHTML = "";
         document.getElementById("percentage").style.color = "var(--arrow_red)";
         document.getElementById("battery-level").style.setProperty("height", 0) ; 
 
@@ -172,7 +172,7 @@ function renderDataBattery(plantdata, error){
 
         return;
     }
-
+    document.getElementById("percentage").style.color = "var(--text-color)";
 
 
     var battery_height = "calc(" + plantdata.Battery_Percentage + "% - 4px)";
