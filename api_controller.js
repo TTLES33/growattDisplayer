@@ -1,25 +1,30 @@
 var express = require('express');
 var app = express();
 const path = require('path');
-const fs = require('node:fs');
-const dbController = require("./dbController.js");
+
+
 const sqlite3 = require("sqlite3");
 const cors = require('cors');
 
 const global = require("./global.js");
 const growatt_controller = require("./growatt_controller.js");
+const dbController = require("./dbController.js");
+const file_controller = require("./file_controller.js");
 
 
 var server = app.listen(8081, function () {
     var host = server.address().address;
     var port = server.address().port;
-    console.log("[INFO] Example app listening at http://%s:%s", host, port);
+    global.addlog("INFO", `Example app listening at http://${host}:${port}`);
 })
 
 
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true}));
+
+
+
 app.get('/plantdata', async function (req, res) {
     global.addlog("GET", "/plantdata");
     res.send(growatt_controller.getGrowattCacheData());
@@ -27,52 +32,37 @@ app.get('/plantdata', async function (req, res) {
 })
 
 app.get('/config', async function (req, res) {
-   
-        fs.readFile('data/config.json', 'utf8', (err, data) => {
-        if (err) {
-            console.error(err);
-            return;
-        }
-            res.setHeader('Content-Type', 'application/json');
-            res.send(data);
-            res.end();
-        }); 
-  
+    global.addlog("GET", "/config");
+    try{
+        const configData = await file_controller.configRead();
+        res.status(200);
+        res.json(configData)
+        // res.setHeader('Content-Type', 'application/json');
+    }catch(err){
+        global.addlog("ERROR", "/config - " + err);
+        res.sendStatus(500);
+    }
 })
-app.post('/config/set/theme', (req, res) => {
-    const reqBody = req.body; // Access the data sent in the request body
-    global.addlog("POST", reqBody);
-    // Basic validation (in a real app, this would be more robust)
+
+
+app.post('/config/set/theme', async (req, res) => {
+    const reqBody = req.body; 
+    global.addlog("POST", JSON.stringify(reqBody));
+
     if (!reqBody || !reqBody.from || !reqBody.to) {
         return res.status(400).json({ message: 'from and to are required' });
     }
 
-    const fileName = 'data/config.json';
+    try{
+        await file_controller.configSetTheme(reqBody.from, reqBody.to);
+    }catch(err){
+        global.addlog("ERROR", "/config/set/theme - " + err);
+        res.sendStatus(500);
+    }
 
-    fs.readFile(fileName, 'utf8', (err, data) => {
-        if (err) {
-            console.error(err);
-            return;
-        }
-        let file = JSON.parse(data);
-        file.theme.from = reqBody.from;
-        file.theme.to = reqBody.to;
-
-        fs.writeFile(fileName, JSON.stringify(file, null, 2), function writeJSON(err) {
-            if (err) return console.log(err);
-            console.log(JSON.stringify(file, null, 2));
-            //console.log('writing to ' + fileName);
-        });
-
-        res.status(201).json({
-            message: 'updated successfully!'
-        });
-
+    res.status(201).json({
+        message: 'updated successfully!'
     });
-   
-        
-        
-  
 });
 app.get('/', function(req, res) {
     global.addlog("GET", req.params.tagid);
@@ -217,47 +207,21 @@ app.post('/temp/setSensorName', function(req, res) {
     global.addlog("GET", "/temp/setSensorName " + JSON.stringify(reqBody));
 
 
-  if (!reqBody || !reqBody.sensorId || !reqBody.name) {
+    if (!reqBody || !reqBody.sensorId || !reqBody.name) {
         return res.status(400).json({ message: 'sensorId and name are required' });
     }
 
-    const fileName = 'data/config.json';
+    try{
+        file_controller.configSetSensorName(reqBody.sensorId, reqBody.name);
+    }catch(err){
+        global.addlog("ERROR", "/temp/setSensorName - " + err);
+        res.sendStatus(501);
+    }
 
-    fs.readFile(fileName, 'utf8', (err, data) => {
-        if (err) {
-            console.error(err);
-            return;
-        }
-        let file = JSON.parse(data);
-
-        let sensorInFile = false;
-        for(i = 0; i < file.sensorNames.length; i++){
-            if(file.sensorNames[i].sensorId == reqBody.sensorId){
-                file.sensorNames[i].name = reqBody.name;
-                sensorInFile = true;
-                break;
-            }
-        }
-
-        if(sensorInFile == false){
-            file.sensorNames.push(
-                {
-                    "sensorId": reqBody.sensorId,
-                    "name": reqBody.name
-                }
-            )
-        }
-
-        fs.writeFile(fileName, JSON.stringify(file, null, 2), function writeJSON(err) {
-            if (err) return console.log(err);
-            console.log(JSON.stringify(file, null, 2));
-        });
-
-        res.status(201).json({
-            message: 'updated successfully!'
-        });
-
+    res.status(201).json({
+        message: 'updated successfully!'
     });
+
 });
 
 
