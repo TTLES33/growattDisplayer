@@ -77,11 +77,6 @@ async function grawattDataUpdate(){
     dateNow = new Date();
     let loggers = await growatt.getDataLoggers().catch(e => {console.log(e)})
     let getAllPlantData = await growatt.getAllPlantData(options).catch(e => {})
-
-    console.log(getAllPlantData);
-    await fs.writeFile("temp.json", JSON.stringify(getAllPlantData), function writeJSON(err) {
-        // console.log(JSON.stringify(file, null, 2));
-    });
  
     growattCacheData.Battery_Discharged_Total = getAllPlantData["1531648"].devices.KHH0B1500P.totalData.edischarge1Total,
     growattCacheData.Battery_Discharged_Today =   getAllPlantData["1531648"].devices.KHH0B1500P.totalData.edischarge1Today,

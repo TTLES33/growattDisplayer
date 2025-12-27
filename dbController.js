@@ -21,35 +21,25 @@ async function selectTeplotaData(sqlite3, from, to, sensorId){
     const inverval_seconds = interval * 60;
     const sql = `
         WITH RECURSIVE
-        -- 1. Create a list of timestamps for every minute of the last 24 hours
-        params AS (
-            SELECT 
-            ${from} AS start_time, 
-            ${to} AS end_time,
-            ${inverval_seconds} AS interval_sec
-        ),
+                
             timeline(bucket_ts) AS (
-                SELECT (start_time / 1000) / 60 * 60 FROM params
+                SELECT (${from} / 1000) / 60 * 60 
                 UNION ALL
-                SELECT bucket_ts + (SELECT interval_sec FROM params) FROM timeline
-                WHERE bucket_ts < (SELECT (end_time / 1000) / 60 * 60 FROM params)
-        ),
-            recent_data AS (
-                SELECT timestamp, temperature 
-                FROM sensor_data 
-                WHERE timestamp >= (SELECT start_time FROM params)
-                    AND timestamp <= (SELECT end_time FROM params)
-        )
-        -- 2. Join the timeline with your actual sensor data
-        SELECT 
-            datetime(t.bucket_ts, 'unixepoch', 'localtime') AS time_label,
-            AVG(s.teplota) AS avg_temp
-        FROM timeline t
-        LEFT JOIN teploty s ON 
-            s.datetime >= (t.bucket_ts * 1000) AND 
-            s.datetime < ((t.bucket_ts + (SELECT interval_sec FROM params)) * 1000)
-        GROUP BY t.bucket_ts
-        ORDER BY t.bucket_ts ASC;
+                SELECT bucket_ts + ${inverval_seconds}
+                FROM timeline
+                WHERE bucket_ts <  (${to} / 1000) / 60 * 60
+            )
+            -- 2. Join the timeline with your actual sensor data
+            SELECT 
+                datetime(t.bucket_ts, 'unixepoch', 'localtime') AS time_label,
+                ROUND(AVG(s.teplota), 2) AS avg_temp
+            FROM timeline t
+            LEFT JOIN teploty s ON 
+                s.sensorId = ${sensorId} AND
+                s.datetime >= (t.bucket_ts * 1000) AND 
+                s.datetime < ((t.bucket_ts + ${inverval_seconds}) * 1000)
+            GROUP BY t.bucket_ts
+            ORDER BY t.bucket_ts ASC;
     `;
     try {
         const products = await fetchAll(db, sql);

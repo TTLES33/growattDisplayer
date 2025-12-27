@@ -353,7 +353,7 @@ function loadData(){
 async function updateTemperatures(){
     //continue only on index page
     if(activepage != "index"){
-        return -1;
+        return;
     }
     //24 hours
     let dateNow = Date.now();
@@ -365,13 +365,13 @@ async function updateTemperatures(){
     let tempdata0 = await loadTemperature(dateFrom, dateNow, 45);
     let tempdata1 = await loadTemperature(dateFrom, dateNow, 129);
 
-    let tempString0 = Number.parseFloat(tempdata0[0].teplota).toFixed(1) + "°C";
-    let tempString1 = Number.parseFloat(tempdata1[0].teplota).toFixed(1) + "°C";
+    let tempString0 = Number.parseFloat(tempdata0[0].avg_temp).toFixed(1) + "°C";
+    let tempString1 = Number.parseFloat(tempdata1[0].avg_temp).toFixed(1) + "°C";
 
 
     //check for old data
-    const dateToCheck0 = new Date(tempdata0[0].datetime);
-    const dateToCheck1 = new Date(tempdata1[0].datetime);
+    const dateToCheck0 = new Date(tempdata0[0].time_label);
+    const dateToCheck1 = new Date(tempdata1[0].time_label);
     const currentTimeMillis = Date.now();
     //if difference is bigger than 1 minute
     if((currentTimeMillis - dateToCheck0.getTime()) > (60 * 1000)){
