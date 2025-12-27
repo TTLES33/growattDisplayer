@@ -89,8 +89,8 @@ async function createGraph(containerElement, sensorId){
     let minTemp = Number.MAX_SAFE_INTEGER;
     let maxTemp = Number.MIN_SAFE_INTEGER;
 
-    for(x = tempdata.length - 1; x >= 0; x=x-5){
-        let temp = tempdata[x].teplota
+    for(x = tempdata.length - 1; x >= 0; x--){
+        let temp = tempdata[x].avg_temp
 
         tempArray.push(parseFloat(temp));
         if(temp < minTemp){
@@ -101,7 +101,7 @@ async function createGraph(containerElement, sensorId){
         }
 
 
-        var date = new Date(tempdata[x].datetime);
+        var date = new Date(tempdata[x].time_label);
         var hours = date.getHours();
 
         // Minutes part from the timestamp
@@ -114,8 +114,8 @@ async function createGraph(containerElement, sensorId){
         chartLabels.push(formattedTime);
     }
     
-    minTemp -= 1;
-    maxTemp += 1;
+    minTemp -= 2;
+    maxTemp += 2;
 
 
     console.log("minTemp: " + minTemp);
