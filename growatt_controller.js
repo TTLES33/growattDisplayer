@@ -1,9 +1,12 @@
 const api = require('growatt')
 const global = require("./global.js");
-let login;
+let loginData;
 const options={
     weather : false,
     faultlog: true,
+}
+const errorOptions = {
+    plantId: 1531648,   
 }
 let growattCacheData = {
         "loggerInfo":{
@@ -57,24 +60,28 @@ const growatt = new api({
     "server": process.env.GROWATT_SERVER	
 })
 
-async function growattLogin() {
+async function login() {
 
-    login = await growatt.login(process.env.GROWATT_USER,process.env.GROWATT_PASS).catch(e => {console.log(e)});
+    loginData = await growatt.login(process.env.GROWATT_USER,process.env.GROWATT_PASS).catch(e => {console.log(e)});
     global.addlog("INFO", "login succesfull");
 }
-
+const fs = require('node:fs').promises;
 async function grawattDataUpdate(){
 
     global.addlog("INFO", "growattDataUpdate()");
-    if(!login){
+    if(!loginData){
         global.addlog("ERROR", "504 /plantdata - No Login");
-        await growattLogin();
+        await login();
     }
 
     dateNow = new Date();
     let loggers = await growatt.getDataLoggers().catch(e => {console.log(e)})
     let getAllPlantData = await growatt.getAllPlantData(options).catch(e => {})
-    //console.log(getAllPlantData);
+
+    console.log(getAllPlantData);
+    await fs.writeFile("temp.json", JSON.stringify(getAllPlantData), function writeJSON(err) {
+        // console.log(JSON.stringify(file, null, 2));
+    });
  
     growattCacheData.Battery_Discharged_Total = getAllPlantData["1531648"].devices.KHH0B1500P.totalData.edischarge1Total,
     growattCacheData.Battery_Discharged_Today =   getAllPlantData["1531648"].devices.KHH0B1500P.totalData.edischarge1Today,
@@ -114,16 +121,20 @@ async function grawattDataUpdate(){
     growattCacheData.loggerInfo.deviceType = loggers[0].deviceType;
     growattCacheData.loggerInfo.ipAddress = loggers[0].ipAndPort;
     growattCacheData.loggerInfo.interval = loggers[0].interval;
-    growattCacheData.loggerInfo.lastUpdateTime = loggers[0].lastUpdateTime;
+    growattCacheData.loggerInfo.lastUpdateTime = +new Date(loggers[0].lastUpdateTime);
 
-    growattCacheData.Last_Data_Update =   getAllPlantData["1531648"].devices.KHH0B1500P.deviceData.lastUpdateTime,
-    growattCacheData.Last_Server_Update = dateNow.toString()
+    growattCacheData.Last_Data_Update =  +new Date(getAllPlantData["1531648"].devices.KHH0B1500P.deviceData.lastUpdateTime),
+    growattCacheData.Last_Server_Update = Date.now();
 
 }
 
+async function startLoadDataRunner(interval){
+    grawattDataUpdate();
+    setInterval(grawattDataUpdate, interval);
+}
 
 function getGrowattCacheData(){
     return growattCacheData;
 }
 
-module.exports = {grawattDataUpdate, growattLogin, getGrowattCacheData};
+module.exports = {startLoadDataRunner, login, getGrowattCacheData};

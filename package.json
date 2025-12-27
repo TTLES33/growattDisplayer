@@ -42,7 +42,7 @@
     "fs": "^0.0.1-security",
     "function-bind": "^1.1.1",
     "get-intrinsic": "^1.2.0",
-    "growatt": "^0.3.0",
+    "growatt": "^0.7.7",
     "has": "^1.0.3",
     "has-flag": "^4.0.0",
     "has-symbols": "^1.0.3",
