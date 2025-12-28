@@ -32,7 +32,8 @@ async function selectTeplotaData(sqlite3, from, to, sensorId){
             -- 2. Join the timeline with your actual sensor data
             SELECT 
                 datetime(t.bucket_ts, 'unixepoch', 'localtime') AS time_label,
-                ROUND(AVG(s.teplota), 2) AS avg_temp
+                ROUND(AVG(s.teplota), 2) AS avg_temp,
+				ROUND(AVG(s.teplota) OVER (),2) AS avg_temp_overall
             FROM timeline t
             LEFT JOIN teploty s ON 
                 s.sensorId = ${sensorId} AND
