@@ -1,5 +1,8 @@
 
-module.exports = {insertTeplotaRow, selectTeplotaData, selectSensors, removeDB};
+module.exports = {insertTeplotaRow, selectTeplotaData, selectSensors, removeDB, updateDBStructure};
+
+
+const sqlite3 = require("sqlite3");
 
 const dbName = 'data/tempDB.db';
 function insertTeplotaRow(sqlite3, teplota, sensorId){
@@ -17,7 +20,9 @@ async function updateDBStructure(){
     const db = new sqlite3.Database(dbName); 
     const sql = `CREATE INDEX IF NOT EXISTS idx_sensor_id_timestamp ON teploty (sensorId, datetime);`;
     try{
+        // db.run(sql);
         db.run(sql);
+        return ;
     }catch(err){
         console.log(err);
     }
