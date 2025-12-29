@@ -13,6 +13,16 @@ function insertTeplotaRow(sqlite3, teplota, sensorId){
     })
 }
 
+async function updateDBStructure(){
+    const db = new sqlite3.Database(dbName); 
+    const sql = `CREATE INDEX IF NOT EXISTS idx_sensor_id_timestamp ON teploty (sensorId, datetime);`;
+    try{
+        db.run(sql);
+    }catch(err){
+        console.log(err);
+    }
+}
+
 async function selectTeplotaData(sqlite3, from, to, sensorId){
     const db = new sqlite3.Database(dbName); 
     // let sql = "SELECT datetime, teplota FROM teploty WHERE sensorId = " + sensorId + " AND datetime < " + to + " AND datetime > " + from + "  ORDER BY datetime DESC;"; 
