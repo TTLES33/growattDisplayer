@@ -4,6 +4,7 @@ loadEnvFile('setup.env');
 
 const global = require("./global.js");
 const db_controller = require("./dbController.js");
+const api_controller = require("./api_controller.js")
 const growatt_controller = require("./growatt_controller.js");
 
 async function startServer() {
