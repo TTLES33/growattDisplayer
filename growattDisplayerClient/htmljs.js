@@ -128,8 +128,10 @@ async function showTemps(params) {
     console.log("function: dataPageCreator()");
 
     await loadPage("temps");
-
+    
+    tempsPageFirstLoad();
     loadAllTemperatures();
+
     const tempsInterval = setInterval(function () {
         if(activepage != "temps"){
             clearInterval(tempsInterval);
@@ -375,17 +377,21 @@ async function updateTemperatures(){
     const currentTimeMillis = Date.now();
     //if difference is bigger than 1 minute
     if((currentTimeMillis - dateToCheck0.getTime()) > (60 * 1000)){
-        document.getElementById("tempContainer0").style.background = "var(--arrow_red)";
+        // document.getElementById("tempContainer0").style.background = "var(--arrow_red)";
+        document.getElementById("tempContainer0").classList.add("tempError")
         tempString0 = tempString0 + " ⚠";
     }else{
-        document.getElementById("tempContainer0").style.background = "var(--nav_button_background)";
+        // document.getElementById("tempContainer0").style.background = "var(--nav_button_background)";
+        document.getElementById("tempContainer0").classList.remove("tempError")
     }
 
     if((currentTimeMillis - dateToCheck1.getTime()) > (60 * 1000)){
-        document.getElementById("tempContainer1").style.background = "var(--arrow_red)";
+        // document.getElementById("tempContainer1").style.background = "var(--arrow_red)";
+        document.getElementById("tempContainer1").classList.add("tempError")
         tempString1 = tempString1 + " ⚠";
     }else{
-        document.getElementById("tempContainer1").style.background = "var(--nav_button_background)";
+        // document.getElementById("tempContainer1").style.background = "var(--nav_button_background)";
+        document.getElementById("tempContainer1").classList.remove("tempError")
     }
 
 

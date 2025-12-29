@@ -1,3 +1,21 @@
 <div id="bodyData" >
+    <div class="timeRangeSelector" id="timeRangeSelector">
+        <div class="selectorElement selectorActive" onclick="changeSearchRange(false, 86400000, this)">
+            24hod
+        </div>
+        <div class="selectorElement" onclick="changeSearchRange(false, 172800000, this)">
+            2 dny
+        </div>
+        <div class="selectorElement" onclick="changeSearchRange(false, 604800000, this)">
+            týden
+        </div>
+        <div class="selectorElement" onclick="changeSearchRange(false, 2592000000, this)">
+            měsíc
+        </div>
+        <div class="selectorElement">
+            <input type="date" id="tempRange_from" oninput="changeSearchRange(true, undefined, this)">
+            <input type="date" id="tempRange_to" oninput="changeSearchRange(true, undefined, this)">
+        </div>
+    </div>
     <div id="tempsData"></div>
 </div>

@@ -1,7 +1,16 @@
 
 
-let chartArr = [];
 
+let chartArr = [];
+let searchRange = {
+    from: 0,
+    to: 0
+}
+
+function tempsPageFirstLoad(){
+    searchRange.from = Date.now() - 1000 * 60 * 60 * 24;
+    searchRange.to = Date.now();
+}
 
 async function loadAllTemperatures(){
     console.log("loadAllTemperatures()");
@@ -10,9 +19,16 @@ async function loadAllTemperatures(){
         chartArr[i].destroy();
     }
     chartArr = [];
-
-
     document.getElementById("tempsData").innerHTML = "";
+
+    if(!Number.isInteger(searchRange.from) || !Number.isInteger(searchRange.to)){
+        document.getElementById("tempsData").innerHTML = "Invalid dates";
+        return;
+    }
+
+
+
+
       let tempSensors = await loadAvaibleSensors();
       let config = await loadConfig();
 
@@ -79,24 +95,21 @@ async function loadAllTemperatures(){
 }
 
 async function createGraph(containerElement, sensorId){
-    let currentDateTime = Date.now();
-    let yesterdayDateTime = Date.now() - 1000 * 60 * 60 * 24;
-
-    let tempdata = await loadTemperature(yesterdayDateTime, currentDateTime, sensorId);
+    let tempdata = await loadTemperature(searchRange.from, searchRange.to, sensorId);
     let tempArray = [];
     let chartLabels = [];
 
     let minTemp = Number.MAX_SAFE_INTEGER;
     let maxTemp = Number.MIN_SAFE_INTEGER;
 
-    for(x = tempdata.length - 1; x >= 0; x--){
+    for(x = 0; x < tempdata.length; x++){
         let temp = tempdata[x].avg_temp
 
         tempArray.push(parseFloat(temp));
-        if(temp < minTemp){
+        if(temp < minTemp && temp != null){
             minTemp = temp;
         }
-        if(temp > maxTemp){
+        if(temp > maxTemp && temp != null){
             maxTemp = temp;
         }
 
@@ -111,6 +124,10 @@ async function createGraph(containerElement, sensorId){
         // Will display time in 10:30:23 format
         var formattedTime = hours + ':' + minutes.substr(-2);
 
+        if(date.valueOf() <= (Date.now() - 24 * 60 * 60 * 1000)){
+            formattedTime = date.getDate() + "." + (date.getMonth() + 1) + " " +  formattedTime;
+        }
+
         chartLabels.push(formattedTime);
     }
     
@@ -118,8 +135,8 @@ async function createGraph(containerElement, sensorId){
     maxTemp += 2;
 
 
-    console.log("minTemp: " + minTemp);
-    console.log("maxTemp: " + maxTemp);
+    // console.log("minTemp: " + minTemp);
+    // console.log("maxTemp: " + maxTemp);
     
 
     let chart = createTemperatureChart(containerElement, tempArray, chartLabels, minTemp, maxTemp);
@@ -129,8 +146,8 @@ async function createGraph(containerElement, sensorId){
 }
 
 function createTemperatureChart(ctx, tempArray, chartLabels, minTemp, maxTemp){
-    // console.log(chartLabels);
-    // console.log(tempArray);
+    console.log(chartLabels);
+    console.log(tempArray);
     let chartColor = "white";
     if(theme == "light"){
         chartColor = "black";
@@ -163,8 +180,8 @@ function createTemperatureChart(ctx, tempArray, chartLabels, minTemp, maxTemp){
             },
             scales: {
                 y: {
-                    min: minTemp,
-                    max: maxTemp,
+                    suggestedMin: minTemp,
+                    suggestedMax: maxTemp,
                     grid: {
                         display: false
                     },
@@ -184,6 +201,10 @@ function createTemperatureChart(ctx, tempArray, chartLabels, minTemp, maxTemp){
                     },
                     border:{
                         display:false
+                    },
+                    ticks: {
+                        color: chartColor,
+                        maxTicksLimit: 30
                     }
                 }
             }
@@ -211,3 +232,26 @@ function changeSensorName(sensorId, sensorNameInput){
     loadAllTemperatures();
 }
 
+function changeSearchRange(range, value, element){
+    console.log("changeSearchRange() " + value);
+    let buttonsList = document.getElementById("timeRangeSelector").children;
+    for(i = 0; i < buttonsList.length; i++){
+        buttonsList[i].classList.remove("selectorActive");
+    }
+
+    if(range == false){
+        searchRange.to = Date.now();
+        searchRange.from = Date.now() - value;
+        element.classList.add("selectorActive");
+    }else{
+        element.parentNode.classList.add("selectorActive");
+        searchRange.from = new Date(document.getElementById("tempRange_from").valueAsNumber).valueOf();
+        searchRange.to = new Date(document.getElementById("tempRange_to").valueAsNumber).valueOf();
+    }
+
+
+    loadAllTemperatures();
+
+
+
+}
