@@ -96,6 +96,10 @@ app.get('/css.css', function(req, res) {
     global.addlog("GET", req.params.tagid);
     res.sendFile(path.join(__dirname, '/growattDisplayerClient/css.css'));
 });
+app.get('/settings.css', function(req, res) {
+    global.addlog("GET", req.params.tagid);
+    res.sendFile(path.join(__dirname, '/growattDisplayerClient/settings.css'));
+});
 app.get('/color_pallete.css', function(req, res) {
     global.addlog("GET", req.params.tagid);
     res.sendFile(path.join(__dirname, '/growattDisplayerClient/color_pallete.css'));
