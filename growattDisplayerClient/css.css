@@ -100,15 +100,10 @@
 
 body{
     margin: 0;
-    background: var(--nav_background);
-    font-family: 'Asap', sans-serif;
-   
+    background: var(--md-sys-color-surface-container);
+    color: var(--md-sys-color-on-surface-variant);
+    font-family: 'Asap', sans-serif;  
 }
-.body{
-
-}
-
-
 
 
 .loadingDiv{
@@ -142,11 +137,11 @@ body{
   column-gap: 0.5em;
 }
 .content{ 
-    
     float: left;
     width: 100%;
     border-radius: 5px;
-    background: var(--background);
+    background: var(--md-sys-color-surface);
+    color: var(--md-sys-color-on-surface);
     display: flex;
     align-content: center;
     justify-content: center;
@@ -154,8 +149,6 @@ body{
     max-height: calc(100vh - 10px);
     flex-direction: column;
     justify-content: flex-start;
-
-    
  }
  .container {  
     display: grid;
@@ -193,7 +186,7 @@ body{
     grid-area: battery_img;
     justify-self: center;
     align-self: center;
-    border: 1px solid var(--text_color);
+    border: 1px solid var(--md-sys-color-on-surface);
     width: 80px;
     height: 85%;
     padding: 2px;
@@ -205,10 +198,10 @@ body{
   .percentage { 
     grid-area: percentage;
     justify-self: center;;
-    color: var(--text_color);
+    color: var(--md-sys-color-on-surface);
     font-size: 110px;
     font-family: 'Rubik', sans-serif;
-    filter: drop-shadow(0 0 0.05rem var(--text_color));
+    filter: drop-shadow(0 0 0.05rem var(--md-sys-color-on-surface));
     letter-spacing: 5;
     display: flex;
     font-weight: bold;
@@ -225,7 +218,7 @@ body{
     display: flex;
     font-weight: bold;
     align-self: center;
-    color: var(--text_color);
+    color: var(--md-sys-color-on-surface);
     font-size: 30px;
     text-align: center;
   }
@@ -233,7 +226,7 @@ body{
     grid-area: battery_text;
     align-self: end;
     justify-self: center;
-    color: var(--text_color);
+    color: var(--md-sys-color-on-surface);
     line-height: 0.8;
     letter-spacing: 1;
   }
@@ -315,7 +308,7 @@ body{
     grid-area: foto_text;
     font-weight: bold;
     align-self: center;
-    color: var(--text_color);
+    color: var(--md-sys-color-on-surface);
     font-size: 30px;
     font-family: 'Rubik', sans-serif;
     letter-spacing: 3;
@@ -338,7 +331,7 @@ body{
     grid-area: home_text;
     font-weight: bold;
     align-self: center;
-    color: var(--text_color);
+    color: var(--md-sys-color-on-surface);
     font-size: 30px;
     font-family: 'Rubik', sans-serif;
     letter-spacing: 3;
@@ -367,7 +360,7 @@ align-self: end;
     grid-area: grid_nadpis;
     font-weight: bold;
     align-self: end;
-    color: var(--text_color);
+    color: var(--md-sys-color-on-surface);
     font-size: 15px;
     font-family: 'Rubik', sans-serif;
     letter-spacing: 3;
@@ -377,7 +370,7 @@ align-self: end;
     grid-area: grid_text;
     font-weight: bold;
     align-self: start;
-    color: var(--text_color);
+    color: var(--md-sys-color-on-surface);
     font-size: 30px;
     font-family: 'Rubik', sans-serif;
     letter-spacing: 3;
@@ -501,22 +494,25 @@ align-self: end;
 
 .bazenTeplotaWidgetContent{
  padding: 10px 15px;
-  background: var(--nav_button_background);
+  background: var(--md-sys-color-secondary-container);
   border-radius: 10px;
   display: flex;
   flex-direction: row;
-  color: var(--text_color);
+  color: var(--md-sys-color-on-secondary-container);
 }
 
 .bazenTeplotaNadpis{
-      font-family: 'Rubik', sans-serif;
-      font-family: 'Rubik', sans-serif;
+  font-family: 'Rubik', sans-serif;
+  font-family: 'Rubik', sans-serif;
   font-size: 60;
   margin-right: 50px;
   align-self: center;
-  /* color: rgb(75, 192, 192); */
 }
-
+/* temperature container changes for error values */
+.tempError{
+  background: var(--md-sys-color-error-container);
+  color: var(--md-sys-color-on-error-container);
+}
 
 
 
@@ -550,7 +546,7 @@ align-self: end;
     font-size: 24;
     color: white;
     align-content: center;
-    background: var(--nav_button_background);
+    background: var(--md-sys-color-secondary-container);
 
     padding: 5px 10px 5px 10px;
     margin-bottom: 20px;
@@ -559,7 +555,7 @@ align-self: end;
 
   }
   .barItem div{
-    color: var(--text_color);
+    color: var(--md-sys-color-on-secondary-container);
   }
 
   .barCenter{
@@ -571,12 +567,12 @@ align-self: end;
     border-radius:  10px !important;
   }
   table{
-    color: var(--text_color);
   }
   td {
     padding: 10px;
-    background: rgba(255,255,255,0.2);
-    }
+    background: var(--md-sys-color-secondary-container);
+    color: var(--md-sys-color-on-secondary-container);
+  }
 
 .settContainer{
   width: 80%;
@@ -628,8 +624,8 @@ hr{
   transform: translate(-50%, -50%); 
   padding: 20px;
   border-radius: 10px;
-  background: #ff4949;
-  color: white;
+  background: var(--md-sys-color-error-container);
+  color: var(--md-sys-color-on-error-container);
   transition: 0.5s;
   display: none;
 }
