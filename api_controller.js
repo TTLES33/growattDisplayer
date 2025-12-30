@@ -31,6 +31,14 @@ app.get('/plantdata', async function (req, res) {
     res.end();
 })
 
+app.get('/version', async function (req, res) {
+    global.addlog("GET", "/version");
+    res.setHeader('Content-Type', 'application/json');
+    res.json(process.env.APP_VERSION);
+    res.status(200);
+    res.end();
+})
+
 app.get('/config', async function (req, res) {
     global.addlog("GET", "/config");
     try{
