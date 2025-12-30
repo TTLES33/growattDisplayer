@@ -56,7 +56,7 @@ async function loadConfig(){
     }
 
     const json = await response.json();
-    console.log(json.theme);
+    console.log(json);
     config = json.theme;
     
     return json;

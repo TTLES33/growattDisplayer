@@ -1,9 +1,9 @@
 var plantdata = {};
-let Last_Temperature_Update = "never";
 var activepage;
 let theme = "dark";
 let config = {};
 let errorLogs = []; 
+let app_version = 0;
 
 
 async function onloadfnc(){
@@ -12,6 +12,7 @@ async function onloadfnc(){
     await loadConfig();
     updateTemperatures()
     checkForAutoThemeChange();
+    loadAppVersion()
 
     showIndex();
 
@@ -465,4 +466,26 @@ function showError(errMsg){
      errElement.style.display = "none";
     }, "5000");
 
+}
+
+async function loadAppVersion(){
+    console.log("Function: loadAppVersion()");
+    const url = "/version";
+    try {
+        const response = await fetch(url, {
+                method: "GET",
+                headers: {
+                    "Content-type": "application/json; charset=UTF-8"
+                }
+        });
+        if (!response.ok) {
+            let response = `Response status: ${response.status}`;
+                showError(response)
+                throw new Error(response);
+        }
+        app_version = await response.json();
+    } catch (error) {
+        console.error(error.message);
+        showError(error.message);
+    }
 }
