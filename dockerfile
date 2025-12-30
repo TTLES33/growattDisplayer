@@ -1,4 +1,10 @@
-FROM node:18-alpine
+FROM node:20-alpine
+
+# 2. Set the timezone environment variable
+RUN apk add --no-cache tzdata
+ENV TZ=Europe/Prague
+
+
 RUN apk add --no-cache su-exec
 RUN mkdir -p /home/node/app/node_modules && chown -R node:node /home/node/app
 
