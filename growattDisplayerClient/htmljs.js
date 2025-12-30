@@ -99,12 +99,13 @@ async function showData(){
 
     await loadPage("data");
 
-    for(i=0; i< Object.keys(plantdata).length; i++){
-        console.log(Object.keys(plantdata)[i]);
-        console.log(plantdata[Object.keys(plantdata)[i]]);
-        document.getElementById(Object.keys(plantdata)[i]).innerHTML = plantdata[Object.keys(plantdata)[i]];
-    }
-    document.getElementById("Last_Temperature_Update").innerHTML = new Date(Last_Temperature_Update ).toString();
+    updateDataPage(plantdata, );
+    // for(i=0; i< Object.keys(plantdata).length; i++){
+    //     console.log(Object.keys(plantdata)[i]);
+    //     console.log(plantdata[Object.keys(plantdata)[i]]);
+    //     document.getElementById(Object.keys(plantdata)[i]).innerHTML = plantdata[Object.keys(plantdata)[i]];
+    // }
+    // document.getElementById("Last_Temperature_Update").innerHTML = new Date(Last_Temperature_Update ).toString();
 }
 
 async function showSettings(){
@@ -300,7 +301,7 @@ function loadData(){
         url: '/plantdata',
         success: function (result) {
             plantdata = result;
-
+            plantdata.Last_Local_Update = Date.now();
             //check for old data
             const dateToCheck = new Date(plantdata.Last_Data_Update);
             const currentTimeMillis = Date.now();
@@ -367,30 +368,29 @@ async function updateTemperatures(){
     let tempdata0 = await loadTemperature(dateFrom, dateNow, 45);
     let tempdata1 = await loadTemperature(dateFrom, dateNow, 129);
 
-    let tempString0 = Number.parseFloat(tempdata0[0].avg_temp).toFixed(1) + "°C";
-    let tempString1 = Number.parseFloat(tempdata1[0].avg_temp).toFixed(1) + "°C";
+    let tempObject0 = tempdata0[tempdata0.length - 2];
+    let tempObject1 = tempdata1[tempdata1.length - 2];
+
+    let tempString0 = Number.parseFloat(tempObject0.avg_temp).toFixed(1) + "°C";
+    let tempString1 = Number.parseFloat(tempObject1.avg_temp).toFixed(1) + "°C";
 
 
     //check for old data
-    const dateToCheck0 = new Date(tempdata0[0].time_label);
-    const dateToCheck1 = new Date(tempdata1[0].time_label);
+    const dateToCheck0 = new Date(tempObject0.time_label);
+    const dateToCheck1 = new Date(tempObject1.time_label);
     const currentTimeMillis = Date.now();
     //if difference is bigger than 1 minute
-    if((currentTimeMillis - dateToCheck0.getTime()) > (60 * 1000)){
-        // document.getElementById("tempContainer0").style.background = "var(--arrow_red)";
+    if((currentTimeMillis - dateToCheck0.getTime()) > (2 * 60 * 1000) || tempObject0.avg_temp == null){
         document.getElementById("tempContainer0").classList.add("tempError")
         tempString0 = tempString0 + " ⚠";
     }else{
-        // document.getElementById("tempContainer0").style.background = "var(--nav_button_background)";
         document.getElementById("tempContainer0").classList.remove("tempError")
     }
 
-    if((currentTimeMillis - dateToCheck1.getTime()) > (60 * 1000)){
-        // document.getElementById("tempContainer1").style.background = "var(--arrow_red)";
+    if((currentTimeMillis - dateToCheck1.getTime()) > (2 * 60 * 1000) || tempObject1.avg_temp == null){
         document.getElementById("tempContainer1").classList.add("tempError")
         tempString1 = tempString1 + " ⚠";
     }else{
-        // document.getElementById("tempContainer1").style.background = "var(--nav_button_background)";
         document.getElementById("tempContainer1").classList.remove("tempError")
     }
 
