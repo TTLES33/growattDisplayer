@@ -1,118 +1,223 @@
 <div id="bodyData" class="content" >
-       <table div="datatable">
-        <tr>
-            <td>Battery_Discharged_Total</td>
-            <td id="Battery_Discharged_Total"></td>
-        </tr>
-        <tr>
-            <td>Battery_Discharged_Today</td>
-            <td id="Battery_Discharged_Today"></td>
-        </tr>
-        <tr>
-            <td>Battery_Charge_Now_Power</td>
-            <td id="Battery_Charge_Now_Power"></td>
-        </tr>
-        <tr>
-            <td>Battery_Discharge_Now_Power</td>
-            <td id="Battery_Discharge_Now_Power"></td>
-        </tr>
-        <tr>
-            <td>Battery_Percentage</td>
-            <td id="Battery_Percentage"></td>
-        </tr>
-        <tr>
-            <td>Export_To_Grid_Now</td>
-            <td id="Export_To_Grid_Now"></td>
-        </tr>
-        <tr>
-            <td>Export_To_Grid_Today</td>
-            <td id="Export_To_Grid_Today"></td>
-        </tr>
-        <tr>
-            <td>Export_To_Grid_Total</td>
-            <td id="Export_To_Grid_Total"></td>
-        </tr>
-        <tr>
-            <td>Import_From_Grid_Now</td>
-            <td id="Import_From_Grid_Now"></td>
-        </tr>
-        <tr>
-            <td>Import_From_Grid_Today</td>
-            <td id="Import_From_Grid_Today"></td>
-        </tr>
-        <tr>
-            <td>Import_From_Grid_Total</td>
-            <td id="Import_From_Grid_Total"></td>
-        </tr>
-        <tr>
-            <td>Plant_Production_Now</td>
-            <td id="Plant_Production_Now"></td>
-        </tr>
-        <tr>
-            <td>Plant_Production_Today</td>
-            <td id="Plant_Production_Today"></td>
-        </tr>
-        <tr>
-            <td>Plant_Production_Total</td>
-            <td id="Plant_Production_Total"></td>
-        </tr>
-        <tr>
-            <td>Total_energy_created</td>
-            <td id="Total_energy_created"></td>
-        </tr>
-        <tr>
-            <td>Power_Consumption_Now</td>
-            <td id="Power_Consumption_Now"></td>
-        </tr>
-        <tr>
-            <td>Power_Consumption_Today</td>
-            <td id="Power_Consumption_Today"></td>
-        </tr>
-        <tr>
-            <td>Self_Power_Consumption_Today</td>
-            <td id="Self_Power_Consumption_Today"></td>
-        </tr>
-        <tr>
-            <td>Battery_Voltage</td>
-            <td id="Battery_Voltage"></td>
-        </tr>
-        <tr>
-            <td>Grid_Voltage</td>
-            <td id="Grid_Voltage"></td>
-        </tr>
-        <tr>
-            <td>Grid_Frequency</td>
-            <td id="Grid_Frequency"></td>
-        </tr>
-        <tr>
-            <td>First_MPPT_Voltage</td>
-            <td id="First_MPPT_Voltage"></td>
-        </tr>
-        <tr>
-            <td>First_MPPT_Power</td>
-            <td id="First_MPPT_Power"></td>
-        </tr>
-        <tr>
-            <td>Second_MPPT_Voltage</td>
-            <td id="Second_MPPT_Voltage"></td>
-        </tr>
-        <tr>
-            <td>Second_MPPT_Power</td>
-            <td id="Second_MPPT_Power"></td>
-        </tr>
-        <tr>
-            <td>Last_Data_Update</td>
-            <td id="Last_Data_Update"></td>
-        </tr>
-         <tr>
-            <td>Last_Server_Update</td>
-            <td id="Last_Server_Update"></td>
-        </tr>
-         <tr>
-            <td>Last Temperature Update</td>
-            <td id="Last_Temperature_Update"></td>
-        </tr>
 
+    <div class="data-label-main">Čas posledních změn</div>
+    <div class="data-list">
+        <div class="data-item">
+            <div class="data-content">
+                <div class="data-label">Získání dat z lokálního serveru</div>
+                <div class="data-supporting">=aktualizace webu</div>
+            </div>
+            <div class="data-trailing" id="logger-last-local-update">--</div>
+        </div>
+        <div class="data-item">
+            <div class="data-content">
+                <div class="data-label">Získání dat z Growatt serveru</div>
+            </div>
+            <div class="data-trailing" id="logger-last-server-update">--</div>
+        </div>
+        <div class="data-item">
+            <div class="data-content">
+                <div class="data-label">Poslední data na serveru Growatt</div>
+            </div>
+            <div class="data-trailing" id="logger-last-data-update">--</div>
+        </div>
+        <div class="data-item">
+            <div class="data-content">
+                <div class="data-label">Poslední data loggeru elektrárny</div>
+            </div>
+            <div class="data-trailing" id="logger-last-update">--</div>
+        </div>
 
-       </table>
+        <div class="data-item">
+            <div class="data-content">
+                <div class="data-label">Teploměr venku (129)</div>
+            </div>
+            <div class="data-trailing" id="">--</div>
+        </div>
     </div>
+
+
+ <div class="data-label-main">Data elektrárny</div>
+    <div class="data-list">
+        <div class="data-item">
+            <div class="data-content">
+                <div class="data-label">Battery_Discharged_Total</div>
+            </div>
+            <div class="data-trailing" id="Battery_Discharged_Total">--</div>
+        </div>
+
+        <div class="data-item">
+            <div class="data-content">
+                <div class="data-label">Battery_Discharged_Today</div>
+            </div>
+            <div class="data-trailing" id="Battery_Discharged_Today">--</div>
+        </div>
+
+        <div class="data-item">
+            <div class="data-content">
+                <div class="data-label">Battery_Charge_Now_Power</div>
+            </div>
+            <div class="data-trailing" id="Battery_Charge_Now_Power">--</div>
+        </div>
+        <div class="data-item">
+            <div class="data-content">
+                <div class="data-label">Battery_Discharge_Now_Power</div>
+            </div>
+            <div class="data-trailing" id="Battery_Discharge_Now_Power">--</div>
+        </div>
+        <div class="data-item">
+            <div class="data-content">
+                <div class="data-label">Battery_Percentage</div>
+            </div>
+            <div class="data-trailing" id="Battery_Percentage">--</div>
+        </div>
+        <div class="data-item">
+            <div class="data-content">
+                <div class="data-label">Export_To_Grid_Now</div>
+            </div>
+            <div class="data-trailing" id="Export_To_Grid_Now">--</div>
+        </div>
+        <div class="data-item">
+            <div class="data-content">
+                <div class="data-label">Export_To_Grid_Today</div>
+            </div>
+            <div class="data-trailing" id="Export_To_Grid_Today">--</div>
+        </div>
+        <div class="data-item">
+            <div class="data-content">
+                <div class="data-label">Export_To_Grid_Total</div>
+            </div>
+            <div class="data-trailing" id="Export_To_Grid_Total">--</div>
+        </div>
+        <div class="data-item">
+            <div class="data-content">
+                <div class="data-label">Import_From_Grid_Now</div>
+            </div>
+            <div class="data-trailing" id="Import_From_Grid_Now">--</div>
+        </div>
+        <div class="data-item">
+            <div class="data-content">
+                <div class="data-label">Import_From_Grid_Today</div>
+            </div>
+            <div class="data-trailing" id="Import_From_Grid_Today">--</div>
+        </div>
+        <div class="data-item">
+            <div class="data-content">
+                <div class="data-label">Import_From_Grid_Total</div>
+            </div>
+            <div class="data-trailing" id="Import_From_Grid_Total">--</div>
+        </div>
+        <div class="data-item">
+            <div class="data-content">
+                <div class="data-label">Plant_Production_Now</div>
+            </div>
+            <div class="data-trailing" id="Plant_Production_Now">--</div>
+        </div>
+        <div class="data-item">
+            <div class="data-content">
+                <div class="data-label">Plant_Production_Today</div>
+            </div>
+            <div class="data-trailing" id="Plant_Production_Today">--</div>
+        </div>
+        <div class="data-item">
+            <div class="data-content">
+                <div class="data-label">Plant_Production_Total</div>
+            </div>
+            <div class="data-trailing" id="Plant_Production_Total">--</div>
+        </div>
+        <div class="data-item">
+            <div class="data-content">
+                <div class="data-label">Total_energy_created</div>
+            </div>
+            <div class="data-trailing" id="Total_energy_created">--</div>
+        </div>
+        <div class="data-item">
+            <div class="data-content">
+                <div class="data-label">Power_Consumption_Now</div>
+            </div>
+            <div class="data-trailing" id="Power_Consumption_Now">--</div>
+        </div>
+        <div class="data-item">
+            <div class="data-content">
+                <div class="data-label">Power_Consumption_Today</div>
+            </div>
+            <div class="data-trailing" id="Power_Consumption_Today">--</div>
+        </div>
+        <div class="data-item">
+            <div class="data-content">
+                <div class="data-label">Self_Power_Consumption_Today</div>
+            </div>
+            <div class="data-trailing" id="Self_Power_Consumption_Today">--</div>
+        </div>
+        <div class="data-item">
+            <div class="data-content">
+                <div class="data-label">Battery_Voltage</div>
+            </div>
+            <div class="data-trailing" id="Battery_Voltage">--</div>
+        </div>
+        <div class="data-item">
+            <div class="data-content">
+                <div class="data-label">Grid_Voltage</div>
+            </div>
+            <div class="data-trailing" id="Grid_Voltage">--</div>
+        </div>
+        <div class="data-item">
+            <div class="data-content">
+                <div class="data-label">Grid_Frequency</div>
+            </div>
+            <div class="data-trailing" id="Grid_Frequency">--</div>
+        </div>
+        <div class="data-item">
+            <div class="data-content">
+                <div class="data-label">First_MPPT_Voltage</div>
+            </div>
+            <div class="data-trailing" id="First_MPPT_Voltage">--</div>
+        </div>
+        <div class="data-item">
+            <div class="data-content">
+                <div class="data-label">First_MPPT_Power</div>
+            </div>
+            <div class="data-trailing" id="First_MPPT_Power">--</div>
+        </div>
+        <div class="data-item">
+            <div class="data-content">
+                <div class="data-label">Second_MPPT_Voltage</div>
+            </div>
+            <div class="data-trailing" id="Second_MPPT_Voltage">--</div>
+        </div>
+        <div class="data-item">
+            <div class="data-content">
+                <div class="data-label">Second_MPPT_Power</div>
+            </div>
+            <div class="data-trailing" id="Second_MPPT_Power">--</div>
+        </div>
+
+    </div>
+
+
+    <div class="data-label-main">Data Logger</div>
+    <div class="data-list">
+        <div class="data-item">
+            <div class="data-content">
+                <div class="data-label">Device type</div>
+            </div>
+            <div class="data-trailing" id="logger-device-type">--</div>
+        </div>
+
+        <div class="data-item">
+            <div class="data-content">
+                <div class="data-label">ip address</div>
+            </div>
+            <div class="data-trailing" id="logger-ip-address">--</div>
+        </div>
+
+        <div class="data-item">
+            <div class="data-content">
+                <div class="data-label">Update interval</div>
+            </div>
+            <div class="data-trailing" id="logger-update-interval">--</div>
+        </div>
+    </div>
+
+
+</div>

@@ -80,6 +80,13 @@ app.get('/htmljs.js', function(req, res) {
     global.addlog("GET", req.params.tagid);
     res.sendFile(path.join(__dirname, '/growattDisplayerClient/htmljs.js'));
 });
+app.get('/data.html', function(req, res) {
+    global.addlog("GET", req.params.tagid);
+    res.sendFile(path.join(__dirname, '/growattDisplayerClient/data.html'));
+});
+
+
+//scripts
 app.get('/settingsjs.js', function(req, res) {
     global.addlog("GET", req.params.tagid);
     res.sendFile(path.join(__dirname, '/growattDisplayerClient/settingsjs.js'));
@@ -88,27 +95,22 @@ app.get('/temps.js', function(req, res) {
     global.addlog("GET", req.params.tagid);
     res.sendFile(path.join(__dirname, '/growattDisplayerClient/temps.js'));
 });
-app.get('/data.html', function(req, res) {
+app.get('/data.js', function(req, res) {
     global.addlog("GET", req.params.tagid);
-    res.sendFile(path.join(__dirname, '/growattDisplayerClient/data.html'));
+    res.sendFile(path.join(__dirname, '/growattDisplayerClient/data.js'));
 });
-app.get('/css.css', function(req, res) {
+app.get('/global.js', function(req, res) {
     global.addlog("GET", req.params.tagid);
-    res.sendFile(path.join(__dirname, '/growattDisplayerClient/css.css'));
+    res.sendFile(path.join(__dirname, '/growattDisplayerClient/global.js'));
 });
-app.get('/settings.css', function(req, res) {
+
+
+//styles
+app.get('/styles/:tagid', function(req, res) {
     global.addlog("GET", req.params.tagid);
-    res.sendFile(path.join(__dirname, '/growattDisplayerClient/settings.css'));
+    res.sendFile(path.join(__dirname, '/growattDisplayerClient/styles/' + req.params.tagid));
 });
-app.get('/color_pallete.css', function(req, res) {
-    global.addlog("GET", req.params.tagid);
-    res.sendFile(path.join(__dirname, '/growattDisplayerClient/color_pallete.css'));
-});
-app.get('/temps.css', function(req, res) {
-    var dateNow = new Date();
-    console.log("[" + dateNow.getHours() + ":" + dateNow.getMinutes() + ":" + dateNow.getSeconds() + "][GET] " + req.params.tagid);
-    res.sendFile(path.join(__dirname, '/growattDisplayerClient/temps.css'));
-});
+
 
 app.get('/iframe/:tagid', function(req, res) {
     global.addlog("GET", req.params.tagid);
