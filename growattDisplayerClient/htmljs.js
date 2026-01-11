@@ -2,7 +2,7 @@ var plantdata = {};
 var activepage;
 let theme = "dark";
 let config = {};
-let errorLogs = []; 
+let errorLogs = [];
 let app_version = 0;
 
 
@@ -29,11 +29,11 @@ function autoupdater(){
     updateTemperatures();
 
     plantDataIntervel = setInterval(function(){
-        if(activepage = "index"){
+        if(activepage == "index"){
             loadData();
         }
         checkForAutoThemeChange();
-    }, 120000)
+    }, 20000)
 
     tempInterval = setInterval(function(){
         updateTemperatures();
@@ -47,13 +47,13 @@ function autoupdater(){
 //******************************* */
 function toggleTheme(){
 
-     if(theme == "light"){
+    if(theme == "light"){
         document.documentElement.dataset["theme"] = "dark";
         theme = "dark";
-     }else{
+    }else{
         document.documentElement.dataset["theme"] = "light";
         theme = "light";
-     }
+    }
 }
 
 function checkForAutoThemeChange(){
@@ -100,7 +100,7 @@ async function showData(){
 
     await loadPage("data");
 
-    updateDataPage(plantdata, );
+    updateDataPage(plantdata);
     // for(i=0; i< Object.keys(plantdata).length; i++){
     //     console.log(Object.keys(plantdata)[i]);
     //     console.log(plantdata[Object.keys(plantdata)[i]]);
@@ -130,7 +130,7 @@ async function showTemps(params) {
     console.log("function: dataPageCreator()");
 
     await loadPage("temps");
-    
+
     tempsPageFirstLoad();
     loadAllTemperatures();
 
@@ -144,19 +144,19 @@ async function showTemps(params) {
 }
 
 async function loadPage(page){
-        return $.ajax({
+    return $.ajax({
         type: "GET",
         url: '/iframe/' + page + '.html',
         success: function (result) {
-         
+
             console.log(plantdata);
             document.getElementById("pageIFrame").innerHTML = result;
 
         },
         error: function (xhr, ajaxOptions, thrownError) {
-          showError(thrownError);
+            showError(thrownError);
         }
-      });
+    });
 }
 
 
@@ -168,7 +168,7 @@ function renderDataBattery(plantdata, error){
         document.getElementById("power").innerHTML = "data elektrárny starší než 10min";
         document.getElementById("battery_text").innerHTML = "";
         document.getElementById("percentage").style.color = "var(--arrow_red)";
-        document.getElementById("battery-level").style.setProperty("height", 0) ; 
+        document.getElementById("battery-level").style.setProperty("height", 0) ;
 
         for(i=0; i < document.getElementById("arrow_0").childNodes.length; i++ ){
             document.getElementById("arrow_0").childNodes[i].style.display = "none";
@@ -179,22 +179,22 @@ function renderDataBattery(plantdata, error){
     document.getElementById("percentage").style.color = "var(--text-color)";
 
 
-    var battery_height = "calc(" + plantdata.Battery_Percentage + "% - 4px)";
+    var battery_height = "calc(" + plantdata.SOC + "% - 4px)";
     console.log(battery_height)
 
 
-    document.getElementById("percentage").innerHTML = plantdata.Battery_Percentage;
+    document.getElementById("percentage").innerHTML = plantdata.SOC;
     document.getElementById("battery-level").style.setProperty("height", battery_height) ;
-    if(plantdata.Battery_Percentage > 50){
-        document.getElementById("battery-level").style.backgroundColor = "var(--arrow_green)";    
+    if(plantdata.SOC > 50){
+        document.getElementById("battery-level").style.backgroundColor = "var(--arrow_green)";
     }else{
-        document.getElementById("battery-level").style.backgroundColor = "var(--arrow_red)";     
+        document.getElementById("battery-level").style.backgroundColor = "var(--arrow_red)";
     }
 
 
-    if(plantdata.Battery_Charge_Now_Power > 0){
+    if(plantdata.Pcharge1 > 0){
         document.getElementById("battery_text").innerHTML = "nabíjení";
-        document.getElementById("power").innerHTML = plantdata.Battery_Charge_Now_Power + "kW";
+        document.getElementById("power").innerHTML = plantdata.Pcharge1 / 1000+ "kW";
         for(i=0; i < document.getElementById("arrow_0").childNodes.length; i++ ){
             document.getElementById("arrow_0").childNodes[i].className = "arrow_top";
             document.getElementById("arrow_0").childNodes[i].classList.add("charging");
@@ -202,9 +202,9 @@ function renderDataBattery(plantdata, error){
             document.getElementById("arrow_0").childNodes[i].style.display = "block";
         }
     }else{
-        if(plantdata.Battery_Discharge_Now_Power > 0){
+        if(plantdata.Pdischarge1 > 0){
             document.getElementById("battery_text").innerHTML = "vybíjení";
-            document.getElementById("power").innerHTML = plantdata.Battery_Discharge_Now_Power + "kW";
+            document.getElementById("power").innerHTML = plantdata.Pdischarge1 / 1000 + "kW";
             for(i=0; i < document.getElementById("arrow_0").childNodes.length; i++ ){
                 console.log(document.getElementById("arrow_0"));
                 document.getElementById("arrow_0").childNodes[i].className = "arrow_down";
@@ -234,7 +234,7 @@ function renderDataHome(plantdata, error){
     for(i=0; i < document.getElementById("arrow_3").childNodes.length; i++ ){
         document.getElementById("arrow_3").childNodes[i].style.display = "block";
     }
-    document.getElementById("home_text").innerHTML = plantdata.Power_Consumption_Now + "kW";
+    document.getElementById("home_text").innerHTML = plantdata.PLocalLoad / 1000+ " kW";
 }
 
 function renderDataPlant(plantdata, error){
@@ -246,9 +246,9 @@ function renderDataPlant(plantdata, error){
         return ;
     }
 
-    document.getElementById("foto_text").innerHTML = plantdata.Plant_Production_Now;
-    if(plantdata.Plant_Production_Now > 0){
-        document.getElementById("foto_text").innerHTML = plantdata.Plant_Production_Now + "kW";
+    //document.getElementById("foto_text").innerHTML = plantdata.Ppv/1000;
+    if(plantdata.Ppv > 0){
+        document.getElementById("foto_text").innerHTML = plantdata.Ppv / 1000 + "kW";
         for(i=0; i < document.getElementById("arrow_1").childNodes.length; i++ ){
             document.getElementById("arrow_1").childNodes[i].className = "arrow_right";
             document.getElementById("arrow_1").childNodes[i].style.borderLeftColor = "var(--arrow_green)";
@@ -274,17 +274,17 @@ function renderDataGrid(plantdata, error){
     }
 
 
-    if(plantdata.ExportToGrid <= 0){
-    document.getElementById("grid_nadpis").innerHTML = "Import";
-    document.getElementById("grid_text").innerHTML = plantdata.Import_From_Grid_Now + " kW";
-    for(i=0; i < document.getElementById("arrow_2").childNodes.length; i++ ){
-        document.getElementById("arrow_2").childNodes[i].className =  "arrow_left";
-        document.getElementById("arrow_2").childNodes[i].style.borderLeftColor = "var(--arrow_red)";
-        document.getElementById("arrow_2").childNodes[i].style.display = "block";
-    }
+    if(plantdata.Pac_to_grid <= 0){
+        document.getElementById("grid_nadpis").innerHTML = "Import";
+        document.getElementById("grid_text").innerHTML = plantdata.Pac_to_user / 1000+ " kW";
+        for(i=0; i < document.getElementById("arrow_2").childNodes.length; i++ ){
+            document.getElementById("arrow_2").childNodes[i].className =  "arrow_left";
+            document.getElementById("arrow_2").childNodes[i].style.borderRightColor = "var(--arrow_red)";
+            document.getElementById("arrow_2").childNodes[i].style.display = "block";
+        }
     }else{
         document.getElementById("grid_nadpis").innerHTML = "Export";
-        document.getElementById("grid_text").innerHTML = plantdata.Export_To_Grid_Now + " kW";
+        document.getElementById("grid_text").innerHTML = plantdata.Pac_to_grid / 1000+ " kW";
 
         for(i=0; i < document.getElementById("arrow_2").childNodes.length; i++ ){
             document.getElementById("arrow_2").childNodes[i].className = "arrow_right";
@@ -299,12 +299,12 @@ function loadData(){
 
     $.ajax({
         type: "GET",
-        url: '/plantdata',
+        url: '/growattdata/getLast',
         success: function (result) {
             plantdata = result;
             plantdata.Last_Local_Update = Date.now();
             //check for old data
-            const dateToCheck = new Date(plantdata.Last_Data_Update);
+            const dateToCheck = new Date(plantdata.timestamp);
             const currentTimeMillis = Date.now();
             //if difference is bigger than 10 minutes
             if((currentTimeMillis - dateToCheck.getTime()) > (10 * 60 * 1000)){
@@ -337,11 +337,11 @@ function loadData(){
             showError(thrownError);
 
             setTimeout(() => {
-                loadData(); 
+                loadData();
 
             }, "5000");
         }
-      });
+    });
 }
 
 
@@ -405,11 +405,11 @@ async function updateTemperatures(){
 
 
 async function loadTemperature(from, to, sensorId){
-      console.log("Function: loadTemperature");
-  const url = "/temp/getData";
+    console.log("Function: loadTemperature");
+    const url = "/temp/getData";
 
-   try {
-    const response = await fetch(url, {
+    try {
+        const response = await fetch(url, {
             method: "POST",
             body: JSON.stringify({
                 "from": from,
@@ -419,19 +419,19 @@ async function loadTemperature(from, to, sensorId){
             headers: {
                 "Content-type": "application/json; charset=UTF-8"
             }
-    });
-    if (!response.ok) {
-      let response = `Response status: ${response.status}`;
-        showError(response)
-        throw new Error(response);
-    }
+        });
+        if (!response.ok) {
+            let response = `Response status: ${response.status}`;
+            showError(response)
+            throw new Error(response);
+        }
 
-    const json = await response.json();
-    return json;
-  } catch (error) {
-    console.error(error.message);
-    showError(error.message);
-  }
+        const json = await response.json();
+        return json;
+    } catch (error) {
+        console.error(error.message);
+        showError(error.message);
+    }
 }
 
 
@@ -442,14 +442,14 @@ async function loadTemperature(from, to, sensorId){
 //******************************* */
 function toggleFullScreen() {
     let element = document.documentElement;
-  if (!document.fullscreenElement) {
-    // If the document is not in full screen mode
-    // make the video full screen
-    element.requestFullscreen();
-  } else {
-    // Otherwise exit the full screen
-    document.exitFullscreen?.();
-  }
+    if (!document.fullscreenElement) {
+        // If the document is not in full screen mode
+        // make the video full screen
+        element.requestFullscreen();
+    } else {
+        // Otherwise exit the full screen
+        document.exitFullscreen?.();
+    }
 }
 
 function showError(errMsg){
@@ -463,7 +463,7 @@ function showError(errMsg){
     errTextElement.innerHTML = errMsg;
 
     setTimeout(() => {
-     errElement.style.display = "none";
+        errElement.style.display = "none";
     }, "5000");
 
 }
@@ -473,15 +473,15 @@ async function loadAppVersion(){
     const url = "/version";
     try {
         const response = await fetch(url, {
-                method: "GET",
-                headers: {
-                    "Content-type": "application/json; charset=UTF-8"
-                }
+            method: "GET",
+            headers: {
+                "Content-type": "application/json; charset=UTF-8"
+            }
         });
         if (!response.ok) {
             let response = `Response status: ${response.status}`;
-                showError(response)
-                throw new Error(response);
+            showError(response)
+            throw new Error(response);
         }
         app_version = await response.json();
     } catch (error) {

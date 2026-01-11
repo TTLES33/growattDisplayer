@@ -7,7 +7,6 @@ const sqlite3 = require("sqlite3");
 const cors = require('cors');
 
 const global = require("./global.js");
-const growatt_controller = require("./growatt_controller.js");
 const dbController = require("./dbController.js");
 const file_controller = require("./file_controller.js");
 
@@ -25,11 +24,6 @@ app.use(express.urlencoded({ extended: true}));
 
 
 
-app.get('/plantdata', async function (req, res) {
-    global.addlog("GET", "/plantdata");
-    res.send(growatt_controller.getGrowattCacheData());
-    res.end();
-})
 
 app.get('/version', async function (req, res) {
     global.addlog("GET", "/version");
@@ -38,6 +32,11 @@ app.get('/version', async function (req, res) {
     res.status(200);
     res.end();
 })
+
+
+//********************************************** */
+//                  CONFIG
+//********************************************** */
 
 app.get('/config', async function (req, res) {
     global.addlog("GET", "/config");
@@ -72,6 +71,139 @@ app.post('/config/set/theme', async (req, res) => {
         message: 'updated successfully!'
     });
 });
+
+
+
+//********************************************** */
+//          TEPLOTY
+//********************************************** */
+
+app.post('/temp/setData', function(req, res) {
+  const reqBody = req.body; // Access the data sent in the request body
+  global.addlog("POST", "/temp/setData " + JSON.stringify(reqBody))
+
+  if(reqBody == []){
+    res.sendStatus(201);
+    res.end();
+  }
+
+  for(i = 0; i < reqBody.length; i++){
+    dbController.insertTeplotaRow(sqlite3, reqBody[i].teplota, reqBody[i].sensorId);
+  }
+
+  res.status(201).json({
+    message: 'inserted successfully!'
+  });
+});
+
+
+
+app.post('/temp/getData', function(req, res) {
+  const reqBody = req.body; // Access the data sent in the request body
+  global.addlog("GET", "/temp/getData " + JSON.stringify(reqBody));
+
+  dbController.selectTeplotaData(sqlite3, reqBody.from, reqBody.to, reqBody.sensorId).then(
+    result => {
+      res.setHeader('Content-Type', 'application/json');
+      res.send(result);
+      res.end();
+    }
+  ).catch(err => {
+    global.addlog("ERROR", "/temp/getData - " + err);
+    res.sendStatus(501);
+  });
+
+});
+
+
+app.get('/temp/getSensors', async function (req, res) {
+  global.addlog("GET", "/temp/getSensors");
+
+  dbController.selectSensors(sqlite3).then(
+    result => {
+      res.setHeader('Content-Type', 'application/json');
+      res.send(result);
+      res.end();
+    }
+  ).catch(err => {
+    global.addlog("ERROR", "/temp/getSensors - " + err);
+    res.sendStatus(501);
+  });
+})
+
+app.get('/temp/removeDB', function(req, res) {
+  global.addlog("GET", "/bazen/removeDB" + req.params.tagid);
+
+  dbController.removeDB(sqlite3);
+  res.status(201).json({
+    message: 'deleted successfully!'
+  });
+});
+app.post('/temp/setSensorName', function(req, res) {
+  const reqBody = req.body; // Access the data sent in the request body
+  global.addlog("GET", "/temp/setSensorName " + JSON.stringify(reqBody));
+
+
+  if (!reqBody || !reqBody.sensorId || !reqBody.name) {
+    return res.status(400).json({ message: 'sensorId and name are required' });
+  }
+
+  try{
+    file_controller.configSetSensorName(reqBody.sensorId, reqBody.name);
+  }catch(err){
+    global.addlog("ERROR", "/temp/setSensorName - " + err);
+    res.sendStatus(501);
+  }
+
+  res.status(201).json({
+    message: 'updated successfully!'
+  });
+
+});
+
+
+
+//********************************************** */
+//               PLANT DATA
+//********************************************** */
+
+
+
+app.post('/growattdata/upload', function(req, res) {
+  const reqBody = req.body; // Access the data sent in the request body
+  global.addlog("GET", "/plantdata/upload " + JSON.stringify(reqBody));
+
+
+  if (!reqBody) {
+    return res.status(400).json({ message: 'plantdata is required' });
+  }
+
+  try{
+    dbController.insertPlantdataRow(sqlite3, reqBody);
+  }catch(err){
+    global.addlog("ERROR", "/plantdata/upload - " + err);
+    res.sendStatus(501);
+    return;
+  }
+
+  res.status(201).json({
+    message: 'Uploaded successfully!'
+  });
+
+});
+
+app.get('/growattdata/getLast', async function (req, res) {
+  global.addlog("GET", "/growattdata/getLast");
+  res.send(await dbController.readLastPlantData(sqlite3));
+  res.end();
+});
+
+
+
+
+//********************************************** */
+//               WEB SERVER
+//********************************************** */
 app.get('/', function(req, res) {
     global.addlog("GET", req.params.tagid);
     res.sendFile(path.join(__dirname, '/growattDisplayerClient/index.html'));
@@ -143,103 +275,4 @@ app.get('/database/download', function(req, res) {
     global.addlog("GET", req.params.tagid);
     res.download(path.join(__dirname, '/data/tempDB.db'));
 });
-
-
-
-
-
-//********************************************** */
-//          TEPLOTY
-//********************************************** */
-
-app.post('/temp/setData', function(req, res) {
- const reqBody = req.body; // Access the data sent in the request body
-    global.addlog("POST", "/temp/setData " + JSON.stringify(reqBody))
-
-    if(reqBody == []){
-        res.sendStatus(201);
-        res.end();
-    }
-
-    for(i = 0; i < reqBody.length; i++){
-        dbController.insertTeplotaRow(sqlite3, reqBody[i].teplota, reqBody[i].sensorId);
-    }
-
-    res.status(201).json({
-        message: 'inserted successfully!'
-    });
-});
-
-
-
-app.post('/temp/getData', function(req, res) {
- const reqBody = req.body; // Access the data sent in the request body
-    global.addlog("GET", "/temp/getData " + JSON.stringify(reqBody));
-
-    dbController.selectTeplotaData(sqlite3, reqBody.from, reqBody.to, reqBody.sensorId).then(
-        result => {
-            res.setHeader('Content-Type', 'application/json');
-            res.send(result);
-            res.end();
-        }
-        ).catch(err => {
-            global.addlog("ERROR", "/temp/getData - " + err);
-            res.sendStatus(501);
-        });
-   
-});
-
-
-app.get('/temp/getSensors', async function (req, res) {
-        global.addlog("GET", "/temp/getSensors");
-
-        dbController.selectSensors(sqlite3).then(
-        result => {
-            res.setHeader('Content-Type', 'application/json');
-            res.send(result);
-            res.end();
-        }
-        ).catch(err => {
-            global.addlog("ERROR", "/temp/getSensors - " + err);
-            res.sendStatus(501);
-        });
-     
-  
-})
-
-
-
-
-app.get('/temp/removeDB', function(req, res) {
-    global.addlog("GET", "/bazen/removeDB" + req.params.tagid);
-  
-    dbController.removeDB(sqlite3);
-      res.status(201).json({
-        message: 'deleted successfully!'
-    });
-});
-
-
-app.post('/temp/setSensorName', function(req, res) {
- const reqBody = req.body; // Access the data sent in the request body
-    global.addlog("GET", "/temp/setSensorName " + JSON.stringify(reqBody));
-
-
-    if (!reqBody || !reqBody.sensorId || !reqBody.name) {
-        return res.status(400).json({ message: 'sensorId and name are required' });
-    }
-
-    try{
-        file_controller.configSetSensorName(reqBody.sensorId, reqBody.name);
-    }catch(err){
-        global.addlog("ERROR", "/temp/setSensorName - " + err);
-        res.sendStatus(501);
-    }
-
-    res.status(201).json({
-        message: 'updated successfully!'
-    });
-
-});
-
 
