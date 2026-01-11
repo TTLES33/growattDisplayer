@@ -117,9 +117,8 @@ async function readLastPlantData(sqlite3){
 
 async function updateDBStructure(){
     const db = new sqlite3.Database(dbName);
-    const sql = `
-    CREATE INDEX IF NOT EXISTS idx_sensor_id_timestamp ON teploty (sensorId, datetime);
-    CREATE TABLE "growatt_data"
+    const sql = `CREATE INDEX IF NOT EXISTS idx_sensor_id_timestamp ON teploty (sensorId, datetime);`;
+    const sql2 = ` CREATE TABLE IF NOT EXISTS "growatt_data"
     (
         "Ppv"                REAL             DEFAULT null,
         "Vpv1"               REAL             DEFAULT null,
@@ -183,7 +182,17 @@ async function updateDBStructure(){
     )`;
     try{
         // db.run(sql);
-        db.run(sql);
+        db.run(sql, function(err) {
+            if (err) {
+                return console.error(err.message);
+            }
+        });
+
+        db.run(sql2, function(err) {
+            if (err) {
+                return console.error(err.message);
+            }
+        });
         return ;
     }catch(err){
         console.log(err);
