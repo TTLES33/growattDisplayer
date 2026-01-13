@@ -89,6 +89,7 @@ async function showIndex(){
     activepage = "index";
     console.log("function: showIndex()");
 
+    navBarChange("navBar_index");
     await loadPage("index");
     updateTemperatures();
     loadData();
@@ -98,6 +99,7 @@ async function showData(){
     activepage = "data";
     console.log("function: dataPageCreator()");
 
+    navBarChange("navBar_data");
     await loadPage("data");
 
     updateDataPage(plantdata);
@@ -116,6 +118,8 @@ async function showSettings(){
     document.getElementById("settTimeFrom").valueAsNumber = config.from;
     document.getElementById("settTimeTo").valueAsNumber = config.to;
 
+
+    navBarChange("navBar_settings");
     let errLogs = document.getElementById("errorLogs");
     errLogs.innerHTML = "";
     for(i = 0; i < errorLogs.length; i++){
@@ -129,6 +133,7 @@ async function showTemps(params) {
     activepage = "temps";
     console.log("function: dataPageCreator()");
 
+    navBarChange("navBar_temp");
     await loadPage("temps");
 
     tempsPageFirstLoad();
@@ -142,6 +147,16 @@ async function showTemps(params) {
     }, 1000 * 30);
 
 }
+
+function navBarChange(nav_id){
+    document.getElementById("navBar_index").classList.remove("active");
+    document.getElementById("navBar_data").classList.remove("active");
+    document.getElementById("navBar_temp").classList.remove("active");
+    document.getElementById("navBar_settings").classList.remove("active");
+
+    document.getElementById(nav_id).classList.add("active");
+}
+
 
 async function loadPage(page){
     return $.ajax({

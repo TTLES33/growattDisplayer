@@ -532,20 +532,27 @@ align-self: end;
 
   .barItem{
     display: flex;
-    border-radius: 24px;
-    font-size: 24;
+    border-radius: 1em;
+    font-size: 24px;
     color: white;
     align-content: center;
     background: var(--md-sys-color-secondary-container);
-
-    padding: 5px 10px 5px 10px;
+    cursor: pointer;
+    padding: 10px 10px 10px 10px;
     margin-bottom: 20px;
     text-align: center;
     text-decoration: none;
-
+    justify-content: space-between;
   }
+  .barItem.active{
+    font-weight: bold;
+    background: var(--md-sys-color-primary-container);
+  }
+
   .barItem div{
     color: var(--md-sys-color-on-secondary-container);
+    flex-grow: 1;
+    text-align: center;
   }
 
   .barCenter{

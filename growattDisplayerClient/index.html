@@ -39,23 +39,23 @@
 
     <div class="bar">
      
-        <a class="barItem" onclick="showIndex()">
+        <a class="barItem active" onclick="showIndex()" id="navBar_index">
             <span class="icon-home baricon active"></span>
             <div>Domů</div>    
         </a>
      
     
-        <a class="barItem" onclick="showData()">
+        <a class="barItem" onclick="showData()" id="navBar_data">
             <span class="icon-data baricon active"></span>
             <div>Data</div>
         </a>
 
-        <a class="barItem" onclick="showTemps()">
+        <a class="barItem" onclick="showTemps()" id="navBar_temp">
             <span class="icon-temp baricon active"></span>
             <div>Teploty</div>
         </a>
 
-        <div class="barBottom ">
+        <div class="barBottom">
             <a class="barItem barCenter" onclick="toggleFullScreen()">
                 <span class="icon-expand baricon active"  ></span>
             </a>
@@ -63,7 +63,7 @@
                 <span class="icon-theme baricon active"  ></span>
             </a>
 
-            <a class="barItem barCenter" onclick="showSettings()">
+            <a class="barItem barCenter" onclick="showSettings()" id="navBar_settings">
                 <span class="icon-settings baricon active"  ></span>
             </a>
         </div>
