@@ -21,7 +21,44 @@ async function configSetSensorName(sensorId, name){
             parsedData.sensorNames.push(
                 {
                     "sensorId": sensorId,
-                    "name": name
+                    "name": name,
+                    "priority": 999
+                }
+            )
+        }
+
+        await fs.writeFile(fileName, JSON.stringify(parsedData, null, 2), function writeJSON(err) {
+        });
+
+    } catch (err) {
+        console.error("Error writing to config:", err);
+        throw err; // Re-throw so the endpoint's catch block can catch it
+    }
+}
+
+async function configSetSensorPriority(sensorId, priority){
+    const fileName = 'data/config.json';
+
+    try{
+        const data = await fs.readFile(fileName, 'utf8');
+        let parsedData = JSON.parse(data);
+
+
+        let sensorInFile = false;
+        for(i = 0; i < parsedData.sensorNames.length; i++){
+            if(parsedData.sensorNames[i].sensorId === sensorId){
+                parsedData.sensorNames[i].priority = parseInt(priority);
+                sensorInFile = true;
+                break;
+            }
+        }
+
+        if(sensorInFile == false){
+            parsedData.sensorNames.push(
+                {
+                    "sensorId": parseInt(sensorId),
+                    "priority": parseInt(priority),
+                    "name": "Undefined"
                 }
             )
         }
@@ -68,4 +105,4 @@ async function configSetTheme(from, to){
 }
     
 
-module.exports = {configSetSensorName, configRead, configSetTheme};
+module.exports = {configSetSensorName, configRead, configSetTheme, configSetSensorPriority};

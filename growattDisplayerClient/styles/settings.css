@@ -6,7 +6,7 @@
 }
 
 .settNadpis{
-  font-size: 40;
+  font-size: 40px;
   color: var(--md-sys-color-on-surface-variant);
 }
 .settItem{
@@ -35,7 +35,7 @@
     color: var(--md-sys-color-on-error) !important;
 }
 .settItemNadpis{
-  font-size: 20;
+  font-size: 2em;
   color: var(--md-sys-color-on-surface-variant);
 }
 .settItem table{
@@ -50,12 +50,22 @@
 
 .sensorListItem{
   display: flex;
-  flex-direction: row;
-  width: 100%;
-  padding: 5px;
+    font-size: 1.2em;
+  flex-direction: column;
+  padding: 1em 1em 0px 1em;
   border-radius: 10px;
-  justify-content: space-around;
-  margin-bottom: 10px;
+  margin-bottom: 1em;
+  row-gap: 5px;
   background: var(--md-sys-color-surface-container-lowest);
   color: var(--md-sys-color-on-surface-variant);
+}
+
+.sensorListItem div:first-child{
+    font-weight: bold;
+}
+
+.sensorListItem .sensorsBttns{
+    display: flex;
+    flex-direction: row;
+    column-gap: 1em;
 }

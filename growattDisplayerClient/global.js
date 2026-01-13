@@ -17,3 +17,40 @@ function getShowDateFormat(date){
     return `${day}.${month}.${year} ${hours}:${minutes}:${seconds}`;
  
 }
+
+
+
+async function changeSensorName(sensorId, sensorNameInput){
+    let sensorName = prompt("Název teploměru " + sensorId, sensorNameInput);
+
+    await fetch("/temp/setSensorName", {
+        method: "POST",
+        body: JSON.stringify({
+            sensorId: sensorId,
+            name: sensorName
+        }),
+        headers: {
+            "Content-type": "application/json; charset=UTF-8"
+        }
+    });
+}
+
+
+async function changeSensorPriority(sensorId, priority){
+    let sensorPriority = prompt("Název teploměru " + sensorId, priority);
+    console.log(sensorPriority);
+    if(isNaN(sensorPriority)){
+        alert("Priorita musí být celé číslo");
+        return;
+    }
+    await fetch("/temp/setSensorPriority", {
+        method: "POST",
+        body: JSON.stringify({
+            sensorId: sensorId,
+            priority: sensorPriority
+        }),
+        headers: {
+            "Content-type": "application/json; charset=UTF-8"
+        }
+    });
+}

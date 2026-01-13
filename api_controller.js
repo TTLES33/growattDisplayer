@@ -141,7 +141,7 @@ app.get('/temp/removeDB', function(req, res) {
 });
 app.post('/temp/setSensorName', function(req, res) {
   const reqBody = req.body; // Access the data sent in the request body
-  global.addlog("GET", "/temp/setSensorName " + JSON.stringify(reqBody));
+  global.addlog("POST", "/temp/setSensorName " + JSON.stringify(reqBody));
 
 
   if (!reqBody || !reqBody.sensorId || !reqBody.name) {
@@ -152,6 +152,32 @@ app.post('/temp/setSensorName', function(req, res) {
     file_controller.configSetSensorName(reqBody.sensorId, reqBody.name);
   }catch(err){
     global.addlog("ERROR", "/temp/setSensorName - " + err);
+    res.sendStatus(501);
+  }
+
+  res.status(201).json({
+    message: 'updated successfully!'
+  });
+
+});
+
+app.post('/temp/setSensorPriority', function(req, res) {
+  const reqBody = req.body; // Access the data sent in the request body
+  global.addlog("POST", "/temp/setSensorPriority " + JSON.stringify(reqBody));
+
+
+  if (!reqBody || !reqBody.sensorId || !reqBody.priority) {
+    return res.status(400).json({ message: 'sensorId and priority are required' });
+  }
+  if(isNaN(reqBody.priority)){
+    return res.status(400).json({ message: 'Priorita musí být celé číslo' });
+  }
+
+
+  try{
+    file_controller.configSetSensorPriority(reqBody.sensorId, reqBody.priority);
+  }catch(err){
+    global.addlog("ERROR", "/temp/setSensorPriority - " + err);
     res.sendStatus(501);
   }
 

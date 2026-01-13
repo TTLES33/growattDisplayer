@@ -1,3 +1,4 @@
+let sensorsArray = [];
 
 
 async function removeTeplotyDB(){
@@ -21,9 +22,6 @@ async function removeTeplotyDB(){
   } 
 }
 
-
-
-
 function configThemeChange(){
     let fromInput = document.getElementById("settTimeFrom").valueAsNumber;
     let toInput = document.getElementById("settTimeTo").valueAsNumber;
@@ -41,9 +39,6 @@ function configThemeChange(){
     }
 }
 
-
-
-
 async function loadConfig(){
   console.log("Function: loadConfig");
   const url = "/config";
@@ -58,6 +53,7 @@ async function loadConfig(){
     const json = await response.json();
     console.log(json);
     config = json.theme;
+    sensorsArray = json.sensorNames;
     
     return json;
     
@@ -67,8 +63,6 @@ async function loadConfig(){
   }
 
 }
-
-
 
 function updateCongig(){
     console.log("Function: updateCongig");
@@ -86,26 +80,75 @@ function updateCongig(){
 
 async function renderAvaibleSensors(){
   let tempSensors = await loadAvaibleSensors();
+  document.getElementById("avaibleTempSensors").innerHTML = "";
+
+
 	for(i = 0; i < tempSensors.length; i++){
 		let sensorDiv = document.createElement("div");
 			sensorDiv.className = "sensorListItem";
+
+    let currnetSensordFromConfig = {
+      "priority": 999,
+      "name": "Undefined"
+    };
+    for(x = 0; x < sensorsArray.length; x++){
+      if(sensorsArray[x].sensorId == tempSensors[i].sensorId){
+        currnetSensordFromConfig = sensorsArray[x];
+        break;
+      }
+    }
 		
 		let sensorId = document.createElement("div");
+		let sensorName = document.createElement("div");
+		let sensorPriority = document.createElement("div");
 		let sensorLastTemp = document.createElement("div");
 		let sensorLastTime = document.createElement("div");
-			
-		sensorId.innerHTML = "Id: " + tempSensors[i].sensorId;
-		sensorLastTemp.innerHTML = tempSensors[i].teplota + "˚c";
-		sensorLastTime.innerHTML = "last update: " + new Date(tempSensors[i].datetime).toString();
+    let bttnContainer = document.createElement("div");
+      bttnContainer.classList.add("sensorsBttns");
 
-		sensorDiv.appendChild(sensorId);
+    let editNameBtn = document.createElement("input");
+    let editPriorityBtn = document.createElement("input");
+
+		sensorId.innerHTML = "Id: " + tempSensors[i].sensorId;
+    sensorName.innerHTML = "Název: " + currnetSensordFromConfig.name;
+    sensorPriority.innerHTML = "Priorita: " + currnetSensordFromConfig.priority;
+		sensorLastTemp.innerHTML = "Teplota: " + tempSensors[i].teplota + "˚c";
+		sensorLastTime.innerHTML = "Last update: " + getShowDateFormat(new Date(tempSensors[i].datetime));
+
+
+    editNameBtn.type = "button";
+    editNameBtn.onclick = async function (){
+      await changeSensorName(currnetSensordFromConfig.sensorId, currnetSensordFromConfig.name);
+      await loadConfig();
+      await renderAvaibleSensors();
+    }
+    editNameBtn.value = "Změnit jméno";
+
+    editPriorityBtn.type = "button";
+    editPriorityBtn.onclick = async function (){
+      await changeSensorPriority(currnetSensordFromConfig.sensorId, currnetSensordFromConfig.priority);
+      await loadConfig();
+      await renderAvaibleSensors();
+    }
+    editPriorityBtn.value = "Změnit prioritu";
+
+		sensorDiv.appendChild(sensorName);
+		sensorDiv.appendChild(sensorPriority);
+    sensorDiv.appendChild(sensorId);
 		sensorDiv.appendChild(sensorLastTemp);
 		sensorDiv.appendChild(sensorLastTime);
+		sensorDiv.appendChild(bttnContainer);
+
+
+    bttnContainer.appendChild(editNameBtn);
+    bttnContainer.appendChild(editPriorityBtn);
 
 		document.getElementById("avaibleTempSensors").appendChild(sensorDiv);
 	}
 
 }
+
+
 
 async function loadAvaibleSensors(){
 	const url = "/temp/getSensors";

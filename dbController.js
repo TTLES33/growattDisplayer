@@ -3,6 +3,7 @@ module.exports = {insertTeplotaRow, selectTeplotaData, selectSensors, removeDB, 
 
 
 const sqlite3 = require("sqlite3");
+const {configRead} = require("./file_controller");
 const dbName = 'data/tempDB.db';
 
 //********************************************** */
@@ -60,7 +61,17 @@ async function selectTeplotaData(sqlite3, from, to, sensorId){
 
 async function selectSensors(sqlite3){
     const db = new sqlite3.Database(dbName);
-    let sql = "SELECT t1.* FROM teploty t1 INNER JOIN (SELECT sensorId, MAX(datetime) AS max_datetime FROM teploty GROUP BY sensorId) t2 ON t1.sensorId = t2.sensorId AND t1.datetime = t2.max_datetime;";
+    let orderCommand = " ORDER BY CASE t1.sensorId ";
+    let config = await configRead();
+    for(const sensor of config.sensorNames){
+        orderCommand += `WHEN ${sensor.sensorId} THEN ${sensor.priority} `;
+    }
+    orderCommand += "ELSE 999 END ASC;";
+
+    let sql = "SELECT t1.* FROM teploty t1 INNER JOIN (SELECT sensorId, MAX(datetime) AS max_datetime FROM teploty GROUP BY sensorId) t2 ON t1.sensorId = t2.sensorId AND t1.datetime = t2.max_datetime";
+    sql += orderCommand;
+
+    console.log(sql);
     try {
         const products = await fetchAll(db, sql);
         return products;
