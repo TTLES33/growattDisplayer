@@ -64,6 +64,9 @@ async function selectSensors(sqlite3){
     let orderCommand = " ORDER BY CASE t1.sensorId ";
     let config = await configRead();
     for(const sensor of config.sensorNames){
+        if(isNaN(sensor.sensorId)){
+            continue;
+        }
         orderCommand += `WHEN ${sensor.sensorId} THEN ${sensor.priority} `;
     }
     orderCommand += "ELSE 999 END ASC;";
@@ -71,7 +74,7 @@ async function selectSensors(sqlite3){
     let sql = "SELECT t1.* FROM teploty t1 INNER JOIN (SELECT sensorId, MAX(datetime) AS max_datetime FROM teploty GROUP BY sensorId) t2 ON t1.sensorId = t2.sensorId AND t1.datetime = t2.max_datetime";
     sql += orderCommand;
 
-    console.log(sql);
+    // console.log(sql);
     try {
         const products = await fetchAll(db, sql);
         return products;
