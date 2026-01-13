@@ -7,25 +7,13 @@
                 <div class="data-label">Získání dat z lokálního serveru</div>
                 <div class="data-supporting">=aktualizace webu</div>
             </div>
-            <div class="data-trailing" id="logger-last-local-update">--</div>
+            <div class="data-trailing" id="last-local-update">--</div>
         </div>
         <div class="data-item">
             <div class="data-content">
-                <div class="data-label">Získání dat z Growatt serveru</div>
+                <div class="data-label">Získání dat z elektrárny</div>
             </div>
-            <div class="data-trailing" id="logger-last-server-update">--</div>
-        </div>
-        <div class="data-item">
-            <div class="data-content">
-                <div class="data-label">Poslední data na serveru Growatt</div>
-            </div>
-            <div class="data-trailing" id="logger-last-data-update">--</div>
-        </div>
-        <div class="data-item">
-            <div class="data-content">
-                <div class="data-label">Poslední data loggeru elektrárny</div>
-            </div>
-            <div class="data-trailing" id="logger-last-update">--</div>
+            <div class="data-trailing" id="last-server-update">--</div>
         </div>
 
     </div>
@@ -33,184 +21,407 @@
 
  <div class="data-label-main">Data elektrárny</div>
     <div class="data-list">
-        <div class="data-item">
-            <div class="data-content">
-                <div class="data-label">Battery_Discharged_Total</div>
-            </div>
-            <div class="data-trailing" id="Battery_Discharged_Total">--</div>
-        </div>
 
         <div class="data-item">
             <div class="data-content">
-                <div class="data-label">Battery_Discharged_Today</div>
+                <div class="data-label">Inverter Status</div>
+                <div class="data-supporting">Inverter run state</div>
             </div>
-            <div class="data-trailing" id="Battery_Discharged_Today">--</div>
+            <div class="data-trailing" id="inverter_status" data-unit=""></div>
+        </div>
+        <div class="data-item">
+            <div class="data-content">
+                <div class="data-label">Ppv</div>
+                <div class="data-supporting">Input power</div>
+            </div>
+            <div class="data-trailing" id="Ppv" data-unit="W"></div>
+        </div>
+        <div class="data-item">
+            <div class="data-content">
+                <div class="data-label">Vpv1</div>
+                <div class="data-supporting">PV1 voltage</div>
+            </div>
+            <div class="data-trailing" id="Vpv1" data-unit="V"></div>
+        </div>
+        <div class="data-item">
+            <div class="data-content">
+                <div class="data-label">PV1Curr</div>
+                <div class="data-supporting">PV1 input current</div>
+            </div>
+            <div class="data-trailing" id="PV1Curr" data-unit="A"></div>
+        </div>
+        <div class="data-item">
+            <div class="data-content">
+                <div class="data-label">Ppv1</div>
+                <div class="data-supporting">PV1 input power</div>
+            </div>
+            <div class="data-trailing" id="Ppv1" data-unit="W"></div>
+        </div>
+        <div class="data-item">
+            <div class="data-content">
+                <div class="data-label">Pac</div>
+                <div class="data-supporting">Output power</div>
+            </div>
+            <div class="data-trailing" id="Pac" data-unit="W"></div>
+        </div>
+        <div class="data-item">
+            <div class="data-content">
+                <div class="data-label">Fac</div>
+                <div class="data-supporting">Grid frequency</div>
+            </div>
+            <div class="data-trailing" id="Fac" data-unit="Hz"></div>
+        </div>
+        <div class="data-item">
+            <div class="data-content">
+                <div class="data-label">Vac1</div>
+                <div class="data-supporting">Three/single phase grid voltage</div>
+            </div>
+            <div class="data-trailing" id="Vac1" data-unit="V"></div>
+        </div>
+        <div class="data-item">
+            <div class="data-content">
+                <div class="data-label">Iac1</div>
+                <div class="data-supporting">Three/single phase grid output current</div>
+            </div>
+            <div class="data-trailing" id="Iac1" data-unit="A"></div>
+        </div>
+        <div class="data-item">
+            <div class="data-content">
+                <div class="data-label">Pac1</div>
+                <div class="data-supporting">Three/single phase grid output watt VA</div>
+            </div>
+            <div class="data-trailing" id="Pac1" data-unit="VA"></div>
+        </div>
+        <div class="data-item">
+            <div class="data-content">
+                <div class="data-label">Vac2</div>
+                <div class="data-supporting">Three phase grid voltage</div>
+            </div>
+            <div class="data-trailing" id="Vac2" data-unit="V"></div>
+        </div>
+        <div class="data-item">
+            <div class="data-content">
+                <div class="data-label">Iac2</div>
+                <div class="data-supporting">Three phase grid output current</div>
+            </div>
+            <div class="data-trailing" id="Iac2" data-unit="A"></div>
+        </div>
+        <div class="data-item">
+            <div class="data-content">
+                <div class="data-label">Pac2</div>
+                <div class="data-supporting">Three phase grid output power</div>
+            </div>
+            <div class="data-trailing" id="Pac2" data-unit="VA"></div>
+        </div>
+        <div class="data-item">
+            <div class="data-content">
+                <div class="data-label">Vac3</div>
+                <div class="data-supporting">Three phase grid voltage</div>
+            </div>
+            <div class="data-trailing" id="Vac3" data-unit="V"></div>
+        </div>
+        <div class="data-item">
+            <div class="data-content">
+                <div class="data-label">Iac3</div>
+                <div class="data-supporting">Three phase grid output current</div>
+            </div>
+            <div class="data-trailing" id="Iac3" data-unit="A"></div>
+        </div>
+        <div class="data-item">
+            <div class="data-content">
+                <div class="data-label">Pac3</div>
+                <div class="data-supporting">Three phase grid output power</div>
+            </div>
+            <div class="data-trailing" id="Pac3" data-unit="VA"></div>
+        </div>
+        <div class="data-item">
+            <div class="data-content">
+                <div class="data-label">Vac_RS</div>
+                <div class="data-supporting">Three phase grid voltage</div>
+            </div>
+            <div class="data-trailing" id="Vac_RS" data-unit="V"></div>
+        </div>
+        <div class="data-item">
+            <div class="data-content">
+                <div class="data-label">Vac_ST</div>
+                <div class="data-supporting">Three phase grid voltage</div>
+            </div>
+            <div class="data-trailing" id="Vac_ST" data-unit="V"></div>
+        </div>
+        <div class="data-item">
+            <div class="data-content">
+                <div class="data-label">Vac_TR</div>
+                <div class="data-supporting">Three phase grid voltage</div>
+            </div>
+            <div class="data-trailing" id="Vac_TR" data-unit="V"></div>
+        </div>
+        <div class="data-item">
+            <div class="data-content">
+                <div class="data-label">Eac_today</div>
+                <div class="data-supporting">Today generate energy</div>
+            </div>
+            <div class="data-trailing" id="Eac_today" data-unit="kWh"></div>
+        </div>
+        <div class="data-item">
+            <div class="data-content">
+                <div class="data-label">Eac_total</div>
+                <div class="data-supporting">Total generate energy</div>
+            </div>
+            <div class="data-trailing" id="Eac_total" data-unit="kWh"></div>
+        </div>
+        <div class="data-item">
+            <div class="data-content">
+                <div class="data-label">Time_total</div>
+                <div class="data-supporting">Work time total</div>
+            </div>
+            <div class="data-trailing" id="Time_total" data-unit="s"></div>
+        </div>
+        <div class="data-item">
+            <div class="data-content">
+                <div class="data-label">Epv1_today</div>
+                <div class="data-supporting">PV1Energy today</div>
+            </div>
+            <div class="data-trailing" id="Epv1_today" data-unit="kWh"></div>
+        </div>
+        <div class="data-item">
+            <div class="data-content">
+                <div class="data-label">Epv1_total</div>
+                <div class="data-supporting">PV1Energy total</div>
+            </div>
+            <div class="data-trailing" id="Epv1_total" data-unit="kWh"></div>
+        </div>
+        <div class="data-item">
+            <div class="data-content">
+                <div class="data-label">Epv_total</div>
+                <div class="data-supporting">PV Energy total</div>
+            </div>
+            <div class="data-trailing" id="Epv_total" data-unit="kWh"></div>
+        </div>
+        <div class="data-item">
+            <div class="data-content">
+                <div class="data-label">Temp1</div>
+                <div class="data-supporting">Inverter temperature</div>
+            </div>
+            <div class="data-trailing" id="Temp1" data-unit="°C"></div>
+        </div>
+        <div class="data-item">
+            <div class="data-content">
+                <div class="data-label">RealOPPercent</div>
+                <div class="data-supporting">Real Output power Percent</div>
+            </div>
+            <div class="data-trailing" id="RealOPPercent" data-unit="%"></div>
+        </div>
+        <div class="data-item">
+            <div class="data-content">
+                <div class="data-label">FaultMaincode</div>
+                <div class="data-supporting">Inverter fault maincode</div>
+            </div>
+            <div class="data-trailing" id="FaultMaincode" data-unit=""></div>
+        </div>
+        <div class="data-item">
+            <div class="data-content">
+                <div class="data-label">Pdischarge1</div>
+                <div class="data-supporting">Discharge power</div>
+            </div>
+            <div class="data-trailing" id="Pdischarge1" data-unit="W"></div>
+        </div>
+        <div class="data-item">
+            <div class="data-content">
+                <div class="data-label">Pcharge1</div>
+                <div class="data-supporting">Charge power</div>
+            </div>
+            <div class="data-trailing" id="Pcharge1" data-unit="W"></div>
+        </div>
+        <div class="data-item">
+            <div class="data-content">
+                <div class="data-label">Vbat</div>
+                <div class="data-supporting">Battery voltage</div>
+            </div>
+            <div class="data-trailing" id="Vbat" data-unit="V"></div>
+        </div>
+        <div class="data-item">
+            <div class="data-content">
+                <div class="data-label">SOC</div>
+                <div class="data-supporting">State of charge Capacity</div>
+            </div>
+            <div class="data-trailing" id="SOC" data-unit="%"></div>
+        </div>
+        <div class="data-item">
+            <div class="data-content">
+                <div class="data-label">Pac_to_user</div>
+                <div class="data-supporting">AC power to user</div>
+            </div>
+            <div class="data-trailing" id="Pac_to_user" data-unit="W"></div>
+        </div>
+        <div class="data-item">
+            <div class="data-content">
+                <div class="data-label">Pac_to_user_Total</div>
+                <div class="data-supporting">AC power to user total</div>
+            </div>
+            <div class="data-trailing" id="Pac_to_user_Total" data-unit="W"></div>
+        </div>
+        <div class="data-item">
+            <div class="data-content">
+                <div class="data-label">Pac_to_grid</div>
+                <div class="data-supporting">AC power to grid</div>
+            </div>
+            <div class="data-trailing" id="Pac_to_grid" data-unit="W"></div>
+        </div>
+        <div class="data-item">
+            <div class="data-content">
+                <div class="data-label">Pac_to_grid_total</div>
+                <div class="data-supporting">AC power to grid total</div>
+            </div>
+            <div class="data-trailing" id="Pac_to_grid_total" data-unit="W"></div>
+        </div>
+        <div class="data-item">
+            <div class="data-content">
+                <div class="data-label">PLocalLoad</div>
+                <div class="data-supporting">INV power to local load</div>
+            </div>
+            <div class="data-trailing" id="PLocalLoad" data-unit="W"></div>
+        </div>
+        <div class="data-item">
+            <div class="data-content">
+                <div class="data-label">PLocalLoad_total</div>
+                <div class="data-supporting">INV power to local load total</div>
+            </div>
+            <div class="data-trailing" id="PLocalLoad_total" data-unit="W"></div>
+        </div>
+        <div class="data-item">
+            <div class="data-content">
+                <div class="data-label">Battery Temperature</div>
+                <div class="data-supporting">Battery Temperature</div>
+            </div>
+            <div class="data-trailing" id="BatteryTemperature" data-unit="°C"></div>
+        </div>
+        <div class="data-item">
+            <div class="data-content">
+                <div class="data-label">Etouser_today</div>
+                <div class="data-supporting">Energy to user today</div>
+            </div>
+            <div class="data-trailing" id="Etouser_today" data-unit="kWh"></div>
+        </div>
+        <div class="data-item">
+            <div class="data-content">
+                <div class="data-label">Etouser_total</div>
+                <div class="data-supporting">Energy to user total</div>
+            </div>
+            <div class="data-trailing" id="Etouser_total" data-unit="kWh"></div>
+        </div>
+        <div class="data-item">
+            <div class="data-content">
+                <div class="data-label">Etogrid_today</div>
+                <div class="data-supporting">Energy to grid today</div>
+            </div>
+            <div class="data-trailing" id="Etogrid_today" data-unit="kWh"></div>
+        </div>
+        <div class="data-item">
+            <div class="data-content">
+                <div class="data-label">Etogrid_total</div>
+                <div class="data-supporting">Energy to grid total</div>
+            </div>
+            <div class="data-trailing" id="Etogrid_total" data-unit="kWh"></div>
+        </div>
+        <div class="data-item">
+            <div class="data-content">
+                <div class="data-label">Edischarge1_today</div>
+                <div class="data-supporting">Discharge energy1 today</div>
+            </div>
+            <div class="data-trailing" id="Edischarge1_today" data-unit="kWh"></div>
+        </div>
+        <div class="data-item">
+            <div class="data-content">
+                <div class="data-label">Edischarge1_total</div>
+                <div class="data-supporting">Total discharge energy1</div>
+            </div>
+            <div class="data-trailing" id="Edischarge1_total" data-unit="kWh"></div>
+        </div>
+        <div class="data-item">
+            <div class="data-content">
+                <div class="data-label">Echarge1_today</div>
+                <div class="data-supporting">Charge1 energy today</div>
+            </div>
+            <div class="data-trailing" id="Echarge1_today" data-unit="kWh"></div>
+        </div>
+        <div class="data-item">
+            <div class="data-content">
+                <div class="data-label">Echarge1_total</div>
+                <div class="data-supporting">Charge1 energy total</div>
+            </div>
+            <div class="data-trailing" id="Echarge1_total" data-unit="kWh"></div>
+        </div>
+        <div class="data-item">
+            <div class="data-content">
+                <div class="data-label">ELocalLoad_Today</div>
+                <div class="data-supporting">Local load energy today</div>
+            </div>
+            <div class="data-trailing" id="ELocalLoad_Today" data-unit="kWh"></div>
+        </div>
+        <div class="data-item">
+            <div class="data-content">
+                <div class="data-label">ELocalLoad_Total</div>
+                <div class="data-supporting">Local load energy total</div>
+            </div>
+            <div class="data-trailing" id="ELocalLoad_Total" data-unit="kWh"></div>
+        </div>
+        <div class="data-item">
+            <div class="data-content">
+                <div class="data-label">ACCharge_Today</div>
+                <div class="data-supporting">AC Charge Energy today</div>
+            </div>
+            <div class="data-trailing" id="ACCharge_today" data-unit="kWh"></div>
+        </div>
+        <div class="data-item">
+            <div class="data-content">
+                <div class="data-label">ACChargePower</div>
+                <div class="data-supporting">AC Charge Power</div>
+            </div>
+            <div class="data-trailing" id="ACChargePower" data-unit="W"></div>
+        </div>
+        <div class="data-item">
+            <div class="data-content">
+                <div class="data-label">Esystem_today</div>
+                <div class="data-supporting">System electric energy today</div>
+            </div>
+            <div class="data-trailing" id="Esystem_today" data-unit="kWh"></div>
+        </div>
+        <div class="data-item">
+            <div class="data-content">
+                <div class="data-label">Esystem_total</div>
+                <div class="data-supporting">System electric energy total</div>
+            </div>
+            <div class="data-trailing" id="Esystem_total" data-unit="kWh"></div>
+        </div>
+        <div class="data-item">
+            <div class="data-content">
+                <div class="data-label">Eself_today</div>
+                <div class="data-supporting">self electric energy today</div>
+            </div>
+            <div class="data-trailing" id="Eself_today" data-unit="kWh"></div>
+        </div>
+        <div class="data-item">
+            <div class="data-content">
+                <div class="data-label">Eself_total</div>
+                <div class="data-supporting">self electric energy total</div>
+            </div>
+            <div class="data-trailing" id="Eself_total" data-unit="kWh"></div>
+        </div>
+        <div class="data-item">
+            <div class="data-content">
+                <div class="data-label">PSystem</div>
+                <div class="data-supporting">System power</div>
+            </div>
+            <div class="data-trailing" id="PSystem" data-unit="W"></div>
+        </div>
+        <div class="data-item">
+            <div class="data-content">
+                <div class="data-label">PSelf</div>
+                <div class="data-supporting">self power</div>
+            </div>
+            <div class="data-trailing" id="PSelf" data-unit="W"></div>
         </div>
 
-        <div class="data-item">
-            <div class="data-content">
-                <div class="data-label">Battery_Charge_Now_Power</div>
-            </div>
-            <div class="data-trailing" id="Battery_Charge_Now_Power">--</div>
-        </div>
-        <div class="data-item">
-            <div class="data-content">
-                <div class="data-label">Battery_Discharge_Now_Power</div>
-            </div>
-            <div class="data-trailing" id="Battery_Discharge_Now_Power">--</div>
-        </div>
-        <div class="data-item">
-            <div class="data-content">
-                <div class="data-label">Battery_Percentage</div>
-            </div>
-            <div class="data-trailing" id="Battery_Percentage">--</div>
-        </div>
-        <div class="data-item">
-            <div class="data-content">
-                <div class="data-label">Export_To_Grid_Now</div>
-            </div>
-            <div class="data-trailing" id="Export_To_Grid_Now">--</div>
-        </div>
-        <div class="data-item">
-            <div class="data-content">
-                <div class="data-label">Export_To_Grid_Today</div>
-            </div>
-            <div class="data-trailing" id="Export_To_Grid_Today">--</div>
-        </div>
-        <div class="data-item">
-            <div class="data-content">
-                <div class="data-label">Export_To_Grid_Total</div>
-            </div>
-            <div class="data-trailing" id="Export_To_Grid_Total">--</div>
-        </div>
-        <div class="data-item">
-            <div class="data-content">
-                <div class="data-label">Import_From_Grid_Now</div>
-            </div>
-            <div class="data-trailing" id="Import_From_Grid_Now">--</div>
-        </div>
-        <div class="data-item">
-            <div class="data-content">
-                <div class="data-label">Import_From_Grid_Today</div>
-            </div>
-            <div class="data-trailing" id="Import_From_Grid_Today">--</div>
-        </div>
-        <div class="data-item">
-            <div class="data-content">
-                <div class="data-label">Import_From_Grid_Total</div>
-            </div>
-            <div class="data-trailing" id="Import_From_Grid_Total">--</div>
-        </div>
-        <div class="data-item">
-            <div class="data-content">
-                <div class="data-label">Plant_Production_Now</div>
-            </div>
-            <div class="data-trailing" id="Plant_Production_Now">--</div>
-        </div>
-        <div class="data-item">
-            <div class="data-content">
-                <div class="data-label">Plant_Production_Today</div>
-            </div>
-            <div class="data-trailing" id="Plant_Production_Today">--</div>
-        </div>
-        <div class="data-item">
-            <div class="data-content">
-                <div class="data-label">Plant_Production_Total</div>
-            </div>
-            <div class="data-trailing" id="Plant_Production_Total">--</div>
-        </div>
-        <div class="data-item">
-            <div class="data-content">
-                <div class="data-label">Total_energy_created</div>
-            </div>
-            <div class="data-trailing" id="Total_energy_created">--</div>
-        </div>
-        <div class="data-item">
-            <div class="data-content">
-                <div class="data-label">Power_Consumption_Now</div>
-            </div>
-            <div class="data-trailing" id="Power_Consumption_Now">--</div>
-        </div>
-        <div class="data-item">
-            <div class="data-content">
-                <div class="data-label">Power_Consumption_Today</div>
-            </div>
-            <div class="data-trailing" id="Power_Consumption_Today">--</div>
-        </div>
-        <div class="data-item">
-            <div class="data-content">
-                <div class="data-label">Self_Power_Consumption_Today</div>
-            </div>
-            <div class="data-trailing" id="Self_Power_Consumption_Today">--</div>
-        </div>
-        <div class="data-item">
-            <div class="data-content">
-                <div class="data-label">Battery_Voltage</div>
-            </div>
-            <div class="data-trailing" id="Battery_Voltage">--</div>
-        </div>
-        <div class="data-item">
-            <div class="data-content">
-                <div class="data-label">Grid_Voltage</div>
-            </div>
-            <div class="data-trailing" id="Grid_Voltage">--</div>
-        </div>
-        <div class="data-item">
-            <div class="data-content">
-                <div class="data-label">Grid_Frequency</div>
-            </div>
-            <div class="data-trailing" id="Grid_Frequency">--</div>
-        </div>
-        <div class="data-item">
-            <div class="data-content">
-                <div class="data-label">First_MPPT_Voltage</div>
-            </div>
-            <div class="data-trailing" id="First_MPPT_Voltage">--</div>
-        </div>
-        <div class="data-item">
-            <div class="data-content">
-                <div class="data-label">First_MPPT_Power</div>
-            </div>
-            <div class="data-trailing" id="First_MPPT_Power">--</div>
-        </div>
-        <div class="data-item">
-            <div class="data-content">
-                <div class="data-label">Second_MPPT_Voltage</div>
-            </div>
-            <div class="data-trailing" id="Second_MPPT_Voltage">--</div>
-        </div>
-        <div class="data-item">
-            <div class="data-content">
-                <div class="data-label">Second_MPPT_Power</div>
-            </div>
-            <div class="data-trailing" id="Second_MPPT_Power">--</div>
-        </div>
-
-    </div>
-
-
-    <div class="data-label-main">Data Logger</div>
-    <div class="data-list">
-        <div class="data-item">
-            <div class="data-content">
-                <div class="data-label">Device type</div>
-            </div>
-            <div class="data-trailing" id="logger-device-type">--</div>
-        </div>
-
-        <div class="data-item">
-            <div class="data-content">
-                <div class="data-label">ip address</div>
-            </div>
-            <div class="data-trailing" id="logger-ip-address">--</div>
-        </div>
-
-        <div class="data-item">
-            <div class="data-content">
-                <div class="data-label">Update interval</div>
-            </div>
-            <div class="data-trailing" id="logger-update-interval">--</div>
-        </div>
     </div>
 
  <div class="data-label-main">Ostatní</div>

@@ -43,21 +43,21 @@
 }
 
 .data-label {
-  font-size: 16px;
+  font-size: 1.3em;
   font-weight: 500;
   color: var(--md-sys-color-on-surface);
   line-height: 24px;
 }
 
 .data-supporting {
-  font-size: 14px;
+  font-size: 1em;
   color: var(--md-sys-color-on-surface-variant);
   line-height: 20px;
 }
 
 /* Trailing element */
 .data-trailing {
-  font-size: 14px;
+  font-size: 1.3em;
   color: var(--md-sys-color-on-surface-variant);
   margin-left: 16px;
 }
