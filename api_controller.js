@@ -9,6 +9,7 @@ const cors = require('cors');
 const global = require("./global.js");
 const dbController = require("./dbController.js");
 const file_controller = require("./file_controller.js");
+const truenas_controller = require("./truenas_controller.js");
 
 
 var server = app.listen(8081, function () {
@@ -302,3 +303,26 @@ app.get('/database/download', function(req, res) {
     res.download(path.join(__dirname, '/data/tempDB.db'));
 });
 
+
+
+
+//********************************************** */
+//               TRUENAS HANDLER
+//********************************************** */
+app.get('/truenas/getData', async function (req, res) {
+    global.addlog("GET", "/truenas/getData");
+
+    try{
+        const truenasData = await truenas_controller.getTruenasData();
+        res.status(200);
+        res.setHeader('Content-Type', 'application/json');
+        res.send(truenasData);
+        res.end();
+    }catch (error){
+        global.addlog("ERROR", "/truenas/getData - " + error);
+        res.sendStatus(501);
+        res.send(error);
+        res.end();
+    }
+
+})
