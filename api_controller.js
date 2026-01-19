@@ -243,6 +243,10 @@ app.get('/data.html', function(req, res) {
     global.addlog("GET", req.params.tagid);
     res.sendFile(path.join(__dirname, '/growattDisplayerClient/data.html'));
 });
+app.get('/audit.html', function(req, res) {
+    global.addlog("GET", req.params.tagid);
+    res.sendFile(path.join(__dirname, '/growattDisplayerClient/audit.html'));
+});
 app.get('/htmljs.js', function(req, res) {
     global.addlog("GET", req.params.tagid);
     res.sendFile(path.join(__dirname, '/growattDisplayerClient/htmljs.js'));
@@ -265,6 +269,10 @@ app.get('/temps.js', function(req, res) {
 app.get('/data.js', function(req, res) {
     global.addlog("GET", req.params.tagid);
     res.sendFile(path.join(__dirname, '/growattDisplayerClient/data.js'));
+});
+app.get('/audit.js', function(req, res) {
+    global.addlog("GET", req.params.tagid);
+    res.sendFile(path.join(__dirname, '/growattDisplayerClient/audit.js'));
 });
 app.get('/global.js', function(req, res) {
     global.addlog("GET", req.params.tagid);

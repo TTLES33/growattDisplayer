@@ -15,12 +15,14 @@
     <link rel="stylesheet" href="styles/temps.css">
     <link rel="stylesheet" href="styles/settings.css">
     <link rel="stylesheet" href="styles/data.css">
+    <link rel="stylesheet" href="styles/audit.css">
 
 
     <script src="htmljs.js"></script>
     <script src="settingsjs.js"></script>
     <script src="temps.js"></script>
     <script src="data.js"></script>
+    <script src="audit.js"></script>
     <script src="global.js"></script>
     <script> activepage = "index";</script>
     <title></title>
@@ -46,16 +48,22 @@
      
     
         <a class="barItem" onclick="showData()" id="navBar_data">
-            <span class="icon-data baricon active"></span>
+            <span class="icon-data baricon"></span>
             <div>Data</div>
         </a>
 
         <a class="barItem" onclick="showTemps()" id="navBar_temp">
-            <span class="icon-temp baricon active"></span>
+            <span class="icon-temp baricon"></span>
             <div>Teploty</div>
         </a>
 
+        <a class="barItem" onclick="showAudit()" id="navBar_audit">
+            <span class="icon-audit baricon"></span>
+            <div>NasServer</div>
+        </a>
+
         <div class="barBottom">
+
             <a class="barItem barCenter" onclick="toggleFullScreen()">
                 <span class="icon-expand baricon active"  ></span>
             </a>
@@ -79,7 +87,6 @@
 
     
 
-
-
+</div>
 </body>
 </html>

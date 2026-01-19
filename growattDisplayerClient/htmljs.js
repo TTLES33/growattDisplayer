@@ -103,12 +103,15 @@ async function showData(){
     await loadPage("data");
 
     updateDataPage(plantdata);
-    // for(i=0; i< Object.keys(plantdata).length; i++){
-    //     console.log(Object.keys(plantdata)[i]);
-    //     console.log(plantdata[Object.keys(plantdata)[i]]);
-    //     document.getElementById(Object.keys(plantdata)[i]).innerHTML = plantdata[Object.keys(plantdata)[i]];
-    // }
-    // document.getElementById("Last_Temperature_Update").innerHTML = new Date(Last_Temperature_Update ).toString();
+}
+
+async function showAudit(){
+    activepage = "audit";
+
+    navBarChange("navBar_audit");
+    await loadPage("audit");
+
+    loadAuditData(plantdata);
 }
 
 async function showSettings(){

@@ -1,0 +1,154 @@
+.audit-container{
+    background-color: var(--md-sys-color-background);
+    color: var(--md-sys-color-on-background);
+    margin: 0;
+    padding: 24px;
+    display: grid;
+    gap: 24px;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+}
+
+
+.section-title {
+    color: var(--md-sys-color-primary);
+    font-size: 1.5rem;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+/* --- 3. MATERIAL CARD COMPONENT --- */
+.card {
+    background-color: var(--md-sys-color-surface-container);
+    border-radius: 16px;
+    padding: 16px;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.card-title {
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: var(--md-sys-color-on-surface);
+}
+
+.badge {
+    padding: 4px 12px;
+    border-radius: 16px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.badge-ok {
+    background-color: var(--md-sys-color-primary-container);
+    color: var(--md-sys-color-on-primary-container);
+}
+
+.badge-warn {
+    background-color: var(--md-sys-color-error-container);
+    color: var(--md-sys-color-on-error-container);
+}
+
+.badge-neutral {
+    background-color: var(--md-sys-color-surface-variant);
+    color: var(--md-sys-color-on-surface-variant);
+}
+
+/* --- 4. SECTION SPECIFIC STYLES --- */
+
+/* Storage */
+.disk-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 8px;
+    margin-top: 12px;
+}
+.disk-item {
+    background-color: var(--md-sys-color-surface-container-high);
+    padding: 8px;
+    border-radius: 8px;
+    text-align: center;
+    font-size: 0.85rem;
+    border: 1px solid var(--md-sys-color-outline-variant);
+}
+.scan-info {
+    font-size: 0.9rem;
+    color: var(--md-sys-color-on-surface-variant);
+    margin-bottom: 12px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--md-sys-color-outline-variant);
+}
+
+/* Alerts */
+.alert-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+.alert-item {
+    padding: 12px 16px;
+    border-radius: 12px;
+    background-color: var(--md-sys-color-surface-container-high);
+    border-left: 4px solid var(--md-sys-color-outline);
+}
+/* Highlight active alerts */
+.alert-item.active {
+    background-color: var(--md-sys-color-tertiary-container);
+    color: var(--md-sys-color-on-tertiary-container);
+    border-left-color: var(--md-sys-color-tertiary);
+}
+/* Critical alerts */
+.alert-item.critical {
+    background-color: var(--md-sys-color-error-container);
+    color: var(--md-sys-color-on-error-container);
+    border-left-color: var(--md-sys-color-error);
+}
+
+.alert-meta {
+    font-size: 0.75rem;
+    opacity: 0.8;
+    margin-bottom: 4px;
+    display: flex;
+    justify-content: space-between;
+}
+
+/* Apps */
+.app-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+}
+.app-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px;
+    background-color: var(--md-sys-color-surface-container-high);
+    border-radius: 12px;
+}
+.update-avail {
+    color: var(--md-sys-color-tertiary);
+    font-size: 0.8rem;
+    font-weight: bold;
+    display: block;
+}
+
+
+
+
+ .material-symbols-outlined {
+     font-variation-settings:
+             'FILL' 0,
+             'wght' 400,
+             'GRAD' 0,
+             'opsz' 24
+ }
