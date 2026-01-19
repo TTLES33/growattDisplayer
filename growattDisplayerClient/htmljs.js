@@ -206,10 +206,10 @@ function renderDataBattery(plantdata, error){
         document.getElementById("battery-level").style.backgroundColor = "var(--arrow_red)";
     }
 
-
+    let pchargeFormatted = (plantdata.Pcharge1 / 1000).toFixed(2);
     if(plantdata.Pcharge1 > 0){
         document.getElementById("battery_text").innerHTML = "nabíjení";
-        document.getElementById("power").innerHTML = plantdata.Pcharge1 / 1000+ "kW";
+        document.getElementById("power").innerHTML = pchargeFormatted + "kW";
         for(i=0; i < document.getElementById("arrow_0").childNodes.length; i++ ){
             document.getElementById("arrow_0").childNodes[i].className = "arrow_top";
             document.getElementById("arrow_0").childNodes[i].classList.add("charging");
@@ -219,7 +219,7 @@ function renderDataBattery(plantdata, error){
     }else{
         if(plantdata.Pdischarge1 > 0){
             document.getElementById("battery_text").innerHTML = "vybíjení";
-            document.getElementById("power").innerHTML = plantdata.Pdischarge1 / 1000 + "kW";
+            document.getElementById("power").innerHTML = pchargeFormatted + "kW";
             for(i=0; i < document.getElementById("arrow_0").childNodes.length; i++ ){
                 console.log(document.getElementById("arrow_0"));
                 document.getElementById("arrow_0").childNodes[i].className = "arrow_down";
@@ -246,10 +246,11 @@ function renderDataHome(plantdata, error){
         return;
     }
 
+    let ploadFormatted = (plantdata.PLocalLoad / 1000).toFixed(2);
     for(i=0; i < document.getElementById("arrow_3").childNodes.length; i++ ){
         document.getElementById("arrow_3").childNodes[i].style.display = "block";
     }
-    document.getElementById("home_text").innerHTML = plantdata.PLocalLoad / 1000+ " kW";
+    document.getElementById("home_text").innerHTML = ploadFormatted + " kW";
 }
 
 function renderDataPlant(plantdata, error){
@@ -262,8 +263,10 @@ function renderDataPlant(plantdata, error){
     }
 
     //document.getElementById("foto_text").innerHTML = plantdata.Ppv/1000;
+    let ppvFormatted = (plantdata.Ppv / 1000).toFixed(2);
+
     if(plantdata.Ppv > 0){
-        document.getElementById("foto_text").innerHTML = plantdata.Ppv / 1000 + "kW";
+        document.getElementById("foto_text").innerHTML = ppvFormatted + "kW";
         for(i=0; i < document.getElementById("arrow_1").childNodes.length; i++ ){
             document.getElementById("arrow_1").childNodes[i].className = "arrow_right";
             document.getElementById("arrow_1").childNodes[i].style.borderLeftColor = "var(--arrow_green)";
@@ -288,10 +291,12 @@ function renderDataGrid(plantdata, error){
         return ;
     }
 
+    let pacToUserFormatted = (plantdata.Pac_to_user / 1000).toFixed(2);
+    let pacToGridFormatted = (plantdata.Pac_to_grid / 1000).toFixed(2);
 
     if(plantdata.Pac_to_grid <= 0){
         document.getElementById("grid_nadpis").innerHTML = "Import";
-        document.getElementById("grid_text").innerHTML = plantdata.Pac_to_user / 1000+ " kW";
+        document.getElementById("grid_text").innerHTML = pacToUserFormatted + " kW";
         for(i=0; i < document.getElementById("arrow_2").childNodes.length; i++ ){
             document.getElementById("arrow_2").childNodes[i].className =  "arrow_left";
             document.getElementById("arrow_2").childNodes[i].style.borderRightColor = "var(--arrow_red)";
@@ -299,7 +304,7 @@ function renderDataGrid(plantdata, error){
         }
     }else{
         document.getElementById("grid_nadpis").innerHTML = "Export";
-        document.getElementById("grid_text").innerHTML = plantdata.Pac_to_grid / 1000+ " kW";
+        document.getElementById("grid_text").innerHTML = pacToGridFormatted + " kW";
 
         for(i=0; i < document.getElementById("arrow_2").childNodes.length; i++ ){
             document.getElementById("arrow_2").childNodes[i].className = "arrow_right";
