@@ -390,7 +390,7 @@ async function updateTemperatures(){
     //console.log(dateFrom);
 
     let tempdata0 = await loadTemperature(dateFrom, dateNow, 45);
-    let tempdata1 = await loadTemperature(dateFrom, dateNow, 129);
+    let tempdata1 = await loadTemperature(dateFrom, dateNow, 128);
 
     let tempObject0 = tempdata0[tempdata0.length - 2];
     let tempObject1 = tempdata1[tempdata1.length - 2];
