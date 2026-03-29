@@ -3,7 +3,7 @@ let sensorsArray = [];
 
 async function removeTeplotyDB(){
       console.log("Function: removeTeplotyDB");
-  const url = "/temp/removeDB";
+  const url = baseURL + "/temp/removeDB";
 
    try {
     const response = await fetch(url, {
@@ -41,7 +41,7 @@ function configThemeChange(){
 
 async function loadConfig(){
   console.log("Function: loadConfig");
-  const url = "/config";
+  const url = baseURL+ "/config";
   try {
     const response = await fetch(url);
     if (!response.ok) {
@@ -151,7 +151,7 @@ async function renderAvaibleSensors(){
 
 
 async function loadAvaibleSensors(){
-	const url = "/temp/getSensors";
+	const url = baseURL + "/temp/getSensors";
   	try {
     	const response = await fetch(url);
 		if (!response.ok) {

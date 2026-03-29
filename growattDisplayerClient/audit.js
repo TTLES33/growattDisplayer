@@ -4,7 +4,7 @@
 function loadAuditData(){
     $.ajax({
         type: "GET",
-        url: '/truenas/getData',
+        url: baseURL + '/truenas/getData',
         success: function (result) {
             let auditData = result;
 

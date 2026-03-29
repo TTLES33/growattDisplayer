@@ -4,6 +4,20 @@
     "to": 75600000
   },
   "sensorNames": [
- 
+    {
+      "sensorId": "Undefined",
+      "priority": 5,
+      "name": "teplomer 45"
+    },
+    {
+      "sensorId": 114,
+      "priority": 1,
+      "name": "outside"
+    },
+    {
+      "sensorId": 45,
+      "name": "inside",
+      "priority": 999
+    }
   ]
 }

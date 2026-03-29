@@ -5,6 +5,9 @@ let config = {};
 let errorLogs = [];
 let app_version = 0;
 
+let baseURL = "";   //for deployment
+// let baseURL = "http://192.168.1.109:8081";   //for developmnet
+
 
 async function onloadfnc(){
     document.documentElement.dataset["theme"] = "dark";
@@ -322,7 +325,7 @@ function loadData(){
 
     $.ajax({
         type: "GET",
-        url: '/growattdata/getLast',
+        url: baseURL + '/growattdata/getLast',
         success: function (result) {
             plantdata = result;
             plantdata.Last_Local_Update = Date.now();
@@ -429,7 +432,7 @@ async function updateTemperatures(){
 
 async function loadTemperature(from, to, sensorId){
     console.log("Function: loadTemperature");
-    const url = "/temp/getData";
+    const url = baseURL + "/temp/getData";
 
     try {
         const response = await fetch(url, {
