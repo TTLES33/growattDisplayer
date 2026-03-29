@@ -55,7 +55,7 @@ jobs:
           # This builds for both standard PC and ARM (like Raspberry Pi/Mac M1)
           platforms: linux/amd64,linux/arm64
           tags: |
-            ${{ secrets.DOCKER_USERNAME }}/growatt-displayer:latest
-            ${{ secrets.DOCKER_USERNAME }}/growatt-displayer:${{ steps.meta.outputs.SHORT_SHA }}
+           ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKERHUB_PROJECT_NAME }}:latest
+           ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKERHUB_PROJECT_NAME }}:${{ steps.meta.outputs.SHORT_SHA }}
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache,mode=max
