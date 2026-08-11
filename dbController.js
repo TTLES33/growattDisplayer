@@ -1,5 +1,5 @@
 
-module.exports = {insertTeplotaRow, selectTeplotaData, selectSensors, removeDB, updateDBStructure, insertPlantdataRow, readLastPlantData};
+module.exports = {insertTeplotaRow, selectTeplotaData, selectSensors, removeDB, updateDBStructure, insertPlantdataRow, readLastPlantData, deleteSensor};
 
 
 const sqlite3 = require("sqlite3");
@@ -50,38 +50,6 @@ async function selectTeplotaData(sqlite3, from, to, sensorId){
             ORDER BY t.bucket_ts ASC;
     `;
 
-
-//         const sql = `
-//     WITH RECURSIVE timeline(bucket_ts) AS (
-//     SELECT (${from} / 1000) / ${inverval_seconds} * ${inverval_seconds}
-//     UNION ALL
-//     SELECT bucket_ts + ${inverval_seconds}
-//     FROM timeline
-//     WHERE bucket_ts < (${to} / 1000) - ${inverval_seconds}
-// ),
-// aggregated_data AS (
-//     -- 1 Single Range Scan over filtered sensor data
-//     SELECT 
-//         ((datetime / 1000) / ${inverval_seconds}) * ${inverval_seconds} AS bucket_ts,
-//         ROUND(AVG(teplota), 2) AS avg_temp,
-//         SUM(teplota) AS sum_temp,     -- Collect sum for overall average
-//         COUNT(teplota) AS count_temp  -- Collect count for overall average
-//     FROM teploty
-//     WHERE sensorId = ${sensorId}
-//       AND datetime >= ${from}
-//       AND datetime <= ${to}
-//     GROUP BY bucket_ts
-// )
-// SELECT 
-//     datetime(t.bucket_ts, 'unixepoch', 'localtime') AS time_label,
-//     a.avg_temp,
-//     -- Divide total sum by total count to get the true overall average across all buckets
-//     ROUND(SUM(a.sum_temp) OVER () / SUM(a.count_temp) OVER (), 2) AS avg_temp_overall
-// FROM timeline t
-// LEFT JOIN aggregated_data a ON t.bucket_ts = a.bucket_ts
-// ORDER BY t.bucket_ts ASC;
-//     `;
-
     try {
         const products = await fetchAll(db, sql);
         return products;
@@ -111,6 +79,25 @@ async function selectSensors(sqlite3){
     try {
         const products = await fetchAll(db, sql);
         return products;
+    } catch (err) {
+        console.log(err);
+    } finally {
+        db.close();
+    }
+}
+
+async function deleteSensor(sqlite3, sensorId){
+    const db = new sqlite3.Database(dbName);
+    let sql = "DELETE FROM teploty WHERE sensorId = " + sensorId + ";";
+    console.log(sql);
+
+
+    try {
+        db.run(sql, function(err) {
+            if (err) {
+                return console.error(err.message);
+            }
+        });
     } catch (err) {
         console.log(err);
     } finally {

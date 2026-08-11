@@ -117,6 +117,26 @@ app.post('/temp/getData', function(req, res) {
 });
 
 
+app.post('/temp/deleteSensor', function(req, res) {
+  const reqBody = req.body; // Access the data sent in the request body
+  // console.log(req);
+  global.addlog("POST", "/temp/deleteSensor " + JSON.stringify(reqBody));
+  console.log(reqBody);
+
+  dbController.deleteSensor(sqlite3, reqBody.sensorId).then(
+    result => {
+      // res.setHeader('Content-Type', 'application/json');
+      res.sendStatus(200);
+      res.end();
+    }
+  ).catch(err => {
+    global.addlog("ERROR", "/temp/getData - " + err);
+    res.sendStatus(501);
+  });
+
+});
+
+
 app.get('/temp/getSensors', async function (req, res) {
   global.addlog("GET", "/temp/getSensors");
 
