@@ -158,6 +158,7 @@ function navBarChange(nav_id){
     document.getElementById("navBar_index").classList.remove("active");
     document.getElementById("navBar_data").classList.remove("active");
     document.getElementById("navBar_temp").classList.remove("active");
+    document.getElementById("navBar_audit").classList.remove("active");
     document.getElementById("navBar_settings").classList.remove("active");
 
     document.getElementById(nav_id).classList.add("active");
